@@ -1,5 +1,9 @@
 \documentclass[a4paper]{article}
 
+% For referencing
+\usepackage{biblatex}
+\addbibresource{references.bib}
+
 % This should be loaded last
 \usepackage[colorlinks]{hyperref}
 \usepackage{subfiles}
@@ -90,7 +94,6 @@ My project:
 
 
 % References
-\section{References}
-
+\printbibliography[heading=bibnumbered]
 
 \end{document}
