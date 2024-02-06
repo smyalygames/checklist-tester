@@ -1,5 +1,11 @@
 \documentclass[a4paper]{article}
 
+% Tables
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+
 % For referencing
 \usepackage{biblatex}
 \addbibresource{references.bib}
@@ -42,7 +48,15 @@
 \end{itemize}
 
 \subsection{Key Background Sources}
-
+\begin{tabularx}{\linewidth}{p{5em} X}
+    \toprule
+    Resource & Info \\
+    \midrule
+    \multirow{2}{*}{\parbox{5em}{This needs to be fixed as it will overflow}}
+    & Description: Filler \\
+    & Reason: Filler \\
+    \bottomrule
+\end{tabularx}
 
 % Aim (or hypothesis) and Objectives
 \section{Aim and Objectives}
