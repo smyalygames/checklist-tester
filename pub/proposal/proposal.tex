@@ -7,7 +7,7 @@
 \usepackage{array}
 
 % For referencing
-\usepackage{biblatex}
+\usepackage[citestyle=ieee]{biblatex}
 \addbibresource{references.bib}
 
 % This should be loaded last
@@ -48,13 +48,17 @@
 \end{itemize}
 
 \subsection{Key Background Sources}
-\begin{tabularx}{\linewidth}{p{5em} X}
+\begin{tabularx}{\linewidth}{p{8em} X}
     \toprule
     Resource & Info \\
     \midrule
-    \multirow{4}{*}{\parbox{5em}{This needs to be fixed as it will overflow}}
-    & Description: Filler \\
-    & Reason: Filler \\ & \\ & \\
+    \multirow{2}{*}{\parbox{8em}{US Airways 1549 NTSB Investigation~\cite{AWE1549}}}
+    & \textbf{Description:} An investigation on an aircraft that
+        suffered from a dual engine failure from a bird strike
+        forcing the pilots to land on the Hudson River. \\
+    & \textbf{Reason:} The investigation found that the QRH was too
+        lengthy and the pilots' used their experience to prioritize
+        essential actions outside the QRH to keep the aircraft in control. \\
     \bottomrule
 \end{tabularx}
 
@@ -106,6 +110,7 @@ My project:
 
 
 % References
+\nocite{*}
 \printbibliography[heading=bibnumbered]
 
 \end{document}
