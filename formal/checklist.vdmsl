@@ -1,0 +1,25 @@
+module Checklist
+exports all
+definitions
+
+values
+
+types
+
+    String = seq of char;
+
+    -- Item of a checklist, e.g. Landing gear down
+    Item ::
+            todo : String
+            checked : bool;
+
+    -- A section of a checklist, e.g. Landing Checklist
+    Section = seq of Item;
+
+    -- Full checklist, e.g. Startup, Descent, Landing Checklist
+    Checklist = seq of Section;
+
+functions
+
+end Checklist
+
