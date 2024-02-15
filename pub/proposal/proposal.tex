@@ -125,14 +125,29 @@
   x unit=1.3mm,
   y unit chart=7.5mm,
   time slot format=isodate,
-  ]{2024-02-26}{2024-05-12}
-  % \gantttitle{Project Plan}{12} \\
-  % \gantttitlelist{1,...,12}{1} \\
+  % vrule styling
+  vrule/.append style={red},
+  vrule label node/.append style={align=center},
+]{2024-02-26}{2024-05-12}
   \gantttitlecalendar{year, week} \\
+  
   \ganttgroup{Task 1}{2024-02-26}{2024-03-09} \\
   \ganttbar{Subtask 1}{2024-02-26}{2024-02-29} \\
   \ganttlinkedbar{Subtask 2}{2024-03-01}{2024-03-09} \ganttnewline
-  % \ganttlink{elem2}{elem3}
+
+  % Deadlines
+  \ganttvrule{%
+    Presentation\ganttalignnewline 
+    Deadline %
+  }{2024-03-22}
+  \ganttvrule{%
+    Poster\ganttalignnewline %
+    Deadline%
+  }{2024-04-24}
+  \ganttvrule{%
+    Dissertation\ganttalignnewline %
+    Deadline%
+  }{2024-05-08}
 \end{ganttchart}
 
 \subsection{Brief Explanation}
