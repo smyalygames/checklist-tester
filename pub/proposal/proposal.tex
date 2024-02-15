@@ -8,6 +8,9 @@
 \usepackage{multirow}
 \usepackage{array}
 
+% Gantt Chart
+\usepackage{pgfgantt}
+
 % For referencing
 \usepackage[citestyle=ieee]{biblatex}
 \addbibresource{references.bib}
@@ -108,6 +111,29 @@
 % Planning
 \section{Planning}
 \subsection{Diagrammatic Work Plan}
+
+% Make title format for gantt chart into week commencing
+\ganttset{%
+  calendar week text={%
+    \startday/\startmonth%
+  }%
+}
+
+\begin{ganttchart}[
+  hgrid,
+  vgrid={*{6}{draw=none}, dotted},
+  x unit=1.3mm,
+  y unit chart=7.5mm,
+  time slot format=isodate,
+  ]{2024-02-26}{2024-05-12}
+  % \gantttitle{Project Plan}{12} \\
+  % \gantttitlelist{1,...,12}{1} \\
+  \gantttitlecalendar{year, week} \\
+  \ganttgroup{Task 1}{2024-02-26}{2024-03-09} \\
+  \ganttbar{Subtask 1}{2024-02-26}{2024-02-29} \\
+  \ganttlinkedbar{Subtask 2}{2024-03-01}{2024-03-09} \ganttnewline
+  % \ganttlink{elem2}{elem3}
+\end{ganttchart}
 
 \subsection{Brief Explanation}
 
