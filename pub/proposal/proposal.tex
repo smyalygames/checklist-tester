@@ -123,17 +123,50 @@
   hgrid,
   vgrid={*{6}{draw=none}, dotted},
   x unit=1.3mm,
-  y unit chart=7.5mm,
+  y unit chart=8mm,
   time slot format=isodate,
+  % bar formatting
+  bar label node/.append style={align=right},
+  % milestone formatting
+  milestone label node/.append style={align=right},
   % vrule styling
   vrule/.append style={red},
   vrule label node/.append style={align=center},
+  % Font sizing
+  title label font=\small,
+  bar label font=\small,
+  group label font=\small,
+  milestone label font=\small,
+  today label font=\small,
+  vrule label font=\small,
 ]{2024-02-26}{2024-05-12}
   \gantttitlecalendar{year, week} \\
-  
-  \ganttgroup{Task 1}{2024-02-26}{2024-03-09} \\
-  \ganttbar{Subtask 1}{2024-02-26}{2024-02-29} \\
-  \ganttlinkedbar{Subtask 2}{2024-03-01}{2024-03-09} \ganttnewline
+ 
+  % VDM
+  \ganttgroup{VDM Modelling}{2024-02-26}{2024-03-09} \\
+  \ganttbar{%
+    Create Checklist\ganttalignnewline
+    Functionality%
+  }{2024-02-26}{2024-03-03} \\
+  \ganttlinkedbar{%
+    Capture\ganttalignnewline
+    Aircraft State%
+  }{2024-03-04}{2024-03-10} \ganttnewline
+  \ganttlinkedbar{%
+    Simulate\ganttalignnewline
+    Pilot Actions%
+  }{2024-03-11}{2024-03-17} \ganttnewline
+  \ganttlinkedbar{%
+    Flight\ganttalignnewline
+    Conditions%
+  }{2024-03-18}{2024-03-24} \ganttnewline
+
+  % Coursework
+  \ganttbar{Create Video}{2024-03-11}{2024-03-20} \ganttnewline
+  \ganttlinkedmilestone{%
+    Submit\ganttalignnewline
+    Presentation%
+  }{2024-03-21}
 
   % Deadlines
   \ganttvrule{%
