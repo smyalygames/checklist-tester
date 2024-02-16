@@ -10,6 +10,7 @@
 
 % Gantt Chart
 \usepackage{pgfgantt}
+\usepackage{moresize}
 
 % For referencing
 \usepackage[citestyle=ieee]{biblatex}
@@ -123,27 +124,29 @@
   hgrid,
   vgrid={*{6}{draw=none}, dotted},
   x unit=1.3mm,
-  y unit chart=8mm,
+  y unit chart=5mm,
   time slot format=isodate,
   % bar formatting
   bar label node/.append style={align=right},
   % milestone formatting
   milestone label node/.append style={align=right},
+  % group styling
+  group label node/.append style={align=right},
   % vrule styling
   vrule/.append style={red},
   vrule label node/.append style={align=center},
   % Font sizing
-  title label font=\small,
-  bar label font=\small,
-  group label font=\small,
-  milestone label font=\small,
-  today label font=\small,
-  vrule label font=\small,
+  title label font=\ssmall,
+  bar label font=\ssmall,
+  group label font=\bfseries\ssmall,
+  milestone label font=\ssmall,
+  today label font=\ssmall,
+  vrule label font=\ssmall,
 ]{2024-02-26}{2024-05-12}
   \gantttitlecalendar{year, week} \\
  
   % VDM
-  \ganttgroup{VDM Modelling}{2024-02-26}{2024-03-09} \\
+  \ganttgroup{VDM Modelling}{2024-02-26}{2024-04-28} \\
   \ganttbar{%
     Create Checklist\ganttalignnewline
     Functionality%
@@ -152,15 +155,40 @@
     Capture\ganttalignnewline
     Aircraft State%
   }{2024-03-04}{2024-03-10} \ganttnewline
-  \ganttlinkedbar{%
+  \ganttlinkedmilestone{Useable Model}{2024-03-10} \ganttnewline
+  \ganttbar{%
     Simulate\ganttalignnewline
     Pilot Actions%
-  }{2024-03-11}{2024-03-17} \ganttnewline
+  }{2024-04-15}{2024-04-21} \ganttnewline
   \ganttlinkedbar{%
     Flight\ganttalignnewline
     Conditions%
-  }{2024-03-18}{2024-03-24} \ganttnewline
+  }{2024-04-22}{2024-04-28} \ganttnewline
+  %\ganttlinkedmilestone{Finish Model}{2024-03-24} \ganttnewline
 
+  % Frontend
+  \ganttgroup{Manager}{2024-03-11}{2024-03-24} \\
+  \ganttbar{%
+    Create\ganttalignnewline
+    Frontend%
+  }{2024-03-11}{2024-03-17}\ganttnewline
+  \ganttlinkedbar{Link VDM}{2024-03-18}{2024-03-24} \ganttnewline
+  \ganttlink{elem3}{elem7}
+  
+  % Simulator Connector
+  \ganttgroup{%
+    Simulator\ganttalignnewline
+    Connector%
+  }{2024-03-25}{2024-04-14} \\ 
+  \ganttbar{%
+    Learn\ganttalignnewline
+    Simulator SDK%
+  }{2024-03-25}{2024-03-31} \ganttnewline
+  \ganttlinkedbar{Connect Logic}{2024-04-01}{2024-04-14} \ganttnewline
+  \ganttlink{elem8}{elem10}
+  \ganttlink{elem11}{elem4}
+
+  \ganttnewline
   % Coursework
   \ganttbar{Create Video}{2024-03-11}{2024-03-20} \ganttnewline
   \ganttlinkedmilestone{%
@@ -169,11 +197,15 @@
   }{2024-03-21}
 
   % Deadlines
-  \ganttvrule{%
+  \ganttvrule[
+    vrule label node/.append style={anchor=north east}
+  ]{%
     Presentation\ganttalignnewline 
     Deadline %
   }{2024-03-22}
-  \ganttvrule{%
+  \ganttvrule[
+    vrule label node/.append style={anchor=north west}
+  ]{%
     Poster\ganttalignnewline %
     Deadline%
   }{2024-04-24}
@@ -181,6 +213,21 @@
     Dissertation\ganttalignnewline %
     Deadline%
   }{2024-05-08}
+  % Holidays
+  \ganttvrule[
+    vrule/.append style={thin, blue},
+    vrule label node/.append style={anchor=north west}
+  ]{%
+    Easter\ganttalignnewline
+    Holidays%
+  }{2024-03-25}
+  \ganttvrule[
+    vrule/.append style={thin, blue},
+    vrule label node/.append style={anchor=north east}
+  ]{%
+    End of\ganttalignnewline
+    Holidays%
+  }{2024-04-22}
 \end{ganttchart}
 
 \subsection{Brief Explanation}
