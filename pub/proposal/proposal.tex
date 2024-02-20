@@ -2,6 +2,8 @@
 
 \usepackage{csquotes}
 
+\usepackage{xcolor}
+
 % Tables
 \usepackage{tabularx}
 \usepackage{booktabs}
@@ -31,6 +33,10 @@
     }
 }
 
+\newcommand{\lfcomment}[1]{\textcolor{blue}{\textbf{LF}:~#1}}
+%Uncomment below to remove comments from PDF yet keeping in the LaTeX :-)
+%\renewcommand{\lfcomment}[1]{\relax}
+
 \begin{document}
 % Title Page and contents
 \begin{titlepage}
@@ -46,7 +52,8 @@
 \begin{itemize}
     \item Designing Emergency Checklists is difficult
     \item Procedures in checklists must be tested in simulators~\cite{nasa-design},
-      which usally means trained pilots test it
+      which usually means trained pilots test it
+      	\lfcomment{Testing for what? What's the baseline? I guess you will need some kind of evidence/argument that demonstrates that with and without the checklist results are markedly different. }
     \item Checklists are usually carried out in high
         workload environments, especially emergency ones
 \end{itemize}
@@ -55,17 +62,20 @@
 \begin{itemize}
   \item Testing procedures in checklists are often neglected~\cite{nasa-design}
     \item There are some checklists that may not be fit
-        for certain scenarios
+        for certain scenarios \lfcomment{What check lists and what scenarios?}
     \item Some checklists may make pilots \enquote{stuck}
+    	\lfcomment{Yes, or might make them ignore the checklist. What criteria does that?}
     \item Checklists may take too long to carry out - Swissair 111
+    	\lfcomment{Yes. See Checklist manifesto test}
 \end{itemize}
 
 \subsubsection*{Rationale}
 \begin{itemize}
-    \item Test checklists in a simulated environment
+    \item Test checklists in a simulated environment \lfcomment{Again, explain testing against what}
     \item Results in being able to see where to improve checklists
 \end{itemize}
 
+\lfcomment{On CL book, Ch1 is about nature of where CL work best; Ch2 explains what a CL is and isn't; Ch3 you can ignore, it talks about checklist for unknown/unexpected scenarios (advanced CL) in building; Ch4 he discussed CL with chefs; Ch5 talks about CL failures and why; \textbf{Ch6 is about Boeing's CL ``factory''}; Ch7 and 8 are about applying the CL he came up with, here you get the examples of test/baseline criteria for CL; Ch9 he explains it in his own practice (this is daunting read)!.}
 \subsection{Key Background Sources}
 \begin{tabularx}{\linewidth}{p{8em} X}
     \toprule
@@ -110,6 +120,8 @@
     \item Find how reproducible the checklist is
 \end{enumerate}
 
+\lfcomment{See above about "testing" what?}
+
 \subsection*{Objectives}
 \begin{enumerate}
     \item Checklist Manager
@@ -122,11 +134,12 @@
         \item Capture state of aircraft
         \item Simulate a pilot's actions
         \item Simulate delay in actions
+        \lfcomment{\item Ensure consistency of checklist logic}
     \end{enumerate}
     \item Simulator connector
     \begin{enumerate}
         \item Connect to the flight simulator
-        \item Set up conditions of flight
+        \item Set up conditions for flight
         \item Monitor and take Logic's actions
     \end{enumerate}
 \end{enumerate}
