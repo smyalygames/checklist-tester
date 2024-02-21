@@ -192,30 +192,29 @@ the checklist.
 
 To test checklists for flaws that could compromise the aircraft 
 and to make sure that the checklist can be completed in a reasonable 
-amount of time for multiple different conditions (such as weather or pilot's reaction times)
+amount of time for multiple different conditions (such as the weather or pilot's reaction times)
 that could affect the amount of time the pilots will have to complete the checklist.
 As a result, this will also test the reproducibility of the checklist's goal.
 
 \subsection*{Objectives}
 \begin{enumerate}
-    \item Checklist Manager
+  \item Research current checklists that may be problematic that 
+    could be tested
+  \item Research how pilots act within certain situations for 
+    the checklists to be tested
+  \item Implement a formal model that runs through checklists,
+    with the research gathered, to produce an accurate test
     \begin{enumerate}
-        \item Input a checklist
-        \item Add conditions to test        
+      \item Understand the relative states of the aircraft that 
+        need to be captured
+      \item Ensure the consistency of the checklist procedures 
+        are tested
     \end{enumerate}
-    \item Checklist Testing Logic
-    \begin{enumerate}
-        \item Capture state of aircraft
-        \item Simulate a pilot's actions
-        \item Simulate delay in actions
-        \lfcomment{\item Ensure consistency of checklist logic}
-    \end{enumerate}
-    \item Simulator connector
-    \begin{enumerate}
-        \item Connect to the flight simulator
-        \item Set up conditions for flight
-        \item Monitor and take Logic's actions
-    \end{enumerate}
+  \item Implement a manager for the checklist testing logic to 
+    provide information about how the test results
+  \item Connect the formal model to a flight simulator allowing
+    for a more accurate representation of the aircraft systems
+    and flight conditions
 \end{enumerate}
 
 % Planning
