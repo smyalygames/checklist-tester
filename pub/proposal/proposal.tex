@@ -5,7 +5,7 @@
 \usepackage{xcolor}
 
 % Tables
-\usepackage{tabularx}
+\usepackage{xltabular}
 \usepackage{booktabs}
 \usepackage{multirow}
 \usepackage{array}
@@ -35,7 +35,7 @@
 
 \newcommand{\lfcomment}[1]{\textcolor{blue}{\textbf{LF}:~#1}}
 %Uncomment below to remove comments from PDF yet keeping in the LaTeX :-)
-%\renewcommand{\lfcomment}[1]{\relax}
+\renewcommand{\lfcomment}[1]{\relax}
 
 \begin{document}
 % Title Page and contents
@@ -124,10 +124,23 @@ the checklist.
 
 \lfcomment{On CL book, Ch1 is about nature of where CL work best; Ch2 explains what a CL is and isn't; Ch3 you can ignore, it talks about checklist for unknown/unexpected scenarios (advanced CL) in building; Ch4 he discussed CL with chefs; Ch5 talks about CL failures and why; \textbf{Ch6 is about Boeing's CL ``factory''}; Ch7 and 8 are about applying the CL he came up with, here you get the examples of test/baseline criteria for CL; Ch9 he explains it in his own practice (this is daunting read)!.}
 \subsection{Key Background Sources}
-\begin{tabularx}{\linewidth}{p{8em} X}
+\begin{xltabular}{\linewidth}{p{8em} X}
     \toprule
     Resource & Info \\
+    \midrule \endfirsthead
+    
+    \toprule
+    \multicolumn{2}{l}{Key Background Sources (continued)} \\
+    Resource & Info \\
+    \midrule \endhead
+
     \midrule
+    \multicolumn{2}{r}{Continued\dots} \\
+    \bottomrule \endfoot
+
+
+    \bottomrule \endlastfoot
+
     \multirow{2}{*}{\parbox{8em}{US Airways 1549 NTSB Investigation~\cite{AWE1549}}}
     & \textbf{Description:} An investigation on an aircraft that
         suffered from a dual engine failure from a bird strike
@@ -161,9 +174,7 @@ the checklist.
     & \textbf{Reason:} Checklist designer from Boeing is interviewed
     where they go through the vital design choices to make them effective
     and how they gain pilots' trust to use checklists. \\
-
-    \bottomrule
-\end{tabularx}
+\end{xltabular}
 
 % Aim (or hypothesis) and Objectives
 \section{Aims and Objectives}
