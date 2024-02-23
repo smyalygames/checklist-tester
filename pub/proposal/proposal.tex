@@ -1,4 +1,4 @@
-\documentclass[a4paper]{article}
+\documentclass[a4paper, british]{article}
 
 \usepackage{csquotes}
 
@@ -13,6 +13,8 @@
 % Gantt Chart
 \usepackage{pgfgantt}
 \usepackage{moresize}
+
+\usepackage{babel}
 
 % For referencing
 \usepackage[citestyle=ieee]{biblatex}
@@ -289,7 +291,10 @@ As a result, this will also test the reproducibility of the checklist's goal.
   %\ganttlinkedmilestone{Finish Model}{2024-03-24} \ganttnewline
 
   % Frontend
-  \ganttgroup{Manager}{2024-03-11}{2024-03-24} \ganttnewline
+  \ganttgroup{
+    Checklist \ganttalignnewline
+    Manager%
+  }{2024-03-11}{2024-03-24} \ganttnewline
   \ganttbar{%
     Create\ganttalignnewline
     Frontend%
@@ -384,9 +389,10 @@ during the holidays is to prevent the problem of getting up to speed again
 once the term starts, hence the tasks are simple which should allow for 
 taking more breaks from work during the holidays.
 
-The last tasks in the VDM modelling is not essential to provide a proof of 
-concept of the checklist tester, as they are features that would improve the 
-test quality. This would allow for redundancy if time were to become a problem 
+The last tasks in the Vienna Development Method (VDM)~\cite{vdm} modelling 
+is not essential to provide a proof of concept of the checklist tester,
+as they are features that would improve the test quality. 
+This would allow for redundancy if time were to become a problem 
 as these tasks could be taken out, in favour of writing the dissertation,
 and could be implemented at another time.
 
