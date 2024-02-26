@@ -5,6 +5,28 @@ definitions
 values
 
 types
+    -- Aircraft
+
+    -- Switches
+    --@doc The state a switch can be in
+    SwitchState = nat
+        inv s == s <= 3;
+
+    --@doc A switch, with the possible states it can be in, and the state that it is in
+    Switch :: 
+                position : nat1
+                states : seq of SwitchState
+                inv s == s.position <= len s.states;
+
+    -- Knob
+    Knob :: 
+            position : nat1
+            states : seq of int
+            inv k == k.position <= len k.states;
+
+    Throttle = int
+        inv t == t >= -100 and t <= 100;
+
 
     String = seq of char;
 
