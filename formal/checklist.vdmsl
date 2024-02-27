@@ -5,6 +5,8 @@ definitions
 values
 
 types
+    String = seq of char;
+
     -- Aircraft
 
     -- Switches
@@ -24,21 +26,39 @@ types
             states : seq of int
             inv k == k.position <= len k.states;
 
-    Throttle = int
-        inv t == t >= -100 and t <= 100;
+    Lever = nat
+        inv t == t <= 100;
 
+    Throttle :: 
+                thrust: Lever
+                reverser: Lever
+                inv t ==
+                    if t.thrust > 0 then
+                        t.reverser = 0
+                    else 
+                        t.reverser >= 0;
 
-    String = seq of char;
+    --@doc The type that the action of the button is
+    ItemType = <SWITCH> | <KNOB> | <BUTTON>;
 
-    -- Item of a checklist, e.g. Landing gear down
+    --@doc Item of a checklist, e.g. Landing gear down
     Item ::
-            todo : String
-            checked : bool;
+            name : String
+            type : ItemType
+            object : Switch | Knob | Throttle;
 
-    -- A section of a checklist, e.g. Landing Checklist
-    Section = seq of Item;
+    -- Checklist
 
-    -- Full checklist, e.g. Startup, Descent, Landing Checklist
+    --@doc Item of a checklist, e.g. Landing gear down
+    ChecklistItem ::
+                    procedure : String
+                    item : Item
+                    checked : bool;
+
+    --@doc A section of a checklist, e.g. Landing Checklist
+    Section = seq of ChecklistItem;
+
+    --@doc Full checklist, e.g. Startup, Descent, Landing Checklist
     Checklist = seq of Section;
 
 functions
