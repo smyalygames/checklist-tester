@@ -93,6 +93,25 @@ types
     Checklist = seq of Procedure;
 
 functions
+    --@doc Finds the index of the next item in the checklist that needs to be completed
+    procedure_next_index: Procedure -> nat1
+    procedure_next_index(p) ==
+        hd [ x | x in set {1,...,len p} & p(x).checked = false]
+    pre
+        -- Checks to prevent getting the head of an empty sequence
+        len p > 0
+        and procedure_completed(p) = false
+    post
+        -- Checks that the index of the item is the next one to be completed
+        p(RESULT).checked = false
+        and if RESULT > 1 then 
+            p(RESULT-1).checked = true
+        else 
+            true;
 
+    --@doc Checks if the procedure has been completed
+    procedure_completed: Procedure -> bool
+    procedure_completed(p) ==
+        false not in set { p(x).checked | x in set {1,...,len p} };
 
 end Checklist
