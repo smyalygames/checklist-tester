@@ -4,14 +4,25 @@ definitions
 
 values
     -- Before Start Checklist
+    -- Items in Aircraft
     -- Flight Deck... (can't check)
-    fuel: Item = mk_Item("Fuek Pump", <SWITCH>, mk_Switch(1, [1, 2]));
-    pax_sign: Item = mk_Item("Passenger Signs", <SWITCH>, mk_Switch(1, [1, 2, 3]));
-    windows: Item = mk_Item("Windows", <SWITCH>, mk_Switch(2, [1, 2]));
+    fuel: Item = mk_Item("Fuek Pump", <SWITCH>, mk_Switch(<OFF>, false));
+    pax_sign: Item = mk_Item("Passenger Signs", <SWITCH>, mk_Switch(<OFF>, true));
+    windows: Item = mk_Item("Windows", <SWITCH>, mk_Switch(<ON>, false));
     -- Preflight steps
-    acol: Item = mk_Item("Anti Collision Lights", <SWITCH>, mk_Switch(1, [1, 2]));
+    acol: Item = mk_Item("Anti Collision Lights", <SWITCH>, mk_Switch(<OFF>, false));
 
     aircraft: Aircraft = [fuel, pax_sign, windows, acol];
+
+    -- Checklist
+    -- Flight Deck... (can't check)
+    fuel_chkl: ChecklistItem = mk_ChecklistItem(fuel.name, <SWITCH>, <ON>, false);
+    pax_sign_chkl: ChecklistItem = mk_ChecklistItem(pax_sign.name, <SWITCH>, <ON>, false);
+    windows_chkl: ChecklistItem = mk_ChecklistItem(windows.name, <SWITCH>, <ON>, false);
+    -- Preflight steps
+    acol_chkl: ChecklistItem = mk_ChecklistItem(acol.name, <SWITCH>, <ON>, false);
+
+    before_start_procedure: Procedure = [fuel_chkl, pax_sign_chkl, windows_chkl, acol_chkl];
 types
     String = seq of char;
 
@@ -20,14 +31,16 @@ types
     -- Switches
     --@doc The state a switch can be in
     -- 1 means off
-    SwitchState = nat1
-        inv s == s <= 3;
+    SwitchState = <OFF> | <MIDDLE> | <ON>;
 
     --@doc A switch, with the possible states it can be in, and the state that it is in
     Switch :: 
-                position : nat1
-                states : seq of SwitchState
-                inv s == s.position <= len s.states;
+                position : SwitchState
+                middlePosition : bool
+                inv s == 
+                    if s.middlePosition = false then 
+                        s.position <> <MIDDLE>
+                    else true;
 
     -- Knob
     Knob :: 
@@ -64,24 +77,22 @@ types
     --@doc Item of a checklist, e.g. Landing gear down
     ChecklistItem ::
                     procedure : String
-                    item : Item
+                    type : ItemType
+                    check : SwitchState
                     checked : bool;
 
     --@doc A section of a checklist, e.g. Landing Checklist
     Procedure = seq of ChecklistItem
-        inv p == check_procedure_order_complete(p);
+        inv p == 
+            false not in set { 
+                let first = p(x-1).checked, second = p(x).checked in 
+                    (first = second) or ((first = true) and (second = false))
+                | x in set {2,...,len p}};
     
     --@doc Full checklist, e.g. Startup, Descent, Landing Checklist
     Checklist = seq of Procedure;
 
 functions
---@doc Checks that each item in the checklist are completed in order
-check_procedure_order_complete: Procedure -> bool
-check_procedure_order_complete(p) ==
-    false not in set {
-        p(x-1).checked = p(x).checked or 
-        (p(x-1).checked = true and p(x).checked = false)
-            | x in set {1,...,len p}
-    };
+
 
 end Checklist
