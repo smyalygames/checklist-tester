@@ -3,7 +3,15 @@ exports all
 definitions
 
 values
+    -- Before Start Checklist
+    -- Flight Deck... (can't check)
+    fuel: Item = mk_Item("Fuek Pump", <SWITCH>, mk_Switch(1, [1, 2]));
+    pax_sign: Item = mk_Item("Passenger Signs", <SWITCH>, mk_Switch(1, [1, 2, 3]));
+    windows: Item = mk_Item("Windows", <SWITCH>, mk_Switch(2, [1, 2]));
+    -- Preflight steps
+    acol: Item = mk_Item("Anti Collision Lights", <SWITCH>, mk_Switch(1, [1, 2]));
 
+    aircraft: Aircraft = [fuel, pax_sign, windows, acol];
 types
     String = seq of char;
 
@@ -11,7 +19,8 @@ types
 
     -- Switches
     --@doc The state a switch can be in
-    SwitchState = nat
+    -- 1 means off
+    SwitchState = nat1
         inv s == s <= 3;
 
     --@doc A switch, with the possible states it can be in, and the state that it is in
@@ -47,6 +56,9 @@ types
             type : ItemType
             object : Switch | Knob | Throttle;
 
+    --@doc Aircraft contains all the controls
+    Aircraft = seq of Item;
+
     -- Checklist
 
     --@doc Item of a checklist, e.g. Landing gear down
@@ -56,12 +68,20 @@ types
                     checked : bool;
 
     --@doc A section of a checklist, e.g. Landing Checklist
-    Section = seq of ChecklistItem;
-
+    Procedure = seq of ChecklistItem
+        inv p == check_procedure_order_complete(p);
+    
     --@doc Full checklist, e.g. Startup, Descent, Landing Checklist
-    Checklist = seq of Section;
+    Checklist = seq of Procedure;
 
 functions
+--@doc Checks that each item in the checklist are completed in order
+check_procedure_order_complete: Procedure -> bool
+check_procedure_order_complete(p) ==
+    false not in set {
+        p(x-1).checked = p(x).checked or 
+        (p(x-1).checked = true and p(x).checked = false)
+            | x in set {1,...,len p}
+    };
 
 end Checklist
-
