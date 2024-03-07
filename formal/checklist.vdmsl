@@ -93,7 +93,7 @@ types
     Checklist = seq of Procedure;
 
 functions
-    --@doc Finds the index of the next item in the checklist that needs to be completed
+    --@doc Finds the index of the next item in the procedure that needs to be completed
     procedure_next_index: Procedure -> nat1
     procedure_next_index(p) ==
         hd [ x | x in set {1,...,len p} & p(x).checked = false]
@@ -113,5 +113,22 @@ functions
     procedure_completed: Procedure -> bool
     procedure_completed(p) ==
         false not in set { p(x).checked | x in set {1,...,len p} };
+
+    --@doc Find index of an item in Aircraft
+    index_of_item: String * Aircraft -> nat1
+    index_of_item(i, a) ==
+        if (hd a).name = i then 1
+        else 
+            index_of_item(i, tl a) + 1
+        pre
+            len a > 0
+        post
+            -- Checks that the index is correct
+            --TODO this does not check if it is the first item in the list
+            if RESULT > 1 then
+                a(RESULT).name = i
+            else
+                true
+        measure len a;
 
 end Checklist
