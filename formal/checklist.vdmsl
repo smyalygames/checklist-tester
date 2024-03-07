@@ -122,6 +122,8 @@ functions
             index_of_item(i, tl a) + 1
         pre
             len a > 0
+            -- Checks if the last item in the aircraft is the item that is being searched for
+            and (len a = 1 and a(1).name = i)
         post
             -- Checks that the index is correct
             --TODO this does not check if it is the first item in the list
