@@ -131,4 +131,30 @@ functions
                 true
         measure len a;
 
+    --@doc Moves a specific switch in the aircraft
+    move_switch: Switch * SwitchState -> Switch
+    move_switch(i, s) ==
+        mk_Switch(s, i.middlePosition)
+    pre
+        -- Checks that the switch not already in the desired state
+        i.position <> s and
+        -- The switch has to move one at a time
+        -- Reasoning for this is that some switches cannot be moved in one quick move
+        if i.middlePosition = true then
+            -- Checks moving the switch away from the middle position
+            (i.position = <MIDDLE> and s <> <MIDDLE>)
+            -- Checks moving the siwtch to the middle position
+            <> (check_switch_onoff(i) = true and s = <MIDDLE>)
+        else
+            check_switch_onoff(i) and s <> <MIDDLE>
+        post
+            RESULT.position = s;
+
+    --@doc Checks if the switch is in the on or off position
+    check_switch_onoff: Switch -> bool
+    check_switch_onoff(s) ==
+        let position = s.position in
+            position = <OFF> or position = <ON>;
+
+
 end Checklist
