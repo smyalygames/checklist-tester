@@ -78,12 +78,14 @@ types
     ChecklistItem ::
                     procedure : String
                     type : ItemType
+                    --TODO Check is not only SwitchState
                     check : SwitchState
                     checked : bool;
 
     --@doc A section of a checklist, e.g. Landing Checklist
     Procedure = seq of ChecklistItem
         inv p == 
+            len p > 0 and
             false not in set { 
                 let first = p(x-1).checked, second = p(x).checked in 
                     (first = second) or ((first = true) and (second = false))
@@ -98,9 +100,8 @@ functions
     procedure_next_index(p) ==
         hd [ x | x in set {1,...,len p} & p(x).checked = false]
     pre
-        -- Checks to prevent getting the head of an empty sequence
-        len p > 0
-        and procedure_completed(p) = false
+        -- Checks procedure has not already been completed
+        procedure_completed(p) = false
     post
         -- Checks that the index of the item is the next one to be completed
         p(RESULT).checked = false
@@ -113,6 +114,33 @@ functions
     procedure_completed: Procedure -> bool
     procedure_completed(p) ==
         false not in set { p(x).checked | x in set {1,...,len p} };
+
+    --@doc Checks if the next item in the procedure has been completed
+    check_proc_item_complete: Procedure * Aircraft -> bool
+    check_proc_item_complete(p, a) ==
+        let procItem = p(procedure_next_index(p)),
+            itemIndex = index_of_item(procItem.procedure, a),
+            item = a(itemIndex) in
+            
+            --TODO need to be able to check for different types of Items
+            procItem.check = item.object.position
+    pre
+        procedure_completed(p) = false;
+
+    --@doc Marks next item in procedure as complete
+    mark_proc_item_complete: Procedure -> Procedure
+    mark_proc_item_complete(p) ==
+        let i = procedure_next_index(p), item = p(i) in
+            p ++ {i |-> complete_item(item)}
+        pre
+            procedure_completed(p) = false;
+
+    --@doc Marks ChecklistItem as complete
+    complete_item: ChecklistItem -> ChecklistItem
+    complete_item(i) ==
+        mk_ChecklistItem(i.procedure, i.type, i.check, true)
+    pre
+        i.checked = false;
 
     --@doc Find index of an item in Aircraft
     index_of_item: String * Aircraft -> nat1
