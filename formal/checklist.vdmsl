@@ -6,7 +6,7 @@ values
     -- Before Start Checklist
     -- Items in Aircraft
     -- Flight Deck... (can't check)
-    fuel: Item = mk_Item("Fuek Pump", <SWITCH>, mk_Switch(<OFF>, false));
+    fuel: Item = mk_Item("Fuel Pump", <SWITCH>, mk_Switch(<OFF>, false));
     pax_sign: Item = mk_Item("Passenger Signs", <SWITCH>, mk_Switch(<OFF>, true));
     windows: Item = mk_Item("Windows", <SWITCH>, mk_Switch(<ON>, false));
     -- Preflight steps
@@ -32,6 +32,8 @@ types
     --@doc The state a switch can be in
     -- 1 means off
     SwitchState = <OFF> | <MIDDLE> | <ON>;
+
+    ItemState = SwitchState;
 
     --@doc A switch, with the possible states it can be in, and the state that it is in
     Switch :: 
@@ -95,6 +97,7 @@ types
     Checklist = seq of Procedure;
 
 functions
+    -- PROCEDURES
     --@doc Finds the index of the next item in the procedure that needs to be completed
     procedure_next_index: Procedure -> nat1
     procedure_next_index(p) ==
@@ -135,6 +138,15 @@ functions
         pre
             procedure_completed(p) = false;
 
+    --@doc Completes an Item in the procedure on the Aircraft
+    do_proc_item: ChecklistItem * Aircraft -> Aircraft
+    do_proc_item(p, a) ==
+        let itemIndex = index_of_item(p.procedure, a) in
+            a ++ {itemIndex |-> move_item(a(itemIndex), p.check)}
+    pre
+        p.checked = false;
+
+    -- AIRCRAFT ITEMS
     --@doc Marks ChecklistItem as complete
     complete_item: ChecklistItem -> ChecklistItem
     complete_item(i) ==
@@ -145,21 +157,33 @@ functions
     --@doc Find index of an item in Aircraft
     index_of_item: String * Aircraft -> nat1
     index_of_item(i, a) ==
-        if (hd a).name = i then 1
+        if (hd a).name = i then
+            1
         else 
             index_of_item(i, tl a) + 1
-        pre
-            len a > 0
-            -- Checks if the last item in the aircraft is the item that is being searched for
-            and (len a = 1 and a(1).name = i)
-        post
-            -- Checks that the index is correct
-            --TODO this does not check if it is the first item in the list
-            if RESULT > 1 then
-                a(RESULT).name = i
-            else
-                true
-        measure len a;
+    pre
+        len a > 0
+        -- Checks the Item being searched for is in the Aircraft
+        and i in set { a(x).name | x in set {1,...,len a} }
+    post
+        -- Checks that the index is correct
+        --TODO this does not check if it is the first item in the list
+        if RESULT > 1 then
+            a(RESULT).name = i
+        else
+            true
+    measure len a;
+
+    --@doc Moves any type of Item
+    move_item: Item * ItemState -> Item
+    move_item(i, s) ==
+        -- if is_Switch(i) then (implement later)
+            mk_Item(i.name, i.type, move_switch(i.object, s))
+    pre
+        (is_Switch(i.object) and is_SwitchState(s))
+        --TODO check that the item has not already been completed before moving item
+        --TODO add other types of Items
+        ;
 
     --@doc Moves a specific switch in the aircraft
     move_switch: Switch * SwitchState -> Switch
