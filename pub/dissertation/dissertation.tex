@@ -1,0 +1,52 @@
+\documentclass[a4paper, british]{report}
+
+\usepackage{csquotes}
+\usepackage{babel}
+
+\usepackage{xcolor}
+
+% Tables
+\usepackage{xltabular}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+
+% For referencing
+\usepackage[citestyle=ieee]{biblatex}
+\addbibresource{references.bib}
+
+% This should be loaded last
+\usepackage[colorlinks]{hyperref}
+\usepackage{subfiles}
+
+\author{Anthony Berg}
+\title{Testing Quick Reference Handbooks in Simulators}
+
+\hypersetup{
+    pdfinfo = {
+        Title = Testing Quick Reference Handbooks in Simulators,
+        Author = Anthony Berg,
+        Subject = BSc Computer Science Dissertation,
+    }
+}
+
+\newcommand{\lfcomment}[1]{\textcolor{blue}{\textbf{LF}:~#1}}
+%Uncomment below to remove comments from PDF yet keeping in the LaTeX :-)
+\renewcommand{\lfcomment}[1]{\relax}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\chapter{Introduction}
+
+\chapter{Background}
+
+\chapter{Design/Implementation}
+
+\chapter{Results}
+
+\chapter{Conclusion}
+
+\end{document}
+
