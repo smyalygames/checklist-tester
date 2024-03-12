@@ -6,23 +6,25 @@ values
     -- Before Start Checklist
     -- Items in Aircraft
     -- Flight Deck... (can't check)
-    fuel: Item = mk_Item("Fuel Pump", <SWITCH>, mk_Switch(<OFF>, false));
-    pax_sign: Item = mk_Item("Passenger Signs", <SWITCH>, mk_Switch(<OFF>, true));
-    windows: Item = mk_Item("Windows", <SWITCH>, mk_Switch(<ON>, false));
+    fuel: ItemObject = mk_ItemObject(<SWITCH>, mk_Switch(<OFF>, false));
+    pax_sign: ItemObject = mk_ItemObject(<SWITCH>, mk_Switch(<OFF>, true));
+    windows: ItemObject = mk_ItemObject(<SWITCH>, mk_Switch(<ON>, false));
     -- Preflight steps
-    acol: Item = mk_Item("Anti Collision Lights", <SWITCH>, mk_Switch(<OFF>, false));
+    acol: ItemObject = mk_ItemObject(<SWITCH>, mk_Switch(<OFF>, false));
 
-    aircraft: Aircraft = [fuel, pax_sign, windows, acol];
+    aircraft_panels: Items = {"Fuel Pump" |-> fuel, "Passenger Signs" |-> pax_sign, "Windows" |-> windows, "Anti Collision Lights" |-> acol};
 
     -- Checklist
     -- Flight Deck... (can't check)
-    fuel_chkl: ChecklistItem = mk_ChecklistItem(fuel.name, <SWITCH>, <ON>, false);
-    pax_sign_chkl: ChecklistItem = mk_ChecklistItem(pax_sign.name, <SWITCH>, <ON>, false);
-    windows_chkl: ChecklistItem = mk_ChecklistItem(windows.name, <SWITCH>, <ON>, false);
+    fuel_chkl: ChecklistItem = mk_ChecklistItem("Fuel Pump", <SWITCH>, <ON>, false);
+    pax_sign_chkl: ChecklistItem = mk_ChecklistItem("Passenger Signs", <SWITCH>, <ON>, false);
+    windows_chkl: ChecklistItem = mk_ChecklistItem("Windows", <SWITCH>, <ON>, false);
     -- Preflight steps
-    acol_chkl: ChecklistItem = mk_ChecklistItem(acol.name, <SWITCH>, <ON>, false);
+    acol_chkl: ChecklistItem = mk_ChecklistItem("Anti Collision Lights", <SWITCH>, <ON>, false);
 
     before_start_procedure: Procedure = [fuel_chkl, pax_sign_chkl, windows_chkl, acol_chkl];
+
+    aircraft = mk_Aircraft(aircraft_panels, {"Before Start" |-> before_start_procedure});
 types
     String = seq of char;
 
@@ -63,16 +65,26 @@ types
                         t.reverser >= 0;
 
     --@doc The type that the action of the button is
-    ItemType = <SWITCH> | <KNOB> | <BUTTON>;
+    ItemType = <SWITCH> | <KNOB> | <BUTTON> | <THROTTLE>;
 
-    --@doc Item of a checklist, e.g. Landing gear down
-    Item ::
-            name : String
-            type : ItemType
-            object : Switch | Knob | Throttle;
+    --@doc The unique switch/knob/etc of that aircraft
+    ItemObject ::
+        type : ItemType
+        object : Switch | Knob | Throttle
+        inv i ==
+            let type = i.type, object = i.object in
+                (type = <SWITCH> and is_Switch(object))
+                or (type = <KNOB> and is_Knob(object))
+                or (type = <THROTTLE> and is_Throttle(object));
+                --TODO add check for button
 
-    --@doc Aircraft contains all the controls
-    Aircraft = seq of Item;
+    --@doc Contains each ItemObject in the Aircraft, e.g. Fuel Pump switch
+    Items = map String to ItemObject;
+
+    --@doc Contains the panels (all the items in the aircraft) and the checklist
+    Aircraft ::
+        items : Items
+        checklist : Checklist;
 
     -- Checklist
 
@@ -94,7 +106,7 @@ types
                 | x in set {2,...,len p}};
     
     --@doc Full checklist, e.g. Startup, Descent, Landing Checklist
-    Checklist = seq of Procedure;
+    Checklist = map String to Procedure;
 
 functions
     -- PROCEDURES
@@ -122,8 +134,7 @@ functions
     check_proc_item_complete: Procedure * Aircraft -> bool
     check_proc_item_complete(p, a) ==
         let procItem = p(procedure_next_index(p)),
-            itemIndex = index_of_item(procItem.procedure, a),
-            item = a(itemIndex) in
+            item = a.items(procItem.procedure) in
             
             --TODO need to be able to check for different types of Items
             procItem.check = item.object.position
@@ -141,14 +152,19 @@ functions
     --@doc Completes an Item in the procedure on the Aircraft
     do_proc_item: ChecklistItem * Aircraft -> Aircraft
     do_proc_item(p, a) ==
-        let itemIndex = index_of_item(p.procedure, a), item = a(itemIndex), objective = p.check in
+        let itemName = p.procedure, item = a.items(p.procedure), objective = p.check in
             -- Checks if the item is in the objective desired by the checklist
             if check_item_in_position(item, objective) then
                 a
             else
-                a ++ {itemIndex |-> move_item(a(itemIndex), objective)}
+                mk_Aircraft(a.items ++ {itemName |-> move_item(a.items(itemName), objective)}, a.checklist)
     pre
         p.checked = false;
+
+    --@doc Completes a procedure step by step
+    complete_procedure: String * Aircraft -> Aircraft
+    complete_procedure(p, a) ==
+        is not yet specified;
 
     -- AIRCRAFT ITEMS
     --@doc Marks ChecklistItem as complete
@@ -158,40 +174,59 @@ functions
     pre
         i.checked = false;
 
-    --@doc Find index of an item in Aircraft
-    index_of_item: String * Aircraft -> nat1
-    index_of_item(i, a) ==
-        if (hd a).name = i then
-            1
-        else 
-            index_of_item(i, tl a) + 1
-    pre
-        len a > 0
-        -- Checks the Item being searched for is in the Aircraft
-        and i in set { a(x).name | x in set {1,...,len a} }
-    post
-        -- Checks that the index is correct
-        --TODO this does not check if it is the first item in the list
-        if RESULT > 1 then
-            a(RESULT).name = i
-        else
-            true
-    measure len a;
-
     --@doc Moves any type of Item
-    move_item: Item * ItemState -> Item
+    move_item: ItemObject * ItemState -> ItemObject
     move_item(i, s) ==
         -- if is_Switch(i) then (implement later)
-            mk_Item(i.name, i.type, move_switch(i.object, s))
+            let switch: Switch = i.object in
+                if check_switch_onoff(switch) and (s <> <MIDDLE>) then
+                    mk_ItemObject(i.type, move_switch(move_switch(switch, <MIDDLE>), s))
+                else
+                    mk_ItemObject(i.type, move_switch(switch, s))
     pre
-        wf_item_itemstate(i, s) and
-        not check_item_in_position(i, s);
+        wf_item_itemstate(i, s)
+        and not check_item_in_position(i, s)
+        and (wf_switch_move(i.object, s));
 
     --@doc Moves a specific switch in the aircraft
     move_switch: Switch * SwitchState -> Switch
     move_switch(i, s) ==
         mk_Switch(s, i.middlePosition)
     pre
+        wf_switch_move(i, s)       
+    post
+        RESULT.position = s;
+
+    --@doc Checks if the switch is in the on or off position
+    check_switch_onoff: Switch -> bool
+    check_switch_onoff(s) ==
+        let position = s.position in
+            position = <OFF> or position = <ON>
+    post
+        -- Only one can be true at a time
+        -- If the switch is in the middle position, then RESULT cannot be true
+        -- If the switch is in the on/off position, then the RESULT will be true 
+        (s.position = <MIDDLE>) <> RESULT;
+
+    --@doc Checks if the item is already in position for the desired state for that item
+    check_item_in_position: ItemObject * ItemState -> bool
+    check_item_in_position(i, s) ==
+        -- if is_Switch(i) then (implement later)
+            i.object.position = s
+    pre
+        wf_item_itemstate(i,s);
+
+    --@doc Checks if the Item.object is the same type for the ItemState
+    wf_item_itemstate: ItemObject * ItemState -> bool
+    wf_item_itemstate(i, s) ==
+        (is_Switch(i.object) and is_SwitchState(s) and i.type = <SWITCH>)
+        --TODO check that the item has not already been completed before moving item
+        --TODO add other types of Items
+        ;
+
+    --@doc Checks if the move of the Switch is a valid
+    wf_switch_move: Switch * SwitchState -> bool
+    wf_switch_move(i, s) ==
         -- Checks that the switch not already in the desired state
         i.position <> s and
         -- The switch has to move one at a time
@@ -202,31 +237,7 @@ functions
             -- Checks moving the siwtch to the middle position
             <> (check_switch_onoff(i) = true and s = <MIDDLE>)
         else
-            check_switch_onoff(i) and s <> <MIDDLE>
-        post
-            RESULT.position = s;
-
-    --@doc Checks if the switch is in the on or off position
-    check_switch_onoff: Switch -> bool
-    check_switch_onoff(s) ==
-        let position = s.position in
-            position = <OFF> or position = <ON>;
-
-    --@doc Checks if the item is already in position for the desired state for that item
-    check_item_in_position: Item * ItemState -> bool
-    check_item_in_position(i, s) ==
-        -- if is_Switch(i) then (implement later)
-            i.object.position = s
-    pre
-        wf_item_itemstate(i,s);
-
-    --@doc Checks if the Item.object is the same type for the ItemState
-    wf_item_itemstate: Item * ItemState -> bool
-    wf_item_itemstate(i, s) ==
-        (is_Switch(i.object) and is_SwitchState(s))
-        --TODO check that the item has not already been completed before moving item
-        --TODO add other types of Items
-        ;
+            check_switch_onoff(i) and s <> <MIDDLE>;
 
 
 end Checklist
