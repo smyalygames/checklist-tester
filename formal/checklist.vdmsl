@@ -141,8 +141,12 @@ functions
     --@doc Completes an Item in the procedure on the Aircraft
     do_proc_item: ChecklistItem * Aircraft -> Aircraft
     do_proc_item(p, a) ==
-        let itemIndex = index_of_item(p.procedure, a) in
-            a ++ {itemIndex |-> move_item(a(itemIndex), p.check)}
+        let itemIndex = index_of_item(p.procedure, a), item = a(itemIndex), objective = p.check in
+            -- Checks if the item is in the objective desired by the checklist
+            if check_item_in_position(item, objective) then
+                a
+            else
+                a ++ {itemIndex |-> move_item(a(itemIndex), objective)}
     pre
         p.checked = false;
 
@@ -180,10 +184,8 @@ functions
         -- if is_Switch(i) then (implement later)
             mk_Item(i.name, i.type, move_switch(i.object, s))
     pre
-        (is_Switch(i.object) and is_SwitchState(s))
-        --TODO check that the item has not already been completed before moving item
-        --TODO add other types of Items
-        ;
+        wf_item_itemstate(i, s) and
+        not check_item_in_position(i, s);
 
     --@doc Moves a specific switch in the aircraft
     move_switch: Switch * SwitchState -> Switch
@@ -209,6 +211,22 @@ functions
     check_switch_onoff(s) ==
         let position = s.position in
             position = <OFF> or position = <ON>;
+
+    --@doc Checks if the item is already in position for the desired state for that item
+    check_item_in_position: Item * ItemState -> bool
+    check_item_in_position(i, s) ==
+        -- if is_Switch(i) then (implement later)
+            i.object.position = s
+    pre
+        wf_item_itemstate(i,s);
+
+    --@doc Checks if the Item.object is the same type for the ItemState
+    wf_item_itemstate: Item * ItemState -> bool
+    wf_item_itemstate(i, s) ==
+        (is_Switch(i.object) and is_SwitchState(s))
+        --TODO check that the item has not already been completed before moving item
+        --TODO add other types of Items
+        ;
 
 
 end Checklist
