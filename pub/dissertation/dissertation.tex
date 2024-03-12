@@ -1,4 +1,10 @@
-\documentclass[a4paper, british]{report}
+\documentclass[british, twoside]{report}
+
+\usepackage[a4paper, width=150mm, top=25mm, bottom=25mm, bindingoffset=6mm]{geometry}
+
+% Page styling
+\usepackage{fancyhdr}
+\pagestyle{fancy}
 
 \usepackage{csquotes}
 \usepackage{babel}
@@ -36,9 +42,25 @@
 
 \begin{document}
 \maketitle
+
+\pagenumbering{roman}
+\chapter*{Preface}
+\section*{Abstract}
+% TODO
+This is an abstract.
+
+\section*{Declaration}
+I declare that this dissertation represents my own work except where otherwise stated.
+
+\section*{Acknowledgements}
+% TODO
+This is the acknowledgements.
+
 \tableofcontents
 
 \chapter{Introduction}
+\pagenumbering{arabic}
+\subfile{chapters/introduction.tex}
 
 \chapter{Background}
 
