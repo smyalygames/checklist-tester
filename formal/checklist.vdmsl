@@ -96,6 +96,12 @@ types
                     check : SwitchState
                     checked : bool;
 
+    --@doc This is the item with the complimentary item in the chcecklist
+    ItemAndChecklistItem ::
+        item : ItemObject
+        checklist: ChecklistItem
+        inv i == i.item.type = i.checklist.type;
+
     --@doc A section of a checklist, e.g. Landing Checklist
     Procedure = seq of ChecklistItem
         inv p == 
@@ -111,8 +117,8 @@ types
 functions
     -- PROCEDURES
     --@doc Finds the index of the next item in the procedure that needs to be completed
-    procedure_next_index: Procedure -> nat1
-    procedure_next_index(p) ==
+    procedure_next_item_index: Procedure -> nat1
+    procedure_next_item_index(p) ==
         hd [ x | x in set {1,...,len p} & p(x).checked = false]
     pre
         -- Checks procedure has not already been completed
@@ -125,6 +131,18 @@ functions
         else 
             true;
 
+    -- --@doc Checks if all the procedures have been completed
+    -- check_all_proc_completed: Checklist -> bool
+    -- check_all_proc_completed(c) ==
+    --     false not in set { procedure_completed(c(x)) | x in set {1,...,len c} };
+
+    -- --@doc Gives the index for the next procedure to complete
+    -- next_procedure: Checklist -> nat1
+    -- next_procedure(c) ==
+    --     hd [ x | x in set {1,...,len c} & not procedure_completed(c(x))]
+    -- post
+    --     RESULT <= len c;
+
     --@doc Checks if the procedure has been completed
     procedure_completed: Procedure -> bool
     procedure_completed(p) ==
@@ -133,7 +151,7 @@ functions
     --@doc Checks if the next item in the procedure has been completed
     check_proc_item_complete: Procedure * Aircraft -> bool
     check_proc_item_complete(p, a) ==
-        let procItem = p(procedure_next_index(p)),
+        let procItem = p(procedure_next_item_index(p)),
             item = a.items(procItem.procedure) in
             
             --TODO need to be able to check for different types of Items
@@ -144,27 +162,43 @@ functions
     --@doc Marks next item in procedure as complete
     mark_proc_item_complete: Procedure -> Procedure
     mark_proc_item_complete(p) ==
-        let i = procedure_next_index(p), item = p(i) in
+        let i = procedure_next_item_index(p), item = p(i) in
             p ++ {i |-> complete_item(item)}
         pre
             procedure_completed(p) = false;
 
-    --@doc Completes an Item in the procedure on the Aircraft
-    do_proc_item: ChecklistItem * Aircraft -> Aircraft
-    do_proc_item(p, a) ==
-        let itemName = p.procedure, item = a.items(p.procedure), objective = p.check in
+    --@doc Completes an item in the procedure
+    do_proc_item: ItemObject * ChecklistItem -> ItemAndChecklistItem
+    do_proc_item(i, p) ==
+        let objective = p.check,
+            checkckItem = complete_item(p) in
             -- Checks if the item is in the objective desired by the checklist
-            if check_item_in_position(item, objective) then
-                a
+            if check_item_in_position(i, objective) then
+                mk_ItemAndChecklistItem(i, checkckItem)
             else
-                mk_Aircraft(a.items ++ {itemName |-> move_item(a.items(itemName), objective)}, a.checklist)
+                mk_ItemAndChecklistItem(move_item(i, p.check), checkckItem)
     pre
-        p.checked = false;
+        p.checked = false
+    post
+        -- Checks the item has been moved correctly
+        check_item_in_position(RESULT.item, p.check);
+
+    --@doc Gets the procedure by the name, n.
+    get_procedure: String * Aircraft -> Procedure
+    get_procedure(n, a) ==
+        a.checklist(n)
+    pre
+        n in set dom a.checklist;
 
     --@doc Completes a procedure step by step
+    -- p = Name of procedure, a = Aircraft
     complete_procedure: String * Aircraft -> Aircraft
     complete_procedure(p, a) ==
-        is not yet specified;
+        is not yet specified
+    pre
+        let checklist = a.checklist in
+            p in set dom checklist
+            and not procedure_completed(checklist(p));
 
     -- AIRCRAFT ITEMS
     --@doc Marks ChecklistItem as complete
