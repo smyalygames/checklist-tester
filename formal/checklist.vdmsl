@@ -26,6 +26,7 @@ values
 
     aircraft = mk_Aircraft(aircraft_panels, {"Before Start" |-> before_start_procedure});
 types
+	--@LF can this be empty? perhaps seq1?
     String = seq of char;
 
     -- Aircraft
@@ -35,6 +36,7 @@ types
     -- 1 means off
     SwitchState = <OFF> | <MIDDLE> | <ON>;
 
+	--@LF why have a type kist as a rename?
     ItemState = SwitchState;
 
     --@doc A switch, with the possible states it can be in, and the state that it is in
@@ -42,15 +44,25 @@ types
                 position : SwitchState
                 middlePosition : bool
                 inv s == 
-                    if s.middlePosition = false then 
-                        s.position <> <MIDDLE>
-                    else true;
+                	--@LF boolean conditions like these are clearer described as
+                	-- not s.middlePosition => s.position <> <MIDDLE>
+                	-- =
+                	-- (s.position = <MIDDLE> => s.middlePosition)
+                    --
+                    --
+                    --if s.middlePosition = false then 
+                   --     s.position <> <MIDDLE>
+                    --else true;
+                    (s.position = <MIDDLE> => s.middlePosition);
 
     -- Knob
     Knob :: 
             position : nat1
-            states : seq of int
-            inv k == k.position <= len k.states;
+            --@LF how can a state be an int? perhaps a proper type (i..e. subset of int range or a union?)
+            states : seq1 of int
+            inv k == 
+            	--@LF if k.pos <= len k.states  and pos is nat1, then states better be seq1 as well?! It implicitly already is anyhow.
+            	k.position <= len k.states;
 
     Lever = nat
         inv t == t <= 100;
@@ -59,6 +71,22 @@ types
                 thrust: Lever
                 reverser: Lever
                 inv t ==
+                	--@LF again, this is "programming" not modelling. This one won't turn out as clear as the one for Switch
+                	--    but it is effectively this
+                	--
+                	-- (t.thrust > 0 <=> t.reverser = 0)
+                	--
+                	-- that is, if t.thurst > 0 then t.reverser = 0 and
+                	-- and    , if not (t.thurst > 0) then not t.reverser = 0
+                	--			==
+                	--			if (t.thurst <= 0) then t.reverser <> 0
+                	--
+                	-- coming to think of this, t.reverser is already >= 0 (i.e. it's a nat?). 
+                	-- so the else is spurious (i.e. it is a good as "true"). Don't you mean
+                	-- "t.reverser > 0"? (i.e. if thurst is <= 0, then reverser cannot be zero)?
+                	--
+                	-- again, this is concrete example how logic is better to illstrate issue than if-then-else. 
+                	-- arguably this is also a matter of taste. But as-is, this seems wrong. 
                     if t.thrust > 0 then
                         t.reverser = 0
                     else 
@@ -72,24 +100,46 @@ types
         type : ItemType
         object : Switch | Knob | Throttle
         inv i ==
+        	--@LF here I would write differently. This is protracted. I would use pattern matching 
             let type = i.type, object = i.object in
                 (type = <SWITCH> and is_Switch(object))
                 or (type = <KNOB> and is_Knob(object))
                 or (type = <THROTTLE> and is_Throttle(object));
                 --TODO add check for button
 
+	--@LF if type is always inline with the object, then why is it needed? 
+	--	  that is, would ItemType come from anywhere else but the way you  consutrct object type? 
+	--    this seems redudant (i.e. you just need object union type) perhaps as
+	
+	ObjectType = Switch | Knob | Throttle;                
+    ItemObject' ::
+        type : ItemType
+        object : ObjectType
+        inv mk_ItemObject'(type, object) ==
+        	cases type: 
+        		<SWITCH> -> is_Switch(object),
+        		<KNOB>   -> is_Knob(object),
+        		<THROTTLE>-> is_Throttle(object)
+        	end;
+
     --@doc Contains each ItemObject in the Aircraft, e.g. Fuel Pump switch
+    --@LF then String defintely shouldn't be empty. Otherwise, what does it mean to map empty to something? 
+    --    dores it really need to be string?
     Items = map String to ItemObject;
 
     --@doc Contains the panels (all the items in the aircraft) and the checklist
     Aircraft ::
         items : Items
         checklist : Checklist;
+    --@LF should the domains of these two maps be equal or contained? Should the maps be non-empty?
+    --e.g. 
+    -- inv mk_Aircraft(i, c) == (dom i = dom c) or (dom i subset dom c); ?
 
     -- Checklist
 
     --@doc Item of a checklist, e.g. Landing gear down
     ChecklistItem ::
+    				--@LF again, empty string here doesn't make sense.
                     procedure : String
                     type : ItemType
                     --TODO Check is not only SwitchState
@@ -99,16 +149,21 @@ types
     --@doc This is the item with the complimentary item in the chcecklist
     ItemAndChecklistItem ::
         item : ItemObject
+        --@LF this name is bad. This is not a check list but a check list item! call it checkListItem! 
         checklist: ChecklistItem
         inv i == i.item.type = i.checklist.type;
 
     --@doc A section of a checklist, e.g. Landing Checklist
-    Procedure = seq of ChecklistItem
+    --@LF shouldn't this be non-empty? What's the point to map a checklist name to an empty procedure? Yes.
+    Procedure = seq1 of ChecklistItem
         inv p == 
-            len p > 0 and
+            --len p > 0 and
+            --@LF the "trick" for "false not in set S" is neat. It forces a full evaluation, rather than short circuited (i.e. stops at first false).
+            --    I presume this was intended.
             false not in set { 
                 let first = p(x-1).checked, second = p(x).checked in 
-                    (first = second) or ((first = true) and (second = false))
+                	--@LF boolean values don't need equality check
+                    (first = second) or (first and not second)--((first = true) and (second = false))
                 | x in set {2,...,len p}};
     
     --@doc Full checklist, e.g. Startup, Descent, Landing Checklist
@@ -119,17 +174,23 @@ functions
     --@doc Finds the index of the next item in the procedure that needs to be completed
     procedure_next_item_index: Procedure -> nat1
     procedure_next_item_index(p) ==
-        hd [ x | x in set {1,...,len p} & p(x).checked = false]
+        hd [ x | x in set {1,...,len p} & not p(x).checked ]--p(x).checked = false]
     pre
         -- Checks procedure has not already been completed
-        procedure_completed(p) = false
+        not procedure_completed(p)--procedure_completed(p) = false
     post
-        -- Checks that the index of the item is the next one to be completed
-        p(RESULT).checked = false
-        and if RESULT > 1 then 
-            p(RESULT-1).checked = true
-        else 
-            true;
+    	-- Checks that the index of the item is the next one to be completed
+        --@LF your def is quite confusing (to me)
+        --@LF how do you know that RESULT in inds p? Well, the definition above okay.
+        --    but you can't know whether p(RESULT-1) will! What if RESULT=1? p(RESULT-1)=p(0) which is invalid!
+        (not p(RESULT).checked)
+    	and 
+    	(RESULT > 1 => p(RESULT-1).checked)
+        --p(RESULT).checked = false
+        --and if RESULT > 1 then 
+        --    p(RESULT-1).checked = true
+        --else 
+        --    true;
 
     -- --@doc Checks if all the procedures have been completed
     -- check_all_proc_completed: Checklist -> bool
@@ -151,13 +212,20 @@ functions
     --@doc Checks if the next item in the procedure has been completed
     check_proc_item_complete: Procedure * Aircraft -> bool
     check_proc_item_complete(p, a) ==
+        --@LF here you have a nice lemma to prove: procedure_next_item_index(p) in set inds p! 
+        --	  I think that's always true
         let procItem = p(procedure_next_item_index(p)),
+        	--@LF here you can't tell whether this will be true? i.e. procItem.procedure in set dom a.items?
             item = a.items(procItem.procedure) in
             
             --TODO need to be able to check for different types of Items
             procItem.check = item.object.position
     pre
-        procedure_completed(p) = false;
+        procedure_completed(p) = false
+        --@LF perhaps add 
+        --and
+        --p(procedure_next_item_index(p)).procedure in set dom a.items?  
+        ;
 
     --@doc Marks next item in procedure as complete
     mark_proc_item_complete: Procedure -> Procedure
