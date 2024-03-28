@@ -262,14 +262,20 @@ functions
         n in set dom a.checklist;
 
     --@doc Completes a procedure step by step
-    -- p = Name of procedure, a = Aircraft
+    -- n = Name of procedure, a = Aircraft
     complete_procedure: String * Aircraft -> Aircraft
-    complete_procedure(p, a) ==
-        is not yet specified
+    complete_procedure(n, a) ==
+        let procedure = get_procedure(n, a) in
+            mk_Aircraft(
+                a.items ++ { x.procedure |-> do_proc_item(a.items(x.procedure), x).item | x in seq procedure },
+                a.checklist ++ { n |-> [ complete_item(x) | x in seq procedure ] }
+            )
     pre
         let checklist = a.checklist in
-            p in set dom checklist
-            and not procedure_completed(checklist(p));
+            n in set dom checklist
+            and not procedure_completed(checklist(n))
+    post
+        procedure_completed(RESULT.checklist(n));
 
     -- AIRCRAFT ITEMS
     --@doc Marks ChecklistItem as complete
@@ -284,14 +290,14 @@ functions
     move_item(i, s) ==
         -- if is_Switch(i) then (implement later)
             let switch: Switch = i.object in
-                if check_switch_onoff(switch) and (s <> <MIDDLE>) then
+                if check_switch_onoff(switch) and (s <> <MIDDLE>) and switch.middlePosition then
                     mk_ItemObject(i.type, move_switch(move_switch(switch, <MIDDLE>), s))
                 else
                     mk_ItemObject(i.type, move_switch(switch, s))
     pre
         wf_item_itemstate(i, s)
-        and not check_item_in_position(i, s)
-        and (wf_switch_move(i.object, s));
+        and not check_item_in_position(i, s);
+        -- and wf_switch_move(i.object, s);
 
     --@doc Moves a specific switch in the aircraft
     move_switch: Switch * SwitchState -> Switch
