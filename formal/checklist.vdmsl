@@ -119,7 +119,9 @@ types
         	cases type: 
         		<SWITCH> -> is_Switch(object),
         		<KNOB>   -> is_Knob(object),
-        		<THROTTLE>-> is_Throttle(object)
+        		<THROTTLE>-> is_Throttle(object),
+        		--<BUTTON> -> true
+        		others -> true
         	end;
 
     --@doc Contains each ItemObject in the Aircraft, e.g. Fuel Pump switch
@@ -190,7 +192,8 @@ functions
         --and if RESULT > 1 then 
         --    p(RESULT-1).checked = true
         --else 
-        --    true;
+        --    true
+        ;
 
     -- --@doc Checks if all the procedures have been completed
     -- check_all_proc_completed: Checklist -> bool
@@ -343,3 +346,83 @@ functions
 
 
 end Checklist
+
+/*
+//@LF always a good idea to run "qc" on your model. Here is its output. PO 21 and 22 show a problem.
+//@LF silly me, this was my encoding with the cases missing one pattern :-). I can see yours has no issues. Good.
+
+> qc
+PO #1, PROVABLE by finite types in 0.002s
+PO #2, PROVABLE by finite types in 0.0s
+PO #3, PROVABLE by finite types in 0.0s
+PO #4, PROVABLE by finite types in 0.0s
+PO #5, PROVABLE by finite types in 0.0s
+PO #6, PROVABLE by finite types in 0.0s
+PO #7, PROVABLE by finite types in 0.0s
+PO #8, PROVABLE by finite types in 0.0s
+PO #9, PROVABLE by finite types in 0.001s
+PO #10, PROVABLE by finite types in 0.001s
+PO #11, PROVABLE by direct (body is total) in 0.003s
+PO #12, PROVABLE by witness s = mk_Switch(<MIDDLE>, true) in 0.001s
+PO #13, PROVABLE by direct (body is total) in 0.001s
+PO #14, PROVABLE by witness k = mk_Knob(1, [-2]) in 0.0s
+PO #15, PROVABLE by direct (body is total) in 0.0s
+PO #16, PROVABLE by witness t = 0 in 0.0s
+PO #17, PROVABLE by direct (body is total) in 0.001s
+PO #18, PROVABLE by witness t = mk_Throttle(0, 0) in 0.001s
+PO #19, PROVABLE by direct (body is total) in 0.002s
+PO #20, PROVABLE by witness i = mk_ItemObject(<KNOB>, mk_Knob(1, [-1])) in 0.002s
+PO #21, FAILED in 0.002s: Counterexample: type = <BUTTON>, object = mk_Knob(1, [-1])
+Causes Error 4004: No cases apply for <BUTTON> in 'Checklist' (formal/checklist.vdmsl) at line 119:13
+----
+ItemObject': total function obligation in 'Checklist' (formal/checklist.vdmsl) at line 118:13
+(forall mk_ItemObject'(type, object):ItemObject'! &
+  is_(inv_ItemObject'(mk_ItemObject'!(type, object)), bool))
+
+PO #22, FAILED by direct in 0.005s: Counterexample: type = <BUTTON>
+PO #23, PROVABLE by witness type = <KNOB>, object = mk_Knob(1, [-1]) in 0.002s
+PO #24, PROVABLE by direct (body is total) in 0.001s
+PO #25, PROVABLE by witness i = mk_ItemAndChecklistItem(mk_ItemObject(<KNOB>, mk_Knob(1, [-1])), mk_ChecklistItem([], <KNOB>, <MIDDLE>, true)) in 0.001s
+PO #26, MAYBE in 0.003s
+PO #27, MAYBE in 0.003s
+PO #28, MAYBE in 0.002s
+PO #29, PROVABLE by witness p = [mk_ChecklistItem([], <BUTTON>, <MIDDLE>, true)] in 0.001s
+PO #30, MAYBE in 0.002s
+PO #31, MAYBE in 0.001s
+PO #32, MAYBE in 0.003s
+PO #33, MAYBE in 0.002s
+PO #34, MAYBE in 0.001s
+PO #35, MAYBE in 0.002s
+PO #36, MAYBE in 0.009s
+PO #37, MAYBE in 0.008s
+PO #38, MAYBE in 0.007s
+PO #39, MAYBE in 0.009s
+PO #40, MAYBE in 0.002s
+PO #41, MAYBE in 0.001s
+PO #42, MAYBE in 0.001s
+PO #43, MAYBE in 0.002s
+PO #44, MAYBE in 0.002s
+PO #45, MAYBE in 0.003s
+PO #46, MAYBE in 0.002s
+PO #47, MAYBE in 0.002s
+PO #48, MAYBE in 0.001s
+PO #49, MAYBE in 0.001s
+PO #50, MAYBE in 0.0s
+PO #51, MAYBE in 0.0s
+PO #52, MAYBE in 0.005s
+PO #53, PROVABLE by trivial p in set (dom checklist) in 0.001s
+PO #54, MAYBE in 0.006s
+PO #55, MAYBE in 0.0s
+PO #56, MAYBE in 0.001s
+PO #57, MAYBE in 0.001s
+PO #58, MAYBE in 0.001s
+PO #59, MAYBE in 0.001s
+PO #60, MAYBE in 0.001s
+PO #61, MAYBE in 0.001s
+PO #62, MAYBE in 0.0s
+PO #63, PROVABLE by finite types in 0.001s
+PO #64, PROVABLE by finite types in 0.001s
+PO #65, PROVABLE by finite types in 0.001s
+PO #66, MAYBE in 0.001s
+> 
+*/
