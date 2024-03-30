@@ -1,4 +1,4 @@
-package io.anthonyberg
+package io.anthonyberg.connector
 
 import com.fujitsu.vdmj.ExitStatus
 import com.fujitsu.vdmj.Settings
