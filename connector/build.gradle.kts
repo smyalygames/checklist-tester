@@ -10,12 +10,14 @@ repositories {
 }
 
 dependencies {
+    implementation("dk.au.ece.vdmj:vdmj:4.5.0")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 }
 
 tasks.test {
     useJUnitPlatform()
 }
+
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(21)
 }
