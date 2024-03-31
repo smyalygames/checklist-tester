@@ -2,16 +2,16 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    
+
     alias(libs.plugins.jetbrainsCompose)
 }
 
 kotlin {
     jvm("desktop")
-    
+
     sourceSets {
         val desktopMain by getting
-        
+
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -23,6 +23,7 @@ kotlin {
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
+            implementation("org.jetbrains.compose.material3:material3-desktop:1.6.1")
         }
     }
 }
