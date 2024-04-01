@@ -1,6 +1,7 @@
 package tab.project
 
 import androidx.compose.foundation.VerticalScrollbar
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -46,6 +47,13 @@ class ListProjects : Screen {
                     LazyColumn(state = state) {
                         items(50) { index ->
                             ListItem(
+                                modifier = Modifier
+                                    .clickable(
+                                        enabled = true,
+                                        onClick = {
+                                            // TODO add loading project
+                                        }
+                                    ),
                                 overlineContent = { Text("Emergency") },
                                 headlineContent = { Text("Project $index") },
                                 trailingContent = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, "Open Project") }
