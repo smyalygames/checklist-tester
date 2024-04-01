@@ -1,4 +1,4 @@
-package tab
+package tab.procedure
 
 import Greeting
 import androidx.compose.animation.AnimatedVisibility
