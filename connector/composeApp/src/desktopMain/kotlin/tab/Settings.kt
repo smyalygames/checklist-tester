@@ -1,26 +1,26 @@
-
+package tab
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import connector.composeapp.generated.resources.Res
-import connector.composeapp.generated.resources.check_box_24px
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
 
-class SimulatorTest : Tab {
+class Settings : Tab {
     @OptIn(ExperimentalResourceApi::class)
     override val options: TabOptions
         @Composable
         get() {
-            val title = "Simulator Test"
-            val icon = painterResource(Res.drawable.check_box_24px)
+            val title = "Settings"
+            val icon = rememberVectorPainter(Icons.Outlined.Settings)
 
             return remember {
                 TabOptions(
-                    index = 2u,
+                    index = 4u,
                     title = title,
                     icon = icon,
                 )
@@ -30,7 +30,7 @@ class SimulatorTest : Tab {
     @Composable
     override fun Content() {
         Column {
-            Text("Simulator Test")
+            Text("Settings")
         }
     }
 }

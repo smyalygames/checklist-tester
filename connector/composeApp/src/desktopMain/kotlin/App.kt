@@ -18,6 +18,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import tab.*
+import tab.project.Projects
 import theme.AppTheme
 
 @OptIn(ExperimentalResourceApi::class)
