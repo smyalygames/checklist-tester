@@ -60,7 +60,10 @@ class CreateProject : Screen {
 
                 Button(
                     contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
-                    onClick = { /* TODO Add re-direction to project lists */ }
+                    onClick = {
+                        // TODO save new project and make sure it redirects to list page
+                        navigator.pop()
+                    }
                 ) {
                     Icon(Icons.Outlined.Add, "Create Project", modifier = Modifier.size(18.dp))
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))

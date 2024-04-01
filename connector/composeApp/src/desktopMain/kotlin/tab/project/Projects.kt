@@ -30,7 +30,7 @@ object Projects : Tab {
 
     @Composable
     override fun Content() {
-        Navigator(NoProjects) {
+        Navigator(ListProjects()) {
             CurrentScreen()
         }
     }
