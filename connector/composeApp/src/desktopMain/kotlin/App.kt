@@ -89,8 +89,10 @@ fun TopBar(
                     contentDescription = "Open Navigation Bar",
                 )
             }
+        },
+        actions = {
+            SimulatorStatus().StatusCard()
         }
-        // TODO add Simulator Status
     )
 }
 
