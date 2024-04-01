@@ -2,6 +2,7 @@ package tab.project
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -9,12 +10,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 
 class CreateProject : Screen {
     @Composable
     override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+
         var projectName by remember { mutableStateOf("") }
         var aircraftType by remember { mutableStateOf("") }
+
+        IconButton(
+            onClick = {
+                navigator.pop()
+            }
+        ) {
+            Icon(Icons.AutoMirrored.Outlined.ArrowBack, "Back Arrow")
+        }
 
         Column (
             modifier = Modifier
