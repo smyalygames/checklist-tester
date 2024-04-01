@@ -32,15 +32,16 @@ fun App() {
     AppTheme {
         var showContent by remember { mutableStateOf(false) }
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-            AppScaffold()
-            Button(onClick = { showContent = !showContent }) {
-                Text("Click me!")
-            }
-            AnimatedVisibility(showContent) {
-                val greeting = remember { Greeting().greet() }
-                Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: $greeting")
+            AppScaffold {
+                Button(onClick = { showContent = !showContent }) {
+                    Text("Click me!")
+                }
+                AnimatedVisibility(showContent) {
+                    val greeting = remember { Greeting().greet() }
+                    Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                        Image(painterResource(Res.drawable.compose_multiplatform), null)
+                        Text("Compose: $greeting")
+                    }
                 }
             }
         }
@@ -48,7 +49,7 @@ fun App() {
 }
 
 @Composable
-fun AppScaffold() {
+fun AppScaffold(content: @Composable() () -> Unit) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -58,11 +59,16 @@ fun AppScaffold() {
         },
     ) { innerPadding ->
         Column(
-            modifier = Modifier.padding(innerPadding),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            modifier = Modifier.padding(innerPadding)
         ) {
-            NavigationDrawer(drawerState)
-            Text("Test")
+            NavigationDrawer(drawerState) {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    content()
+                    Text("Test")
+                }
+            }
         }
     }
 }
@@ -112,7 +118,10 @@ fun TopBar(
  */
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun NavigationDrawer(drawerState: DrawerState) {
+fun NavigationDrawer(
+    drawerState: DrawerState,
+    content: @Composable() () -> Unit,
+) {
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -164,5 +173,7 @@ fun NavigationDrawer(drawerState: DrawerState) {
                 }
             }
         }
-    ) {}
+    ) {
+        content()
+    }
 }
