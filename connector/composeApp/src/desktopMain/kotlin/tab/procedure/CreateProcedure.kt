@@ -16,6 +16,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 
 class CreateProcedure : Screen {
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
@@ -35,7 +36,7 @@ class CreateProcedure : Screen {
         var actionTypeExpanded by remember { mutableStateOf(false) }
 
 
-        Scaffold (
+        Scaffold(
             topBar = {
                 IconButton(
                     onClick = {
@@ -46,7 +47,7 @@ class CreateProcedure : Screen {
                 }
             },
         ) {
-            Column (
+            Column(
                 modifier = Modifier
                     .fillMaxHeight()
                     .fillMaxWidth()
@@ -55,7 +56,7 @@ class CreateProcedure : Screen {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
-                Column (
+                Column(
                     Modifier.fillMaxWidth(0.7F),
                     verticalArrangement = Arrangement.spacedBy(24.dp)
                 ) {
@@ -80,7 +81,36 @@ class CreateProcedure : Screen {
                         singleLine = true,
                     )
 
-                    exposedDropDownType(procedureTypeExpanded, procedureType, procedureTypeOptions)
+                    ExposedDropdownMenuBox(
+                        expanded = procedureTypeExpanded,
+                        onExpandedChange = { procedureTypeExpanded = it }
+                    ) {
+                        TextField(
+                            modifier = Modifier.menuAnchor(),
+                            value = procedureType,
+                            onValueChange = {},
+                            readOnly = true,
+                            singleLine = true,
+                            label = { Text("Type") },
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = procedureTypeExpanded) },
+                            colors = ExposedDropdownMenuDefaults.textFieldColors()
+                        )
+                        ExposedDropdownMenu(
+                            expanded = procedureTypeExpanded,
+                            onDismissRequest = { procedureTypeExpanded = false },
+                        ) {
+                            procedureTypeOptions.forEach { option ->
+                                DropdownMenuItem(
+                                    text = { Text(option, style = MaterialTheme.typography.bodyLarge) },
+                                    onClick = {
+                                        procedureType = option
+                                        procedureTypeExpanded = false
+                                    },
+                                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                                )
+                            }
+                        }
+                    }
 
                     HorizontalDivider()
 
@@ -89,7 +119,36 @@ class CreateProcedure : Screen {
                         style = MaterialTheme.typography.headlineSmall
                     )
 
-                    exposedDropDownType(actionTypeExpanded, actionType, actionTypeOptions)
+                    ExposedDropdownMenuBox(
+                        expanded = actionTypeExpanded,
+                        onExpandedChange = { actionTypeExpanded = it }
+                    ) {
+                        TextField(
+                            modifier = Modifier.menuAnchor(),
+                            value = actionType,
+                            onValueChange = {},
+                            readOnly = true,
+                            singleLine = true,
+                            label = { Text("Type") },
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = actionTypeExpanded) },
+                            colors = ExposedDropdownMenuDefaults.textFieldColors()
+                        )
+                        ExposedDropdownMenu(
+                            expanded = actionTypeExpanded,
+                            onDismissRequest = { actionTypeExpanded = false },
+                        ) {
+                            actionTypeOptions.forEach { option ->
+                                DropdownMenuItem(
+                                    text = { Text(option, style = MaterialTheme.typography.bodyLarge) },
+                                    onClick = {
+                                        actionType = option
+                                        actionTypeExpanded = false
+                                    },
+                                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                                )
+                            }
+                        }
+                    }
 
                     Button(
                         contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
@@ -100,49 +159,12 @@ class CreateProcedure : Screen {
                     ) {
                         Icon(Icons.Outlined.Add, "Create Procedure", modifier = Modifier.size(18.dp))
                         Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                        Text("Create", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onPrimary)
+                        Text(
+                            "Create",
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
                     }
-                }
-            }
-        }
-    }
-
-    @Composable
-    @OptIn(ExperimentalMaterial3Api::class)
-    private fun exposedDropDownType(
-        procedureTypeExpanded: Boolean,
-        procedureType: String,
-        procedureTypeOptions: List<String>
-    ) {
-        var procedureTypeExpanded1 = procedureTypeExpanded
-        var procedureType1 = procedureType
-        ExposedDropdownMenuBox(
-            expanded = procedureTypeExpanded1,
-            onExpandedChange = { procedureTypeExpanded1 = it }
-        ) {
-            TextField(
-                modifier = Modifier.menuAnchor(),
-                value = procedureType1,
-                onValueChange = {},
-                readOnly = true,
-                singleLine = true,
-                label = { Text("Type") },
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = procedureTypeExpanded1) },
-                colors = ExposedDropdownMenuDefaults.textFieldColors()
-            )
-            ExposedDropdownMenu(
-                expanded = procedureTypeExpanded1,
-                onDismissRequest = { procedureTypeExpanded1 = false },
-            ) {
-                procedureTypeOptions.forEach { option ->
-                    DropdownMenuItem(
-                        text = { Text(option, style = MaterialTheme.typography.bodyLarge) },
-                        onClick = {
-                            procedureType1 = option
-                            procedureTypeExpanded1 = false
-                        },
-                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                    )
                 }
             }
         }
