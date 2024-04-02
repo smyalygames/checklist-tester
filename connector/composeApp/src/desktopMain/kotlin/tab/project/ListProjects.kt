@@ -54,7 +54,7 @@ class ListProjects : Screen {
                                             // TODO add loading project
                                         }
                                     ),
-                                overlineContent = { Text("Emergency") },
+                                overlineContent = { Text("Boeing 737-800") },
                                 headlineContent = { Text("Project $index") },
                                 trailingContent = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, "Open Project") }
                             )
