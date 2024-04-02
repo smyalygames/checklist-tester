@@ -9,7 +9,6 @@ import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 class Procedures : Tab {
     override val options: TabOptions
@@ -28,10 +27,9 @@ class Procedures : Tab {
         }
 
 
-    @OptIn(ExperimentalResourceApi::class)
     @Composable
     override fun Content() {
-        Navigator(NoProcedures) {
+        Navigator(ListProcedures()) {
             CurrentScreen()
         }
     }
