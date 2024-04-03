@@ -11,6 +11,13 @@ class ProjectTransaction (driverFactory: DriverFactory) {
     private val database = ProjectDatabase(driverFactory)
 
     /**
+     * Creates a project in the database.
+     */
+    fun createProject(project: Project) {
+        database.createProject(project)
+    }
+
+    /**
      * Gets all Projects in the database.
      */
     fun getProjects(): List<Project> {
@@ -19,9 +26,17 @@ class ProjectTransaction (driverFactory: DriverFactory) {
     }
 
     /**
-     * Creates a project in the database.
+     * Gets the number of projects in the database
      */
-    fun createProject(project: Project) {
-        database.createProject(project)
+    fun countProjects(): Long {
+        return database.countProjects()
+    }
+
+    /**
+     * Checks if projects are on the database.
+     * @return `true` if projects exist
+     */
+    fun projectExists(): Boolean {
+        return database.countProjects() > 0
     }
 }

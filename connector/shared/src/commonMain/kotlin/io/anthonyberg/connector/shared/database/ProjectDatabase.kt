@@ -39,4 +39,11 @@ internal class ProjectDatabase (driverFactory: DriverFactory) {
             createdUTC = project.createdUTC,
         )
     }
+
+    /**
+     * Counts the amount of entries there are for projects
+     */
+    internal fun countProjects(): Long {
+        return dbQuery.countProjects().executeAsOne()
+    }
 }
