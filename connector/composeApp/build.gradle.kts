@@ -6,6 +6,9 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
 }
 
+val material3Version = "1.6.1"
+val voyagerVersion = "1.0.0"
+
 kotlin {
     jvm("desktop")
     jvmToolchain(21)
@@ -24,11 +27,9 @@ kotlin {
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
-            implementation("org.jetbrains.compose.material3:material3-desktop:1.6.1")
+            implementation("org.jetbrains.compose.material3:material3-desktop:$material3Version")
 
             // Voyager - Navigation
-            val voyagerVersion = "1.0.0"
-
             // Multiplatform
 
             // Navigator
