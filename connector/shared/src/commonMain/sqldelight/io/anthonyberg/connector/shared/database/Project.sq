@@ -1,0 +1,14 @@
+CREATE TABLE Project (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    name TEXT NOT NULL,
+    aircraftType TEXT NOT NULL,
+    createdUTC TEXT NOT NULL,
+    modifiedUTC TEXT
+);
+
+createProject:
+INSERT INTO Project(name, aircraftType, createdUTC)
+VALUES (?, ?, ?);
+
+selectAllProjects:
+SELECT * FROM Project;
