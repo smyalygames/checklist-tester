@@ -1,0 +1,22 @@
+\documentclass[../dissertation.tex]{subfiles}
+
+\begin{document}
+\section{Abstraction}
+\begin{figure}[!h]
+\centering
+  \begin{tikzpicture} [align=center, node distance=4cm]
+    \node (connector) [box] {Checklist Tester Initerface};
+    \node (server) [box, below of=connector] {Checklist Tester Server};
+    \node (plugin) [box, right of=server] {Simulator Connector Plugin};
+    \node (formal) [box, left of=server] {Formal Method};
+    \node (simulator) [box, below of=plugin] {Flight Simulator};
+  
+    \draw [arrow] (server) -- (connector);
+    \draw [arrow] (formal) -- (server);
+    \draw [arrow] (plugin) -- (server);
+    \draw [arrow] (plugin) -- (simulator);
+  \end{tikzpicture}
+  \caption{Abstract layout of components}
+\end{figure}
+
+\end{document}

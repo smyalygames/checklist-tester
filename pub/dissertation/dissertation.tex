@@ -11,6 +11,12 @@
 
 \usepackage{xcolor}
 
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
+
+\tikzstyle{box} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, text width=3cm, draw=black]
+\tikzstyle{arrow} = [thick,<->,>=stealth]
+
 % Tables
 \usepackage{xltabular}
 \usepackage{booktabs}
@@ -65,6 +71,7 @@ This is the acknowledgements.
 \chapter{Background}
 
 \chapter{Design/Implementation}
+\subfile{chapters/design.tex}
 
 \chapter{Results}
 
