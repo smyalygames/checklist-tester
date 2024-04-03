@@ -5,10 +5,10 @@ plugins {
     id("app.cash.sqldelight").version("2.0.1")
 }
 
-val coroutinesVersion = "1.7.3"
-val ktorVersion = "2.3.7"
+val coroutinesVersion = "1.8.0"
+val ktorVersion = "2.3.9"
 val sqlDelightVersion = "2.0.1"
-val dateTimeVersion = "0.4.1"
+val dateTimeVersion = "0.5.0"
 
 kotlin {
     jvm()
@@ -29,7 +29,7 @@ kotlin {
 
 sqldelight {
     databases {
-        create("ConnectorDatabase") {
+        create("Database") {
             packageName.set("io.anthonyberg.connector.shared.database")
         }
     }
