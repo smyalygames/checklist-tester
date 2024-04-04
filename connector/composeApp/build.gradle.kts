@@ -12,6 +12,9 @@ val kotlinxVersion = "1.8.0"
 val koinVersion = "3.5.3"
 val kodeinVersion = "7.21.2"
 
+// Testing Versions
+val jupyterVersion = "5.10.1"
+
 kotlin {
     jvm("desktop")
     jvmToolchain(21)
@@ -59,6 +62,24 @@ kotlin {
             implementation("cafe.adriel.voyager:voyager-koin:$voyagerVersion")
 
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:$kotlinxVersion")
+        }
+
+        // Testing
+        val desktopTest by getting
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+
+            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+            implementation(compose.uiTest)
+
+            implementation("org.junit.jupiter:junit-jupiter:$jupyterVersion")
+        }
+        desktopTest.dependencies {
+            implementation(compose.desktop.uiTestJUnit4)
+            implementation(compose.desktop.currentOs)
+
+            implementation("org.junit.jupiter:junit-jupiter:$jupyterVersion")
+            implementation("io.insert-koin:koin-test:$koinVersion")
         }
     }
 }
