@@ -30,6 +30,26 @@ internal class ProjectDatabase (driverFactory: DriverFactory) {
     }
 
     /**
+     * Converts database [Project](io.anthonyberg.connector.shared.database.Project) data class to entity [Project] class
+     */
+    private fun io.anthonyberg.connector.shared.database.Project.toProject() = Project(
+        id = id.toInt(),
+        name = name,
+        aircraftType = aircraftType,
+        createdUTC = createdUTC,
+        modifiedUTC = modifiedUTC,
+    )
+
+    /**
+     * Gets Project from the unique ID of the Project
+     * @param id Project id
+     * @return [Project]
+     */
+    private fun getProjectById(id: Int): Project {
+        return dbQuery.selectProjectById(id.toLong()).executeAsOne().toProject()
+    }
+
+    /**
      * Inserts a project into the database
      */
     internal fun createProject(name: String, aircraftType: String, createdUTC: String) {

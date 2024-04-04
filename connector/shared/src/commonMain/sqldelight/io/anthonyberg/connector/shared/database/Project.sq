@@ -13,5 +13,9 @@ VALUES (?, ?, ?);
 selectAllProjects:
 SELECT * FROM Project;
 
+selectProjectById:
+SELECT * FROM Project
+WHERE id = ?;
+
 countProjects:
 SELECT COUNT(*) FROM Project;
