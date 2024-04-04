@@ -58,16 +58,6 @@ kotlin {
             // Koin integration
             implementation("cafe.adriel.voyager:voyager-koin:$voyagerVersion")
 
-
-
-            // Desktop + Android
-
-            // Kodein integration
-            implementation("cafe.adriel.voyager:voyager-kodein:$voyagerVersion")
-
-            // RxJava integration
-            implementation("cafe.adriel.voyager:voyager-rxjava:$voyagerVersion")
-
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:$kotlinxVersion")
         }
     }
