@@ -1,7 +1,8 @@
 package tab.project
 
-import androidx.compose.runtime.*
-import cafe.adriel.voyager.koin.getScreenModel
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
@@ -9,7 +10,6 @@ import connector.composeapp.generated.resources.Res
 import connector.composeapp.generated.resources.folder_24px
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import tab.LoadingScreen
 
 class Projects : Tab {
     @OptIn(ExperimentalResourceApi::class)
@@ -30,17 +30,8 @@ class Projects : Tab {
 
     @Composable
     override fun Content() {
-        val screenModel = getScreenModel<ProjectsScreenModel>()
-        val state by screenModel.state.collectAsState()
-
-        when (val s = state) {
-            is ProjectState.Init -> Navigator(NoProjects())
-            is ProjectState.Loading -> Navigator(LoadingScreen("Projects"))
-            is ProjectState.Result -> Navigator(ListProjects(s.projects))
-        }
-
-        LaunchedEffect(currentCompositeKeyHash) {
-            screenModel.projectExists()
+        Navigator(ProjectsContent()) {
+            CurrentScreen()
         }
     }
 }
