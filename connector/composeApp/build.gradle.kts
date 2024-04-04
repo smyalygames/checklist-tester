@@ -8,6 +8,9 @@ plugins {
 
 val material3Version = "1.6.1"
 val voyagerVersion = "1.0.0"
+val kotlinxVersion = "1.8.0"
+val koinVersion = "3.5.3"
+val kodeinVersion = "7.21.2"
 
 kotlin {
     jvm("desktop")
@@ -29,6 +32,11 @@ kotlin {
             implementation(compose.desktop.currentOs)
             implementation("org.jetbrains.compose.material3:material3-desktop:$material3Version")
 
+            // Koin
+            implementation(project.dependencies.platform("io.insert-koin:koin-bom:$koinVersion"))
+            implementation("io.insert-koin:koin-core:$koinVersion")
+            implementation("io.insert-koin:koin-compose:1.1.2")
+
             // Voyager - Navigation
             // Multiplatform
 
@@ -47,6 +55,11 @@ kotlin {
             // Transitions
             implementation("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
 
+            // Koin integration
+            implementation("cafe.adriel.voyager:voyager-koin:$voyagerVersion")
+
+
+
             // Desktop + Android
 
             // Kodein integration
@@ -54,6 +67,8 @@ kotlin {
 
             // RxJava integration
             implementation("cafe.adriel.voyager:voyager-rxjava:$voyagerVersion")
+
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:$kotlinxVersion")
         }
     }
 }

@@ -1,3 +1,4 @@
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -18,12 +19,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import tab.*
+import org.koin.compose.KoinContext
+import tab.About
+import tab.Settings
+import tab.SimulatorTest
+import tab.TestResults
 import tab.procedure.Procedures
 import tab.project.Projects
 import theme.AppTheme
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 @Preview
 fun App() {
@@ -37,7 +41,7 @@ fun AppScaffold() {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
-    TabNavigator(Projects) {
+    TabNavigator(Projects()) {
         Scaffold(
             topBar = {
                 TopBar(drawerState, scope)
@@ -47,7 +51,9 @@ fun AppScaffold() {
                     modifier = Modifier.padding(innerPadding)
                 ) {
                     NavigationDrawer(drawerState) {
-                        CurrentTab()
+                        KoinContext {
+                            CurrentTab()
+                        }
                     }
                 }
             }
@@ -114,7 +120,7 @@ fun NavigationDrawer(
             ModalDrawerSheet {
                 Column(modifier = Modifier.verticalScroll(rememberScrollState()) ) {
                     Text("Project Name...", modifier = Modifier.padding(16.dp))
-                    TabNavigationItem(Projects)
+                    TabNavigationItem(Projects())
                     HorizontalDivider()
 
                     Text("Tester", modifier = Modifier.padding(16.dp))
