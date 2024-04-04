@@ -36,7 +36,6 @@ sqldelight {
         create("Database") {
             packageName.set("io.anthonyberg.connector.shared.database")
             schemaOutputDirectory.set(file("src/commonMain/sqldelight/databases"))
-            deriveSchemaFromMigrations.set(true)
         }
     }
 }
