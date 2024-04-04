@@ -8,33 +8,44 @@ import kotlinx.coroutines.launch
 
 class ProjectsScreenModel (
     private val db: ProjectTransaction
-) : StateScreenModel<ProjectsScreenModel.State>(State.UnInit) {
-
-    sealed class State {
-        object UnInit : State()
-        object Init : State()
-        object Loading : State()
-        data class Result(val projects: List<Project>) : State()
-    }
+) : StateScreenModel<ProjectState>(ProjectState.Loading) {
 
     fun projectExists() {
         screenModelScope.launch {
-            mutableState.value = State.Loading
             val exists = db.projectExists()
 
             if (exists) {
-                getProjects()
+                val projects = getProjects()
+                mutableState.value = ProjectState.Result(projects = projects)
             } else {
-                mutableState.value = State.Init
+                mutableState.value = ProjectState.Init
             }
         }
     }
 
-    fun getProjects() {
-        mutableState.value = State.Loading
-        val projects = db.getProjects()
+    private fun getProjects(): List<Project> {
+            val projects = db.getProjects()
+            println(projects)
 
-        mutableState.value = State.Result(projects)
+            return projects
     }
 
+    fun createProject(projectName : String, aircraftType : String) {
+        screenModelScope.launch {
+            mutableState.value = ProjectState.Loading
+
+            // Add project to database
+            db.createProject(projectName = projectName, aircraftType = aircraftType)
+
+            // Load new projects
+            val projects = getProjects()
+            mutableState.value = ProjectState.Result(projects = projects)
+        }
+    }
+}
+
+sealed class ProjectState {
+    data object Init : ProjectState()
+    data object Loading : ProjectState()
+    data class Result(val projects: List<Project>) : ProjectState()
 }

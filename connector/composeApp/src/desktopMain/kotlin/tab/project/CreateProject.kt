@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 
@@ -17,6 +18,7 @@ class CreateProject : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        val screenModel = getScreenModel<ProjectsScreenModel>()
 
         var projectName by remember { mutableStateOf("") }
         var aircraftType by remember { mutableStateOf("") }
@@ -61,8 +63,13 @@ class CreateProject : Screen {
                 Button(
                     contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
                     onClick = {
-                        // TODO save new project and make sure it redirects to list page
-                        navigator.pop()
+                        if (projectName.isNotBlank() and aircraftType.isNotBlank()) {
+                            screenModel.createProject(
+                                projectName = projectName,
+                                aircraftType = aircraftType
+                            )
+                            navigator.pop()
+                        }
                     }
                 ) {
                     Icon(Icons.Outlined.Add, "Create Project", modifier = Modifier.size(18.dp))

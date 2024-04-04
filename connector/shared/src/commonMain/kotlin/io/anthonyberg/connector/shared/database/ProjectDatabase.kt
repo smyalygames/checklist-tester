@@ -32,11 +32,11 @@ internal class ProjectDatabase (driverFactory: DriverFactory) {
     /**
      * Inserts a project into the database
      */
-    internal fun createProject(project: Project) {
+    internal fun createProject(name: String, aircraftType: String, createdUTC: String) {
         dbQuery.createProject(
-            name = project.name,
-            aircraftType = project.aircraftType,
-            createdUTC = project.createdUTC,
+            name = name,
+            aircraftType = aircraftType,
+            createdUTC = createdUTC,
         )
     }
 

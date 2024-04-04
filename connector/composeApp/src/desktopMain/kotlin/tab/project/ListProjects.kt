@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material.icons.Icons
@@ -19,8 +20,9 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import io.anthonyberg.connector.shared.entity.Project
 
-class ListProjects : Screen {
+class ListProjects(private val projects: List<Project>) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
@@ -45,20 +47,8 @@ class ListProjects : Screen {
                     modifier = Modifier.fillMaxWidth(0.7F),
                 ) {
                     LazyColumn(state = state) {
-                        items(50) { index ->
-                            ListItem(
-                                modifier = Modifier
-                                    .clickable(
-                                        enabled = true,
-                                        onClick = {
-                                            // TODO add loading project
-                                        }
-                                    ),
-                                overlineContent = { Text("Boeing 737-800") },
-                                headlineContent = { Text("Project $index") },
-                                trailingContent = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, "Open Project") }
-                            )
-                            HorizontalDivider()
+                        items(projects) { project ->
+                            projectItem(project)
                         }
                     }
                     VerticalScrollbar(
@@ -72,5 +62,23 @@ class ListProjects : Screen {
                 }
             }
         }
+    }
+
+
+    @Composable
+    private fun projectItem(project: Project) {
+        ListItem(
+            modifier = Modifier
+                .clickable(
+                    enabled = true,
+                    onClick = {
+                        // TODO add loading project
+                    }
+                ),
+            overlineContent = { Text(project.aircraftType) },
+            headlineContent = { Text(project.name) },
+            trailingContent = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, "Open Project") }
+        )
+        HorizontalDivider()
     }
 }

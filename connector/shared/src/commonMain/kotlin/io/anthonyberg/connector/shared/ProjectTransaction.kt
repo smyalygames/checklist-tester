@@ -3,6 +3,7 @@ package io.anthonyberg.connector.shared
 import io.anthonyberg.connector.shared.database.DriverFactory
 import io.anthonyberg.connector.shared.database.ProjectDatabase
 import io.anthonyberg.connector.shared.entity.Project
+import kotlinx.datetime.Clock
 
 /**
  * All database transactions for Project
@@ -13,8 +14,10 @@ class ProjectTransaction (driverFactory: DriverFactory) {
     /**
      * Creates a project in the database.
      */
-    fun createProject(project: Project) {
-        database.createProject(project)
+    fun createProject(projectName: String, aircraftType: String) {
+        val currentTime = Clock.System.now().toString()
+
+        database.createProject(name = projectName, aircraftType = aircraftType, createdUTC = currentTime)
     }
 
     /**

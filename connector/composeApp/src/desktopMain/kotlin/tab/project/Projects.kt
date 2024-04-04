@@ -1,9 +1,6 @@
 package tab.project
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.Tab
@@ -36,11 +33,14 @@ class Projects : Tab {
         val screenModel = getScreenModel<ProjectsScreenModel>()
         val state by screenModel.state.collectAsState()
 
-        when (state) {
-            is ProjectsScreenModel.State.UnInit -> screenModel.projectExists()
-            is ProjectsScreenModel.State.Init -> Navigator(NoProjects())
-            is ProjectsScreenModel.State.Loading -> Navigator(LoadingScreen("Projects"))
-            is ProjectsScreenModel.State.Result -> Navigator(ListProjects())
+        when (val s = state) {
+            is ProjectState.Init -> Navigator(NoProjects())
+            is ProjectState.Loading -> Navigator(LoadingScreen("Projects"))
+            is ProjectState.Result -> Navigator(ListProjects(s.projects))
+        }
+
+        LaunchedEffect(currentCompositeKeyHash) {
+            screenModel.projectExists()
         }
     }
 }
