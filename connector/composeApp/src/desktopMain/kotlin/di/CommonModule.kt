@@ -13,7 +13,9 @@ fun commonModule() = module {
     single<ProjectTransaction> {
         ProjectTransaction(driverFactory = get<DriverFactory>())
     }
+}
 
+fun viewModelModule() = module {
     single<ProjectsScreenModel> {
         ProjectsScreenModel(db = get())
     }
