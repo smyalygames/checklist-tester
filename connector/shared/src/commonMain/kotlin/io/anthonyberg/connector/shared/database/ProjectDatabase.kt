@@ -45,7 +45,7 @@ internal class ProjectDatabase (driverFactory: DriverFactory) {
      * @param id Project id
      * @return [Project]
      */
-    private fun getProjectById(id: Int): Project {
+    internal fun getProjectById(id: Int): Project {
         return dbQuery.selectProjectById(id.toLong()).executeAsOne().toProject()
     }
 
