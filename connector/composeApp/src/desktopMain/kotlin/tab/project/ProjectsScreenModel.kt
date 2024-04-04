@@ -4,16 +4,11 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import io.anthonyberg.connector.shared.ProjectTransaction
 import io.anthonyberg.connector.shared.entity.Project
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class ProjectsScreenModel (
     private val db: ProjectTransaction
 ) : StateScreenModel<ProjectsScreenModel.State>(State.UnInit) {
-
-    override fun onDispose() {
-        println("Project Disposed")
-    }
 
     sealed class State {
         object UnInit : State()
@@ -25,7 +20,6 @@ class ProjectsScreenModel (
     fun projectExists() {
         screenModelScope.launch {
             mutableState.value = State.Loading
-            delay(5000)
             val exists = db.projectExists()
 
             if (exists) {
