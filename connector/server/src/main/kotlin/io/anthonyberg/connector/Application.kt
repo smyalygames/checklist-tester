@@ -1,6 +1,7 @@
 package io.anthonyberg.connector
 
 import SERVER_PORT
+import io.anthonyberg.connector.vdmj.VDMJ
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*

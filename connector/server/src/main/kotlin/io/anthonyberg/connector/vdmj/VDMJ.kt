@@ -1,4 +1,4 @@
-package io.anthonyberg.connector
+package io.anthonyberg.connector.vdmj
 
 import com.fujitsu.vdmj.Settings
 import com.fujitsu.vdmj.VDMJMain
