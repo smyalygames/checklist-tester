@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.kotlinJvm)
     alias(libs.plugins.ktor)
     application
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.23"
 }
 
 val sl4jVersion = "2.0.12"
@@ -21,6 +22,9 @@ dependencies {
     implementation(libs.ktor.server.netty)
     testImplementation(libs.ktor.server.tests)
     testImplementation(libs.kotlin.test.junit)
+
+    implementation("io.ktor:ktor-server-content-negotiation-jvm")
+    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
 
     implementation("dk.au.ece.vdmj:vdmj:$vdmjVersion")
 }
