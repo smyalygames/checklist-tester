@@ -1,16 +1,18 @@
-This is a Kotlin Multiplatform project targeting Desktop, Server.
+# Checklist Tester
 
-* `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - `commonMain` is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    `iosMain` would be the right folder for such calls.
+This is a checklist tester linking together the VDM-SL model
+that runs through checklists and the simulator whilst providing
+a user interface to set up the connection.
 
-* `/server` is for the Ktor server application.
+There are two components to this, the desktop application and the server, both of
+them being written in [Kotlin Multiplatform](https://www.jetbrains.com/kotlin-multiplatform/).
 
-* `/shared` is for the code that will be shared between all targets in the project.
-  The most important subfolder is `commonMain`. If preferred, you can add code to the platform-specific folders here too.
+## Desktop
 
+Provides a graphical interface to create projects, and to run tests.
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+The UI is provided by [Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/).
+
+## Server
+
+Hosts the VDMJ instance and communicates with the simulator plugin.
