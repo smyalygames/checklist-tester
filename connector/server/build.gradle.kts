@@ -4,6 +4,9 @@ plugins {
     application
 }
 
+val sl4jVersion = "2.0.12"
+val vdmjVersion = "4.5.0"
+
 group = "io.anthonyberg.connector"
 version = "1.0.0"
 application {
@@ -19,5 +22,5 @@ dependencies {
     testImplementation(libs.ktor.server.tests)
     testImplementation(libs.kotlin.test.junit)
 
-    implementation("dk.au.ece.vdmj:vdmj:4.5.0")
+    implementation("dk.au.ece.vdmj:vdmj:$vdmjVersion")
 }

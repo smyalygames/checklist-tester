@@ -27,7 +27,7 @@ kotlin {
             implementation("app.cash.sqldelight:coroutines-extensions:$sqlDelightVersion")
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:$dateTimeVersion")
             implementation("org.slf4j:slf4j-api:$sl4jVersion")
-            implementation("org.slf4j:slf4j-reload4j:2.0.12")
+            implementation("org.slf4j:slf4j-reload4j:$sl4jVersion")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
