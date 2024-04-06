@@ -19,7 +19,7 @@ class ProcedureTransaction (driverFactory: DriverFactory) {
      * @param type Procedure type (e.g. Normal, Emergency)
      * @param description Description of what the procedure will do
      */
-    fun createProject(name: String, type: String, description: String) {
+    fun createProcedure(name: String, type: String, description: String) {
         // TODO add dynamic procedureId insertion
         val projectId = 1
         val currentTime = Clock.System.now().toString()
