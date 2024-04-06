@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 
@@ -20,6 +21,7 @@ class CreateProcedure : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        val screenModel = getScreenModel<ProcedureScreenModel>()
         val columnPadding = 24.dp
 
         // Information
@@ -153,8 +155,20 @@ class CreateProcedure : Screen {
                     Button(
                         contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
                         onClick = {
-                            // TODO save new procedure and make sure it redirects to list page
-                            navigator.pop()
+                            if (
+                                procedureName.isNotBlank() and
+                                procedureType.isNotBlank() and
+                                procedureDescription.isNotBlank()
+                                // TODO add checks for actions
+                                ) {
+                                screenModel.createProcedure(
+                                    procedureName = procedureName,
+                                    procedureType = procedureType,
+                                    procedureDescription = procedureDescription,
+                                )
+
+                                navigator.pop()
+                            }
                         }
                     ) {
                         Icon(Icons.Outlined.Add, "Create Procedure", modifier = Modifier.size(18.dp))

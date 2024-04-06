@@ -28,6 +28,24 @@ class ProcedureScreenModel (
 
         return procedures
     }
+
+    fun createProcedure(
+        procedureName: String,
+        procedureType: String,
+        procedureDescription: String
+    ) {
+        screenModelScope.launch {
+            mutableState.value = ProcedureState.Loading
+
+            // Add procedure to the database
+            db.createProcedure(procedureName, procedureType, procedureDescription)
+
+            // Load new procedures
+            val procedures = getProcedures()
+            mutableState.value = ProcedureState.Result(procedures)
+        }
+
+    }
 }
 
 sealed class ProcedureState {
