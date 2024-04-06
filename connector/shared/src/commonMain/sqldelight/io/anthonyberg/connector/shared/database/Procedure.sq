@@ -1,0 +1,26 @@
+CREATE TABLE IF NOT EXISTS Procedure (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    projectId INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    type TEXT NOT NULL,
+    description TEXT NOT NULL,
+    createdUTC TEXT NOT NULL,
+    modifiedUTC TEXT,
+    FOREIGN KEY (projectId) REFERENCES Project(id)
+);
+
+createProcedure:
+INSERT INTO Procedure(projectId, name, type, description, createdUTC)
+VALUES (?, ?, ?, ?, ?);
+
+selectProcedures:
+SELECT * FROM Procedure
+WHERE projectId = ?;
+
+selectProcedureById:
+SELECT * FROM Procedure
+WHERE id = ?;
+
+countProcedures:
+SELECT COUNT(*) FROM Procedure
+WHERE projectId = ?;
