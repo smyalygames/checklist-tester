@@ -24,10 +24,10 @@ class ProjectsScreenModel (
     }
 
     private fun getProjects(): List<Project> {
-            val projects = db.getProjects()
-            println(projects)
+        val projects = db.getProjects()
+        println(projects)
 
-            return projects
+        return projects
     }
 
     fun createProject(projectName : String, aircraftType : String) {
