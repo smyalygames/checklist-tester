@@ -29,7 +29,7 @@ class Procedures : Tab {
 
     @Composable
     override fun Content() {
-        Navigator(ListProcedures()) {
+        Navigator(ProceduresContent()) {
             CurrentScreen()
         }
     }

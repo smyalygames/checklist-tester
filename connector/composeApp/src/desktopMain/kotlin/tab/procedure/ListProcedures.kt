@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material.icons.Icons
@@ -19,8 +20,11 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import io.anthonyberg.connector.shared.entity.Procedure
 
-class ListProcedures : Screen {
+class ListProcedures (
+    private val procedures: List<Procedure>
+) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
@@ -45,20 +49,8 @@ class ListProcedures : Screen {
                     modifier = Modifier.fillMaxWidth(0.7F),
                 ) {
                     LazyColumn(state = state) {
-                        items(50) { index ->
-                            ListItem(
-                                modifier = Modifier
-                                    .clickable(
-                                        enabled = true,
-                                        onClick = {
-                                            // TODO add procedure editor
-                                        }
-                                    ),
-                                overlineContent = { Text("Emergency") },
-                                headlineContent = { Text("Procedure $index") },
-                                trailingContent = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, "Open Procedure") }
-                            )
-                            HorizontalDivider()
+                        items(procedures) { procedure ->
+                            procedureItem(procedure)
                         }
                     }
                     VerticalScrollbar(
@@ -72,5 +64,22 @@ class ListProcedures : Screen {
                 }
             }
         }
+    }
+
+    @Composable
+    private fun procedureItem(procedure: Procedure) {
+        ListItem(
+            modifier = Modifier
+                .clickable(
+                    enabled = true,
+                    onClick = {
+                        // TODO add procedure editor
+                    }
+                ),
+            overlineContent = { Text(procedure.type) },
+            headlineContent = { Text(procedure.name) },
+            trailingContent = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, "Open Procedure") }
+        )
+        HorizontalDivider()
     }
 }
