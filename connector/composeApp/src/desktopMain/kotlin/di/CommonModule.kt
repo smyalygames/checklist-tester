@@ -1,5 +1,6 @@
 package di
 
+import InterfaceState
 import io.anthonyberg.connector.shared.ProcedureTransaction
 import io.anthonyberg.connector.shared.ProjectTransaction
 import io.anthonyberg.connector.shared.database.DriverFactory
@@ -22,6 +23,10 @@ fun commonModule() = module {
 }
 
 fun viewModelModule() = module {
+    single<InterfaceState> {
+        InterfaceState()
+    }
+
     single<ProjectsScreenModel> {
         ProjectsScreenModel(db = get())
     }

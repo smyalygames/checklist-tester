@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
 
 class SimulatorStatus {
     @Composable
@@ -19,7 +20,7 @@ class SimulatorStatus {
         val padding = 0.dp
         val spacer = 16.dp
 
-        var connected by remember { mutableStateOf(false) }
+        val viewModel = koinInject<InterfaceState>()
         var refresh by remember { mutableStateOf(false) }
         val scope = rememberCoroutineScope()
 
@@ -38,7 +39,7 @@ class SimulatorStatus {
                     refreshIndicator()
                 } else {
                     Badge(
-                        containerColor = if (connected) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.error
+                        containerColor = if (viewModel.simConnection) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.error
                     )
                 }
 
@@ -48,8 +49,7 @@ class SimulatorStatus {
                     onClick = {
                         refresh = true
                         scope.launch {
-                            loadSimulator()
-                            connected = !connected
+                            loadSimulator(viewModel)
                             refresh = false
                         }
                     },
@@ -73,7 +73,8 @@ class SimulatorStatus {
     /**
      *  Purely for testing
      */
-    private suspend fun loadSimulator() {
+    private suspend fun loadSimulator(viewModel: InterfaceState) {
         delay(1000)
+        viewModel.simConnection = !viewModel.simConnection
     }
 }
