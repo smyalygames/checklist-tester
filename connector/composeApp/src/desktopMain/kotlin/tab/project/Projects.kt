@@ -11,7 +11,9 @@ import connector.composeapp.generated.resources.folder_24px
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
-class Projects : Tab {
+object Projects : Tab {
+    private fun readResolve(): Any = Projects
+
     @OptIn(ExperimentalResourceApi::class)
     override val options: TabOptions
         @Composable

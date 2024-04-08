@@ -32,6 +32,6 @@ fun viewModelModule() = module {
     }
 
     single<ProcedureScreenModel> {
-        ProcedureScreenModel(db = get())
+        ProcedureScreenModel(db = get(), interfaceState = get())
     }
 }

@@ -1,5 +1,6 @@
 package tab.procedure
 
+import InterfaceState
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import io.anthonyberg.connector.shared.ProcedureTransaction
@@ -7,15 +8,20 @@ import io.anthonyberg.connector.shared.entity.Procedure
 import kotlinx.coroutines.launch
 
 class ProcedureScreenModel (
-    private val db: ProcedureTransaction
+    private val db: ProcedureTransaction,
+    private val interfaceState: InterfaceState
 ) : StateScreenModel<ProcedureState>(ProcedureState.Loading) {
 
     fun procedureExists() {
         screenModelScope.launch {
-            val exists = db.proceduresExist()
+            mutableState.value = ProcedureState.Loading
+
+            val projectId = interfaceState.projectId ?: return@launch
+
+            val exists = db.proceduresExist(projectId)
 
             if (exists) {
-                val procedures = getProcedures()
+                val procedures = getProcedures(projectId)
                 mutableState.value = ProcedureState.Result(procedures = procedures)
             } else {
                 mutableState.value = ProcedureState.Init
@@ -23,8 +29,8 @@ class ProcedureScreenModel (
         }
     }
 
-    private fun getProcedures(): List<Procedure> {
-        val procedures = db.getProcedures()
+    private fun getProcedures(projectId: Int): List<Procedure> {
+        val procedures = db.getProcedures(projectId)
 
         return procedures
     }
@@ -37,11 +43,13 @@ class ProcedureScreenModel (
         screenModelScope.launch {
             mutableState.value = ProcedureState.Loading
 
+            val projectId = interfaceState.projectId ?: return@launch
+
             // Add procedure to the database
-            db.createProcedure(procedureName, procedureType, procedureDescription)
+            db.createProcedure(projectId, procedureName, procedureType, procedureDescription)
 
             // Load new procedures
-            val procedures = getProcedures()
+            val procedures = getProcedures(projectId)
             mutableState.value = ProcedureState.Result(procedures)
         }
 

@@ -10,7 +10,9 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 
-class Procedures : Tab {
+object Procedures : Tab {
+    private fun readResolve(): Any = Procedures
+
     override val options: TabOptions
         @Composable
         get() {

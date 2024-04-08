@@ -12,6 +12,8 @@ class ProjectsScreenModel (
 
     fun projectExists() {
         screenModelScope.launch {
+            mutableState.value = ProjectState.Loading
+
             val exists = db.projectExists()
 
             if (exists) {

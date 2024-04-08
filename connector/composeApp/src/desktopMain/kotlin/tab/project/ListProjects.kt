@@ -1,5 +1,6 @@
 package tab.project
 
+import InterfaceState
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -20,13 +21,20 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
+import cafe.adriel.voyager.navigator.tab.TabNavigator
 import io.anthonyberg.connector.shared.entity.Project
+import org.koin.compose.koinInject
+import tab.procedure.Procedures
 
 class ListProjects(private val projects: List<Project>) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        val tabNavigator = LocalTabNavigator.current
         val state = rememberLazyListState(0)
+
+        val viewModel = koinInject<InterfaceState>()
 
         Scaffold (
             floatingActionButton = {
@@ -48,7 +56,7 @@ class ListProjects(private val projects: List<Project>) : Screen {
                 ) {
                     LazyColumn(state = state) {
                         items(projects) { project ->
-                            projectItem(project)
+                            projectItem(project, viewModel, tabNavigator)
                         }
                     }
                     VerticalScrollbar(
@@ -66,13 +74,16 @@ class ListProjects(private val projects: List<Project>) : Screen {
 
 
     @Composable
-    private fun projectItem(project: Project) {
+    private fun projectItem(project: Project, viewModel: InterfaceState, tabNavigator: TabNavigator) {
         ListItem(
             modifier = Modifier
                 .clickable(
                     enabled = true,
                     onClick = {
-                        // TODO add loading project
+                        viewModel.projectId = project.id
+
+                        // Go to procedures page once project has been selected
+                        tabNavigator.current = Procedures
                     }
                 ),
             overlineContent = { Text(project.aircraftType) },

@@ -12,8 +12,8 @@ class ProjectsContent : Screen {
         val state by screenModel.state.collectAsState()
 
         when (val s = state) {
-            is ProjectState.Init -> NoProjects().Content()
             is ProjectState.Loading -> LoadingScreen("Projects").Content()
+            is ProjectState.Init -> NoProjects().Content()
             is ProjectState.Result -> ListProjects(s.projects).Content()
         }
 

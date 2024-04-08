@@ -15,13 +15,12 @@ class ProcedureTransaction (driverFactory: DriverFactory) {
     /**
      * Creates a procedure for a project
      *
+     * @param projectId ID of the selected Project
      * @param name Name of the procedure
      * @param type Procedure type (e.g. Normal, Emergency)
      * @param description Description of what the procedure will do
      */
-    fun createProcedure(name: String, type: String, description: String) {
-        // TODO add dynamic procedureId insertion
-        val projectId = 1
+    fun createProcedure(projectId: Int, name: String, type: String, description: String) {
         val currentTime = Clock.System.now().toString()
 
         database.createProcedure(
@@ -36,11 +35,10 @@ class ProcedureTransaction (driverFactory: DriverFactory) {
     /**
      * Gets all procedures in current project
      *
+     * @param projectId ID of the selected Project
      * @return List of [Procedure] in current project
      */
-    fun getProcedures(): List<Procedure> {
-        // TODO add dynamic procedureId insertion
-        val projectId = 1
+    fun getProcedures(projectId: Int): List<Procedure> {
 
         val procedures = database.getAllProcedures(projectId = projectId)
 
@@ -62,24 +60,20 @@ class ProcedureTransaction (driverFactory: DriverFactory) {
     /**
      * Counts the amount of procedures that exist based on the current project
      *
+     * @param projectId ID of current Project
      * @return Number of procedures in the database
      */
-    fun countProcedures(): Long {
-        // TODO add dynamic procedureId insertion
-        val projectId = 1
-
+    fun countProcedures(projectId: Int): Long {
         return database.countProcedures(projectId = projectId)
     }
 
     /**
      * Checks if there are procedures on the database for the current project
      *
+     * @param projectId ID of current Project
      * @return `true` if procedures exist for project
      */
-    fun proceduresExist(): Boolean {
-        // TODO add dynamic procedureId insertion
-        val projectId = 1
-
+    fun proceduresExist(projectId: Int): Boolean {
         return database.countProcedures(projectId = projectId) > 0
     }
 }

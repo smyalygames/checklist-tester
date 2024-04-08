@@ -17,7 +17,6 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinContext
 import tab.About
@@ -41,7 +40,7 @@ fun AppScaffold() {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
-    TabNavigator(Projects()) {
+    TabNavigator(Projects) {
         Scaffold(
             topBar = {
                 TopBar(drawerState, scope)
@@ -108,7 +107,6 @@ fun TopBar(
 /**
  * Navigation drawer from the left side
  */
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun NavigationDrawer(
     drawerState: DrawerState,
@@ -120,11 +118,11 @@ fun NavigationDrawer(
             ModalDrawerSheet {
                 Column(modifier = Modifier.verticalScroll(rememberScrollState()) ) {
                     Text("Project Name...", modifier = Modifier.padding(16.dp))
-                    TabNavigationItem(Projects())
+                    TabNavigationItem(Projects)
                     HorizontalDivider()
 
                     Text("Tester", modifier = Modifier.padding(16.dp))
-                    TabNavigationItem(Procedures())
+                    TabNavigationItem(Procedures)
                     TabNavigationItem(SimulatorTest())
                     TabNavigationItem(TestResults())
                     HorizontalDivider()
