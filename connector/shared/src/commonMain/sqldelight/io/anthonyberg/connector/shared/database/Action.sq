@@ -1,0 +1,16 @@
+CREATE TABLE IF NOT EXISTS Action (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    procedureId INTEGER NOT NULL,
+    step INTEGER NOT NULL,
+    type TEXT NOT NULL,
+    goal TEXT NOT NULL,
+    FOREIGN KEY (procedureId) REFERENCES Procedure(id)
+);
+
+createAction:
+INSERT INTO Action(procedureId, step, type, goal)
+VALUES (?, ?, ?, ?);
+
+selectActions:
+SELECT * FROM Action
+WHERE procedureId = ?;
