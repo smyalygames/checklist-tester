@@ -1,4 +1,5 @@
-#include <XPLMProcessing.h>
+#include "XPLMDisplay.h"
+#include "XPLMGraphics.h"
 
 #if IBM
     #include <windows.h>
@@ -27,7 +28,7 @@
 #endif
 
 #ifndef XPLM401
-    #error This is made to be compiled against the XPLM400 SDK
+    #error This is made to be compiled against the XPLM401 SDK
 #endif
 
 PLUGIN_API int XPluginStart(char * outName, char * outSignature, char * outDescription) {

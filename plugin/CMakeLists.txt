@@ -5,7 +5,7 @@ project(XPL-Checklist-Connector CXX)
 set(CMAKE_CXX_STANDARD 17)
 
 # Set compile options for XPLM
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DXPLM401=1 -fvisibility=hidden -shared -rdynamic -nodefaultlibs -undefined_warning -lGL -lGLU")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DXPLM200=1 -DXPLM210=1 -DXPLM300=1 -DXPLM301=1 -DXPLM302=1 -DXPLM303=1 -DXPLM401=1 -fvisibility=hidden -shared -rdynamic -nodefaultlibs -undefined_warning -lGL -lGLU")
 
 # Set output directory in X-Plane plugin structure
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/lin_x64)
