@@ -1,0 +1,4 @@
+[submodule "XPlaneConnect"]
+	path = XPlaneConnect
+	url = git@github.com:nasa/XPlaneConnect.git
+	branch = develop
