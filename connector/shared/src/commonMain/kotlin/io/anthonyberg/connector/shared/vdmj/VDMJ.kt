@@ -1,4 +1,4 @@
-package io.anthonyberg.connector.vdmj
+package io.anthonyberg.connector.shared.vdmj
 
 import com.fujitsu.vdmj.Settings
 import com.fujitsu.vdmj.config.Properties
@@ -7,7 +7,7 @@ import com.fujitsu.vdmj.messages.ConsolePrintWriter
 import com.fujitsu.vdmj.plugins.EventHub
 import com.fujitsu.vdmj.plugins.Lifecycle
 import com.fujitsu.vdmj.plugins.VDMJ
-import io.anthonyberg.connector.models.VDMJExpression
+import io.anthonyberg.connector.shared.entity.VDMJExpression
 import java.io.ByteArrayOutputStream
 import java.nio.file.Paths
 import kotlin.io.path.pathString

@@ -6,7 +6,6 @@ plugins {
 }
 
 val sl4jVersion = "2.0.12"
-val vdmjVersion = "4.5.0"
 
 group = "io.anthonyberg.connector"
 version = "1.0.0"
@@ -25,6 +24,4 @@ dependencies {
 
     implementation("io.ktor:ktor-server-content-negotiation-jvm")
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
-
-    implementation("dk.au.ece.vdmj:vdmj:$vdmjVersion")
 }

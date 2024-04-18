@@ -1,6 +1,6 @@
 package io.anthonyberg.connector.routes
 
-import io.anthonyberg.connector.vdmj.vdmjExecute
+import io.anthonyberg.connector.shared.vdmj.vdmjExecute
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*

@@ -10,6 +10,9 @@ val ktorVersion = "2.3.9"
 val sqlDelightVersion = "2.0.2"
 val dateTimeVersion = "0.5.0"
 val sl4jVersion = "2.0.12"
+val vdmjVersion = "4.5.0"
+
+// Testing Dependencies
 val jupyterVersion = "5.10.1"
 
 kotlin {
@@ -28,6 +31,8 @@ kotlin {
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:$dateTimeVersion")
             implementation("org.slf4j:slf4j-api:$sl4jVersion")
             implementation("org.slf4j:slf4j-reload4j:$sl4jVersion")
+
+            implementation("dk.au.ece.vdmj:vdmj:$vdmjVersion")
 
             // this feels like the most godawful hack I have created, I am ashamed
             implementation("gov.nasa.xpc-parent:xpc:1.4.0-SNAPSHOT")

@@ -1,4 +1,4 @@
-package io.anthonyberg.connector.models
+package io.anthonyberg.connector.shared.entity
 
 import com.fujitsu.vdmj.ExitStatus
 import kotlinx.serialization.Serializable
