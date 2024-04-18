@@ -1,5 +1,6 @@
 package io.anthonyberg.connector.shared.vdmj
 
+import com.fujitsu.vdmj.ExitStatus
 import com.fujitsu.vdmj.Settings
 import com.fujitsu.vdmj.config.Properties
 import com.fujitsu.vdmj.messages.Console
@@ -8,62 +9,101 @@ import com.fujitsu.vdmj.plugins.EventHub
 import com.fujitsu.vdmj.plugins.Lifecycle
 import com.fujitsu.vdmj.plugins.VDMJ
 import io.anthonyberg.connector.shared.entity.VDMJExpression
-import java.io.ByteArrayOutputStream
+import kotlinx.coroutines.*
+import java.io.*
 import java.nio.file.Paths
 import kotlin.io.path.pathString
 
-/**
- * Handler for the VDM Model
- */
-fun vdmjExecute(expression: String): VDMJExpression {
-    Settings.mainClass = VDMJ::class.java
-    Properties.init()
-
-    val lifecycle: Lifecycle = createLifecycle(expression)
-
+@OptIn(DelicateCoroutinesApi::class)
+class VDMJ {
     // Create a ByteArrayOutputStream to capture the output
-    val byteArrayOutputStream = ByteArrayOutputStream()
-    val printStream = ConsolePrintWriter(byteArrayOutputStream)
+    private val byteArrayOutputStream = ByteArrayOutputStream()
+    private val printStream = ConsolePrintWriter(byteArrayOutputStream)
+
+    private val inputStream = PipedInputStream()
+    private val inputOutput = PipedOutputStream(inputStream)
+    private val bufferedReader = BufferedReader(InputStreamReader(inputStream))
+    private val writer = BufferedWriter(OutputStreamWriter(inputOutput))
 
     // Save the old PrintStreams
-    val oldOut = Console.out
-    val oldErr = Console.err
+    private val oldOut = Console.out
+    private val oldErr = Console.err
+    private val oldIn = Console.`in`
 
-    // Redirect Console's PrintStreams to the new PrintStream
-    Console.out = printStream
-    Console.err = printStream
+    private lateinit var exitStatus: ExitStatus
 
-    // TODO check if there is actually a memory leak or if it is just Java
-    val exitStatus = lifecycle.run()
+    /**
+     * Starts VDMJ interpreter
+     */
+    init {
+        Settings.mainClass = VDMJ::class.java
+        Properties.init()
 
-    // Reset Console's PrintStreams to the old PrintStreams
-    Console.out = oldOut
-    Console.err = oldErr
+        // Redirect Console's PrintStreams to the new PrintStream
+        Console.out = printStream
+        Console.err = printStream
+        Console.`in` = bufferedReader
 
-    // Convert the captured output to a string
-    val console = byteArrayOutputStream.toString()
+        val lifecycle: Lifecycle = createLifecycle()
 
-    // Reset the ByteArrayOutputStream
-    byteArrayOutputStream.reset()
+        // Start a coroutine for VDMJ to run in
+        GlobalScope.launch {
+            exitStatus = lifecycle.run()
+        }
+    }
 
-    // Resets VDMJ's EventHub after closing lifecycle
-    EventHub.reset()
 
-    val output = VDMJExpression(output = console, exitStatus = exitStatus)
+    /**
+     * Creates VDMJ Lifecycle with interpreter mode
+     */
+    private fun createLifecycle(): Lifecycle {
+        val vdmPath = Paths.get("src/main/resources/checklist.vdmsl")
 
-    return output
+        // Creates the arguments for VDMJ - i.e. where the file is located
+        val vdmArgs = arrayOf(vdmPath.pathString, "-vdmsl", "-i", "-q")
 
-//        exitProcess(if (lifecycle.run() == ExitStatus.EXIT_OK) 0 else 1)
-}
+        return Lifecycle(vdmArgs)
+    }
 
-/**
- * Creates arguments for VDMJ
- */
-private fun createLifecycle(command: String): Lifecycle {
-    val vdmPath = Paths.get( "src/main/resources/checklist.vdmsl")
+    fun cleanup() {
+        // Reset Console's PrintStreams to the old PrintStreams
+        Console.out = oldOut
+        Console.err = oldErr
+        Console.`in` = oldIn
 
-    // Creates the arguments for VDMJ - i.e. where the file is located
-    val vdmArgs = arrayOf(vdmPath.pathString, "-vdmsl", "-e", command, "-q", "-w")
+        // Reset the ByteArrayOutputStream
+        byteArrayOutputStream.reset()
 
-    return Lifecycle(vdmArgs)
+        // Resets VDMJ's EventHub after closing lifecycle
+        EventHub.reset()
+    }
+
+    /**
+     * Runs VDM command
+     */
+    suspend fun run(command: String): VDMJExpression {
+        // Clean previous console outputs
+        byteArrayOutputStream.reset()
+
+        // Run commands
+        withContext(Dispatchers.IO) {
+            writer.write(command)
+            writer.write(System.lineSeparator())
+            writer.flush()
+        }
+
+        var output = byteArrayOutputStream.toString()
+
+        while(!this::exitStatus.isInitialized and output.isEmpty()) {
+            delay(10)
+
+            // Convert the captured output to a string
+            output = byteArrayOutputStream.toString()
+        }
+
+        // Clear console output again, just to be kind
+        byteArrayOutputStream.reset()
+
+        return VDMJExpression(output = output)
+    }
 }
