@@ -28,6 +28,10 @@ kotlin {
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:$dateTimeVersion")
             implementation("org.slf4j:slf4j-api:$sl4jVersion")
             implementation("org.slf4j:slf4j-reload4j:$sl4jVersion")
+
+            // this feels like the most godawful hack I have created, I am ashamed
+            implementation("gov.nasa.xpc-parent:xpc:1.4.0-SNAPSHOT")
+
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
