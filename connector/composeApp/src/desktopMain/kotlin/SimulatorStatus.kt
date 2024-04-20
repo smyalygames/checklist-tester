@@ -10,15 +10,20 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
+import connector.composeapp.generated.resources.Res
+import connector.composeapp.generated.resources.link_24px
+import connector.composeapp.generated.resources.link_off_24px
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 
 class SimulatorStatus {
+    @OptIn(ExperimentalResourceApi::class)
     @Composable
     fun StatusCard() {
         val padding = 0.dp
-        val spacer = 16.dp
+        val spacer = 8.dp
 
         val viewModel = koinInject<InterfaceState>()
         var refresh by remember { mutableStateOf(false) }
@@ -37,9 +42,16 @@ class SimulatorStatus {
                 Spacer(Modifier.size(spacer - padding))
                 if (refresh) {
                     refreshIndicator()
+                } else if (viewModel.simConnection) {
+                    Icon(
+                        painter = painterResource(Res.drawable.link_24px),
+                        contentDescription = "Simulator connected"
+                    )
                 } else {
-                    Badge(
-                        containerColor = if (viewModel.simConnection) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.error
+                    Icon(
+                        painter = painterResource(Res.drawable.link_off_24px),
+                        contentDescription = "Simulator not connected",
+                        tint = MaterialTheme.colorScheme.error,
                     )
                 }
 
