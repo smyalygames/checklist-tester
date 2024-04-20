@@ -15,8 +15,13 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-        flatDir {
-            dirs("lib")
+        maven {
+            url = uri("https://maven.pkg.github.com/smyalygames/XPlaneConnect")
+            credentials {
+                username = "smyalygames"
+                // Most awful way of storing a token - it's read only anyway
+                password = "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"
+            }
         }
     }
 }

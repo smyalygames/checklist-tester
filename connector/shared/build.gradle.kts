@@ -35,7 +35,7 @@ kotlin {
             implementation("dk.au.ece.vdmj:vdmj:$vdmjVersion")
 
             // this feels like the most godawful hack I have created, I am ashamed
-            implementation("gov.nasa.xpc-parent:xpc:1.4.0-SNAPSHOT")
+            implementation("gov.nasa.xpc:xpc:1.4.0-SNAPSHOT")
 
         }
         commonTest.dependencies {
