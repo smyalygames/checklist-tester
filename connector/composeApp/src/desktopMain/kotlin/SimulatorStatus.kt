@@ -85,8 +85,8 @@ class SimulatorStatus {
     /**
      *  Purely for testing
      */
-    private suspend fun loadSimulator(viewModel: InterfaceState) {
-        delay(1000)
-        viewModel.simConnection = !viewModel.simConnection
+    private fun loadSimulator(viewModel: InterfaceState) {
+        val xpc = XPC()
+        viewModel.simConnection = xpc.connected()
     }
 }
