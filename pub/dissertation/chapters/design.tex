@@ -76,4 +76,22 @@
   \item The choice was to create a VDMJ wrapper, as the modules are available on Maven
 \end{itemize}
 
+\subsection{Checklist Tester}
+\begin{itemize}
+  \item VDMJ uses Java, meaning the logical choice would be to use something with Java
+  \item As the tester is going to include a UI, the language choice was still important
+  \item Kotlin~\cite{kotlin} was the choice in the end as Google has been putting Kotlin first
+    compared to Java, it includes less boilerplate code (e.g. getters and setters)~\cite{android-kotlin}
+  \item There are a variety of GUI libraries to consider using
+    \begin{itemize}
+      \item JavaFX~\cite{javafx}
+      \item Swing~\cite{flatlaf}
+      \item Compose Multiplatform~\cite{compose}
+    \end{itemize}
+  \item The decision was to use Compose Multiplatform in the end, due to time limitations and
+    having prior experience in using Flutter~\cite{flutter}
+  \item Compose Multiplatform has the ability to create a desktop application and a server,
+    which would allow for leeway if a server would be needed
+\end{itemize}
+
 \end{document}
