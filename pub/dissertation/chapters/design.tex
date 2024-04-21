@@ -5,7 +5,7 @@
 \begin{figure}[!h]
 \centering
   \begin{tikzpicture} [align=center, node distance=4cm]
-    \node (connector) [box] {Checklist Tester Initerface};
+    \node (connector) [box] {Checklist Tester Interface};
     \node (server) [box, below of=connector] {Checklist Tester Server};
     \node (plugin) [box, right of=server] {Simulator Connector Plugin};
     \node (formal) [box, left of=server] {Formal Method};
@@ -47,6 +47,33 @@
     and test it with my tool to see if it will pick it up
   \item These previous accident reports can be good metrics to know what statistics to
     look out for
+\end{itemize}
+
+\section{Decisions}
+\begin{itemize}
+  \item There would be around 3 main components to this tester
+    \begin{itemize}
+      \item Formal Model
+      \item Flight Simulator plugin
+      \item Checklist Tester (to connect the formal model and flight simulator)
+    \end{itemize}
+  \item As VDM-SL is being used, it uses VDMJ to parse the model~\cite{vdmj}. This was a starting
+    point for the tech stack, as VDMJ is also open source.
+  \item VDMJ uses Java, therefore my language of choice was a language related to Java.
+\end{itemize}
+
+\subsection{Formal Model}
+\begin{itemize}
+  \item There were a few ways of implementing the formal model into another application
+  \item Some of these methods were provided by Overture~\cite{overture-remote}
+    \begin{itemize}
+      \item RemoteControl interface
+      \item VDMTools API~\cite{vdmtoolbox-api}
+    \end{itemize}
+  \item However, both of these methods did not suit what was required as most of the
+    documentation for RemoteControl was designed for the Overture Tool IDE. VDMTools
+    may have handled the formal model differently
+  \item The choice was to create a VDMJ wrapper, as the modules are available on Maven
 \end{itemize}
 
 \end{document}
