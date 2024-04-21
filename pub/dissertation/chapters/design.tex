@@ -19,4 +19,24 @@
   \caption{Abstract layout of components}
 \end{figure}
 
+\section{Model}
+\begin{itemize}
+  \item Formal modelling is the heart of the logic for testing checklists
+  \item Formal model created using VDM-SL
+  \item It allows to test that the checklists have been completed in a proper manner
+    - and that it is provable
+  \item Model keeps track of
+    \begin{itemize}
+      \item Aircraft state
+      \item Checklist state
+    \end{itemize}
+  \item If an error were to occur in the model, this can be relayed that there was
+    something wrong with running the test for the checklist, such as:
+    \begin{itemize}
+      \item Procedure compromises integrity of aircraft
+      \item There is not enough time to complete the procedure
+      \item There is a contradiction with the steps of the checklist
+    \end{itemize}
+\end{itemize}
+
 \end{document}
