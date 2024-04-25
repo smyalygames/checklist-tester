@@ -1,5 +1,6 @@
 package tab.procedure
 
+import InterfaceState
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -19,8 +20,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import io.anthonyberg.connector.shared.entity.Procedure
+import org.koin.compose.koinInject
 
 class ListProcedures (
     private val procedures: List<Procedure>
@@ -28,6 +31,8 @@ class ListProcedures (
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        val viewModel = koinInject<InterfaceState>()
+
         val state = rememberLazyListState(0)
 
         Scaffold (
@@ -50,7 +55,7 @@ class ListProcedures (
                 ) {
                     LazyColumn(state = state) {
                         items(procedures) { procedure ->
-                            procedureItem(procedure)
+                            procedureItem(procedure, viewModel, navigator)
                         }
                     }
                     VerticalScrollbar(
@@ -67,13 +72,15 @@ class ListProcedures (
     }
 
     @Composable
-    private fun procedureItem(procedure: Procedure) {
+    private fun procedureItem(procedure: Procedure, viewModel: InterfaceState, navigator: Navigator) {
         ListItem(
             modifier = Modifier
                 .clickable(
                     enabled = true,
                     onClick = {
-                        // TODO add procedure editor
+                        viewModel.procedureId = procedure.id
+
+                        navigator.push(Actions())
                     }
                 ),
             overlineContent = { Text(procedure.type) },

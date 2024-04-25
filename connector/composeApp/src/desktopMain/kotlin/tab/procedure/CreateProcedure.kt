@@ -32,11 +32,6 @@ class CreateProcedure : Screen {
         var procedureName by remember { mutableStateOf("") }
         var procedureDescription by remember { mutableStateOf("") }
 
-        // Actions
-        val actionTypeOptions = listOf("Switch", "Button", "Lever")
-        var actionType by remember { mutableStateOf(procedureTypeOptions[0]) }
-        var actionTypeExpanded by remember { mutableStateOf(false) }
-
 
         Scaffold(
             topBar = {
@@ -114,44 +109,6 @@ class CreateProcedure : Screen {
                         }
                     }
 
-                    HorizontalDivider()
-
-                    Text(
-                        text = "Actions",
-                        style = MaterialTheme.typography.headlineSmall
-                    )
-
-                    ExposedDropdownMenuBox(
-                        expanded = actionTypeExpanded,
-                        onExpandedChange = { actionTypeExpanded = it }
-                    ) {
-                        TextField(
-                            modifier = Modifier.menuAnchor(),
-                            value = actionType,
-                            onValueChange = {},
-                            readOnly = true,
-                            singleLine = true,
-                            label = { Text("Type") },
-                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = actionTypeExpanded) },
-                            colors = ExposedDropdownMenuDefaults.textFieldColors()
-                        )
-                        ExposedDropdownMenu(
-                            expanded = actionTypeExpanded,
-                            onDismissRequest = { actionTypeExpanded = false },
-                        ) {
-                            actionTypeOptions.forEach { option ->
-                                DropdownMenuItem(
-                                    text = { Text(option, style = MaterialTheme.typography.bodyLarge) },
-                                    onClick = {
-                                        actionType = option
-                                        actionTypeExpanded = false
-                                    },
-                                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                                )
-                            }
-                        }
-                    }
-
                     Button(
                         contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
                         onClick = {
@@ -159,7 +116,6 @@ class CreateProcedure : Screen {
                                 procedureName.isNotBlank() and
                                 procedureType.isNotBlank() and
                                 procedureDescription.isNotBlank()
-                                // TODO add checks for actions
                                 ) {
                                 screenModel.createProcedure(
                                     procedureName = procedureName,
