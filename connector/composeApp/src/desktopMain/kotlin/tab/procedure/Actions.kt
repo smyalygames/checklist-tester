@@ -72,18 +72,18 @@ class Actions : Screen {
                     ) {
 
                         item {
-                            Header()
+                            header()
                         }
 
                         items(
                             items = inputs,
                             key = { input -> input }
                         ) { item ->
-                            ActionItem(item)
+                            actionItem(item)
                         }
 
                         item {
-                            Footer(navigator, viewModel)
+                            footer(navigator, viewModel)
                         }
                     }
 
@@ -101,7 +101,7 @@ class Actions : Screen {
     }
 
     @Composable
-    private fun Header() {
+    private fun header() {
         Text(
             text = "Edit Actions",
             style = MaterialTheme.typography.headlineSmall
@@ -109,7 +109,7 @@ class Actions : Screen {
     }
 
     @Composable
-    private fun ActionItem(item: Int) {
+    private fun actionItem(item: Int) {
         Column (
             verticalArrangement = Arrangement.spacedBy(itemPadding)
         ) {
@@ -121,7 +121,7 @@ class Actions : Screen {
 
     @OptIn(ExperimentalResourceApi::class)
     @Composable
-    private fun Footer(navigator: Navigator, viewModel: InterfaceState) {
+    private fun footer(navigator: Navigator, viewModel: InterfaceState) {
         Row (
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
