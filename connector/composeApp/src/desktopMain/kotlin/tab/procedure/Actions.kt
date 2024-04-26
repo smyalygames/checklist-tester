@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -27,17 +28,25 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 
-class Actions : Screen {
+class Actions (dbActions: List<Action>) : Screen {
     private val columnPadding = 24.dp
     private val itemPadding = 24.dp
 
     private var inputs = mutableStateListOf<Action>()
+
+    init {
+        inputs.addAll(dbActions)
+    }
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinInject<InterfaceState>()
         val state = rememberLazyListState(0)
+
+        // Sends to screen model that Actions has been loaded
+        val screenModel = getScreenModel<ActionsScreenModel>()
+        screenModel.loadedActions()
 
         // Checks if a project has been selected before viewing contents
         if (viewModel.procedureId == null) {
