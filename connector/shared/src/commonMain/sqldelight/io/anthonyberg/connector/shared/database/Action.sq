@@ -14,3 +14,11 @@ VALUES (?, ?, ?, ?);
 selectActions:
 SELECT * FROM Action
 WHERE procedureId = ?;
+
+countActions:
+SELECT COUNT(*) FROM Action
+WHERE procedureId = ?;
+
+deleteByProcedure:
+DELETE FROM Action
+WHERE procedureId = ?;
