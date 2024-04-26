@@ -10,6 +10,7 @@ import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
@@ -123,7 +124,28 @@ class Actions (dbActions: List<Action>) : Screen {
         Column (
             verticalArrangement = Arrangement.spacedBy(itemPadding)
         ) {
-            Text(text = "Action ${item.step + 1}")
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "Action ${item.step + 1}")
+
+                IconButton(
+                    modifier = Modifier.size(24.dp),
+                    onClick = {
+                        inputs.removeAt(item.step)
+                        updateStepOrder()
+                    }
+                ) {
+                    Icon(
+                        Icons.Outlined.Delete,
+                        contentDescription = "Delete Action ${item.step + 1}",
+                        modifier = Modifier.size(20.dp),
+                        tint = MaterialTheme.colorScheme.secondary
+                    )
+                }
+            }
 
             Row(
                 Modifier.fillMaxWidth(),
@@ -197,16 +219,25 @@ class Actions (dbActions: List<Action>) : Screen {
     }
 
     private fun createEmptyAction(procedureId: Int): Action {
-        val index = inputs.size + 1
+        val index = inputs.size
 
         val action = Action(
-            id = index,
+            id = index + 1,
             procedureId = procedureId,
-            step = index - 1,
+            step = index,
             type = "",
             goal = ""
         )
 
         return action
+    }
+
+    /**
+     * Updates Action.step in the input list to be the same as the index in the list
+     */
+    private fun updateStepOrder() {
+        for ((index, action) in inputs.withIndex()) {
+            inputs[index] = action.copy(step = index)
+        }
     }
 }
