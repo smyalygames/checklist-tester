@@ -93,7 +93,7 @@ class Actions (dbActions: List<Action>) : Screen {
                         }
 
                         item {
-                            footer(navigator, viewModel)
+                            footer(navigator, viewModel, screenModel)
                         }
                     }
 
@@ -123,7 +123,7 @@ class Actions (dbActions: List<Action>) : Screen {
         Column (
             verticalArrangement = Arrangement.spacedBy(itemPadding)
         ) {
-            Text(text = "Action ${item.id}")
+            Text(text = "Action ${item.step + 1}")
 
             Row(
                 Modifier.fillMaxWidth(),
@@ -132,7 +132,7 @@ class Actions (dbActions: List<Action>) : Screen {
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(0.6f),
                     value = item.type,
-                    onValueChange = { inputs[item.id] = inputs[item.id].copy(type = it) },
+                    onValueChange = { inputs[item.id - 1] = inputs[item.id - 1].copy(type = it) },
                     label = { Text("Dataref Name") },
                     singleLine = true
                 )
@@ -140,7 +140,7 @@ class Actions (dbActions: List<Action>) : Screen {
                 OutlinedTextField(
                     value = item.goal,
                     modifier = Modifier.fillMaxWidth(),
-                    onValueChange = { inputs[item.id] = inputs[item.id].copy(goal = it) },
+                    onValueChange = { inputs[item.id - 1] = inputs[item.id - 1].copy(goal = it) },
                     label = { Text("Desired State") },
                     singleLine = true
                 )
@@ -152,16 +152,16 @@ class Actions (dbActions: List<Action>) : Screen {
 
     @OptIn(ExperimentalResourceApi::class)
     @Composable
-    private fun footer(navigator: Navigator, viewModel: InterfaceState) {
+    private fun footer(navigator: Navigator, viewModel: InterfaceState, screenModel: ActionsScreenModel) {
         Row (
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             // Add Step
+            // TODO add menu to choose multiple types of items
             FilledTonalButton(
                 contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
                 onClick = {
-                    // TODO make this a proper data array for each item in checklist
                     val procedureId = viewModel.procedureId
                     if (procedureId != null) {
                         inputs += createEmptyAction(procedureId)
@@ -181,7 +181,7 @@ class Actions (dbActions: List<Action>) : Screen {
                 contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
                 onClick = {
                     // TODO make checks
-                    // TODO save to database
+                    screenModel.saveActions(inputs)
                     navigator.pop()
                     viewModel.procedureId = null
                 }
@@ -197,12 +197,12 @@ class Actions (dbActions: List<Action>) : Screen {
     }
 
     private fun createEmptyAction(procedureId: Int): Action {
-        val index = inputs.size
+        val index = inputs.size + 1
 
         val action = Action(
             id = index,
             procedureId = procedureId,
-            step = index,
+            step = index - 1,
             type = "",
             goal = ""
         )

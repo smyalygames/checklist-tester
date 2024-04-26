@@ -26,6 +26,18 @@ class ActionsScreenModel (
     fun loadedActions() {
         mutableState.value = ActionsState.Idle
     }
+
+    fun saveActions(actions: List<Action>) {
+        screenModelScope.launch {
+            val procedureId = interfaceState.procedureId ?: return@launch
+
+            // Delete all previous items of the actions from the database
+            db.deleteActionByProcedure(procedureId = procedureId)
+
+            // Add the new actions to the database
+            db.createActionFromList(actions = actions)
+        }
+    }
 }
 
 sealed class ActionsState {
