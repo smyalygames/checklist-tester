@@ -22,6 +22,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import connector.composeapp.generated.resources.Res
 import connector.composeapp.generated.resources.save_24px
+import io.anthonyberg.connector.shared.entity.Action
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
@@ -30,7 +31,7 @@ class Actions : Screen {
     private val columnPadding = 24.dp
     private val itemPadding = 24.dp
 
-    private var inputs = mutableStateListOf(1)
+    private var inputs = mutableStateListOf<Action>()
 
     @Composable
     override fun Content() {
@@ -77,7 +78,7 @@ class Actions : Screen {
 
                         items(
                             items = inputs,
-                            key = { input -> input }
+                            key = { input -> input.id }
                         ) { item ->
                             actionItem(item)
                         }
@@ -109,11 +110,32 @@ class Actions : Screen {
     }
 
     @Composable
-    private fun actionItem(item: Int) {
+    private fun actionItem(item: Action) {
         Column (
             verticalArrangement = Arrangement.spacedBy(itemPadding)
         ) {
-            Text(text = "Action $item")
+            Text(text = "Action ${item.id}")
+
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(itemPadding)
+            ) {
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(0.6f),
+                    value = item.type,
+                    onValueChange = { inputs[item.id] = inputs[item.id].copy(type = it) },
+                    label = { Text("Dataref Name") },
+                    singleLine = true
+                )
+
+                OutlinedTextField(
+                    value = item.goal,
+                    modifier = Modifier.fillMaxWidth(),
+                    onValueChange = { inputs[item.id] = inputs[item.id].copy(goal = it) },
+                    label = { Text("Desired State") },
+                    singleLine = true
+                )
+            }
 
             HorizontalDivider()
         }
@@ -131,7 +153,10 @@ class Actions : Screen {
                 contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
                 onClick = {
                     // TODO make this a proper data array for each item in checklist
-                    inputs += inputs.last() + 1
+                    val procedureId = viewModel.procedureId
+                    if (procedureId != null) {
+                        inputs += createEmptyAction(procedureId)
+                    }
                 }
             ) {
                 Icon(Icons.Outlined.Add, "Add", modifier = Modifier.size(18.dp))
@@ -160,5 +185,19 @@ class Actions : Screen {
                 )
             }
         }
+    }
+
+    private fun createEmptyAction(procedureId: Int): Action {
+        val index = inputs.size
+
+        val action = Action(
+            id = index,
+            procedureId = procedureId,
+            step = index,
+            type = "",
+            goal = ""
+        )
+
+        return action
     }
 }
