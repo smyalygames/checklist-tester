@@ -10,6 +10,7 @@ import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
@@ -17,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -27,17 +29,25 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 
-class Actions : Screen {
+class Actions (dbActions: List<Action>) : Screen {
     private val columnPadding = 24.dp
     private val itemPadding = 24.dp
 
     private var inputs = mutableStateListOf<Action>()
+
+    init {
+        inputs.addAll(dbActions)
+    }
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinInject<InterfaceState>()
         val state = rememberLazyListState(0)
+
+        // Sends to screen model that Actions has been loaded
+        val screenModel = getScreenModel<ActionsScreenModel>()
+        screenModel.loadedActions()
 
         // Checks if a project has been selected before viewing contents
         if (viewModel.procedureId == null) {
@@ -84,7 +94,7 @@ class Actions : Screen {
                         }
 
                         item {
-                            footer(navigator, viewModel)
+                            footer(navigator, viewModel, screenModel)
                         }
                     }
 
@@ -114,7 +124,28 @@ class Actions : Screen {
         Column (
             verticalArrangement = Arrangement.spacedBy(itemPadding)
         ) {
-            Text(text = "Action ${item.id}")
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "Action ${item.step + 1}")
+
+                IconButton(
+                    modifier = Modifier.size(24.dp),
+                    onClick = {
+                        inputs.removeAt(item.step)
+                        updateStepOrder()
+                    }
+                ) {
+                    Icon(
+                        Icons.Outlined.Delete,
+                        contentDescription = "Delete Action ${item.step + 1}",
+                        modifier = Modifier.size(20.dp),
+                        tint = MaterialTheme.colorScheme.secondary
+                    )
+                }
+            }
 
             Row(
                 Modifier.fillMaxWidth(),
@@ -123,7 +154,7 @@ class Actions : Screen {
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(0.6f),
                     value = item.type,
-                    onValueChange = { inputs[item.id] = inputs[item.id].copy(type = it) },
+                    onValueChange = { inputs[item.id - 1] = inputs[item.id - 1].copy(type = it) },
                     label = { Text("Dataref Name") },
                     singleLine = true
                 )
@@ -131,7 +162,7 @@ class Actions : Screen {
                 OutlinedTextField(
                     value = item.goal,
                     modifier = Modifier.fillMaxWidth(),
-                    onValueChange = { inputs[item.id] = inputs[item.id].copy(goal = it) },
+                    onValueChange = { inputs[item.id - 1] = inputs[item.id - 1].copy(goal = it) },
                     label = { Text("Desired State") },
                     singleLine = true
                 )
@@ -143,16 +174,16 @@ class Actions : Screen {
 
     @OptIn(ExperimentalResourceApi::class)
     @Composable
-    private fun footer(navigator: Navigator, viewModel: InterfaceState) {
+    private fun footer(navigator: Navigator, viewModel: InterfaceState, screenModel: ActionsScreenModel) {
         Row (
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             // Add Step
+            // TODO add menu to choose multiple types of items
             FilledTonalButton(
                 contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
                 onClick = {
-                    // TODO make this a proper data array for each item in checklist
                     val procedureId = viewModel.procedureId
                     if (procedureId != null) {
                         inputs += createEmptyAction(procedureId)
@@ -172,7 +203,7 @@ class Actions : Screen {
                 contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
                 onClick = {
                     // TODO make checks
-                    // TODO save to database
+                    screenModel.saveActions(inputs)
                     navigator.pop()
                     viewModel.procedureId = null
                 }
@@ -191,7 +222,7 @@ class Actions : Screen {
         val index = inputs.size
 
         val action = Action(
-            id = index,
+            id = index + 1,
             procedureId = procedureId,
             step = index,
             type = "",
@@ -199,5 +230,14 @@ class Actions : Screen {
         )
 
         return action
+    }
+
+    /**
+     * Updates Action.step in the input list to be the same as the index in the list
+     */
+    private fun updateStepOrder() {
+        for ((index, action) in inputs.withIndex()) {
+            inputs[index] = action.copy(step = index)
+        }
     }
 }
