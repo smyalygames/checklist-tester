@@ -3,28 +3,28 @@ package tab.procedure
 import InterfaceState
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import connector.composeapp.generated.resources.Res
+import connector.composeapp.generated.resources.expand_more_24px
 import io.anthonyberg.connector.shared.entity.Procedure
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 import tab.LoadingScreen
 
@@ -86,21 +86,71 @@ class ListProcedures (
         }
     }
 
+    @OptIn(ExperimentalResourceApi::class)
     @Composable
     private fun procedureItem(procedure: Procedure, viewModel: InterfaceState, screenModel: ActionsScreenModel) {
-        ListItem(
+        var expanded by remember { mutableStateOf(false) }
+
+        Box(
             modifier = Modifier
-                .clickable(
-                    enabled = true,
-                    onClick = {
-                        viewModel.procedureId = procedure.id
-                        screenModel.getActions()
-                    }
-                ),
-            overlineContent = { Text(procedure.type) },
-            headlineContent = { Text(procedure.name) },
-            trailingContent = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, "Open Procedure") }
-        )
+                .fillMaxSize()
+                .wrapContentSize(Alignment.TopEnd)
+        ) {
+            ListItem(
+                modifier = Modifier
+                    .clickable(
+                        enabled = true,
+                        onClick = {
+                            expanded = true
+                        }
+                    ),
+                overlineContent = { Text(procedure.type) },
+                headlineContent = { Text(procedure.name) },
+                trailingContent = { Icon(painterResource(Res.drawable.expand_more_24px), "Open Procedure Menu") }
+            )
+
+            procedureMenu(
+                procedure = procedure,
+                viewModel = viewModel,
+                screenModel = screenModel,
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            )
+        }
+
         HorizontalDivider()
+    }
+
+    @Composable
+    private fun procedureMenu(
+        procedure: Procedure,
+        viewModel: InterfaceState,
+        screenModel: ActionsScreenModel,
+        expanded: Boolean,
+        onDismissRequest: () -> Unit
+    ) {
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = onDismissRequest,
+        ) {
+            DropdownMenuItem(
+                text = { Text("Edit") },
+                onClick = {
+                    viewModel.procedureId = procedure.id
+                    screenModel.getActions()
+                },
+                leadingIcon = {
+                    Icon(Icons.Outlined.Edit, "Edit Procedure")
+                },
+            )
+
+            DropdownMenuItem(
+                text = { Text("Run Test") },
+                onClick = { /* TODO add logic */ },
+                leadingIcon = {
+                    Icon(Icons.Outlined.PlayArrow, "Run Procedure Tests")
+                },
+            )
+        }
     }
 }
