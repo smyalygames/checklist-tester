@@ -39,18 +39,18 @@ fun App() {
 @Composable
 fun AppScaffold() {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
+    val drawerScope = rememberCoroutineScope()
 
     TabNavigator(Projects) {
         Scaffold(
             topBar = {
-                TopBar(drawerState, scope)
+                TopBar(drawerState, drawerScope)
             },
             content = { innerPadding ->
                 Column(
                     modifier = Modifier.padding(innerPadding)
                 ) {
-                    NavigationDrawer(drawerState) {
+                    NavigationDrawer(drawerState = drawerState, drawerScope = drawerScope) {
                         KoinContext {
                             CurrentTab()
                         }
@@ -111,26 +111,28 @@ fun TopBar(
 @Composable
 fun NavigationDrawer(
     drawerState: DrawerState,
+    drawerScope: CoroutineScope,
     content: @Composable() () -> Unit,
 ) {
     ModalNavigationDrawer(
         drawerState = drawerState,
+        gesturesEnabled = false,
         drawerContent = {
             ModalDrawerSheet {
                 Column(modifier = Modifier.verticalScroll(rememberScrollState()) ) {
                     Text("Project Name...", modifier = Modifier.padding(16.dp))
-                    TabNavigationItem(Projects)
+                    TabNavigationItem(tab = Projects, drawerState = drawerState, drawerScope = drawerScope)
                     HorizontalDivider()
 
                     Text("Tester", modifier = Modifier.padding(16.dp))
-                    TabNavigationItem(Procedures)
-                    TabNavigationItem(SimulatorTest())
-                    TabNavigationItem(TestResults())
+                    TabNavigationItem(tab = Procedures, drawerState = drawerState, drawerScope = drawerScope)
+                    TabNavigationItem(tab = SimulatorTest(), drawerState = drawerState, drawerScope = drawerScope)
+                    TabNavigationItem(tab = TestResults(), drawerState = drawerState, drawerScope = drawerScope)
                     HorizontalDivider()
 
                     Text("Application", modifier = Modifier.padding(16.dp))
-                    TabNavigationItem(Settings())
-                    TabNavigationItem(About())
+                    TabNavigationItem(tab = Settings(), drawerState = drawerState, drawerScope = drawerScope)
+                    TabNavigationItem(tab = About(), drawerState = drawerState, drawerScope = drawerScope)
                 }
             }
         }
@@ -143,13 +145,22 @@ fun NavigationDrawer(
  * Creates button in NavigationDrawer
  */
 @Composable
-private fun TabNavigationItem(tab: Tab) {
+private fun TabNavigationItem(
+    tab: Tab,
+    drawerState: DrawerState,
+    drawerScope: CoroutineScope
+) {
     val tabNavigator = LocalTabNavigator.current
 
     NavigationDrawerItem(
         label = { Text(tab.options.title) },
         icon = { tab.options.icon?.let { Icon(it, null) } },
         selected = tabNavigator.current == tab,
-        onClick = { tabNavigator.current = tab },
+        onClick = {
+            drawerScope.launch {
+                tabNavigator.current = tab
+                drawerState.apply { close() }
+            }
+        },
     )
 }
