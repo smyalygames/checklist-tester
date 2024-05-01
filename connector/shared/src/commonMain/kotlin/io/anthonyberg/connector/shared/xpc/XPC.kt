@@ -1,3 +1,5 @@
+package io.anthonyberg.connector.shared.xpc
+
 import gov.nasa.xpc.XPlaneConnect
 import io.ktor.utils.io.errors.*
 import java.net.SocketException
