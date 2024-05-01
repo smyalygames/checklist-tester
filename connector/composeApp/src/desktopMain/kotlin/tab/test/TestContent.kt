@@ -14,9 +14,9 @@ class TestContent : Screen {
         val state by screenModel.state.collectAsState()
 
         when (val s = state) {
-            is ActionsState.Loading -> LoadingScreen("Simulator Test")
+            is ActionsState.Loading -> LoadingScreen("Simulator Test").Content()
             is ActionsState.Idle -> { /* TODO implement error? */ }
-            is ActionsState.Result -> TODO("Not yet implemented")
+            is ActionsState.Result -> TestRun(s.actions).Content()
         }
 
         LaunchedEffect(currentCompositeKeyHash) {
