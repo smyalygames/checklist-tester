@@ -1,12 +1,9 @@
 package tab.test
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.*
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextOverflow
-import cafe.adriel.voyager.navigator.tab.*
+import cafe.adriel.voyager.navigator.tab.Tab
+import cafe.adriel.voyager.navigator.tab.TabOptions
 import connector.composeapp.generated.resources.Res
 import connector.composeapp.generated.resources.check_box_24px
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -31,41 +28,8 @@ object SimulatorTest : Tab {
             }
         }
 
-    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        TabNavigator(RunTest) {
-            val tabNavigator = LocalTabNavigator.current
-
-            Scaffold(
-                topBar = {
-                    SecondaryTabRow(selectedTabIndex = tabNavigator.current.options.index.toInt()) {
-                        TabItem(RunTest)
-                        TabItem(TestResult)
-                    }
-                },
-                content = { innerPadding ->
-                    Column(
-                        modifier = Modifier.padding(innerPadding)
-                    ) {
-                        CurrentTab()
-                    }
-                }
-            )
-        }
-
-    }
-
-    @Composable
-    private fun TabItem(
-        tab: Tab
-    ) {
-        val tabNavigator = LocalTabNavigator.current
-
-        Tab(
-            text = { Text(text = tab.options.title, maxLines = 2, overflow = TextOverflow.Ellipsis) },
-            selected = tabNavigator.current == tab,
-            onClick = { tabNavigator.current = tab }
-        )
+        Text("Simulator Test")
     }
 }
