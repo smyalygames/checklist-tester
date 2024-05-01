@@ -56,7 +56,7 @@ class ListProjects(private val projects: List<Project>) : Screen {
                 ) {
                     LazyColumn(state = state) {
                         items(projects) { project ->
-                            projectItem(project, viewModel, tabNavigator)
+                            ProjectItem(project, viewModel, tabNavigator)
                         }
                     }
                     VerticalScrollbar(
@@ -74,7 +74,7 @@ class ListProjects(private val projects: List<Project>) : Screen {
 
 
     @Composable
-    private fun projectItem(project: Project, viewModel: InterfaceState, tabNavigator: TabNavigator) {
+    private fun ProjectItem(project: Project, viewModel: InterfaceState, tabNavigator: TabNavigator) {
         ListItem(
             modifier = Modifier
                 .clickable(

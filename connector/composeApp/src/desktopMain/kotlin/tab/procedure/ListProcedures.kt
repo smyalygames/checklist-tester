@@ -72,7 +72,7 @@ class ListProcedures (
                 ) {
                     LazyColumn(state = lazyState) {
                         items(procedures) { procedure ->
-                            procedureItem(procedure, viewModel, screenModel)
+                            ProcedureItem(procedure, viewModel, screenModel)
                         }
                     }
                     VerticalScrollbar(
@@ -90,7 +90,7 @@ class ListProcedures (
 
     @OptIn(ExperimentalResourceApi::class)
     @Composable
-    private fun procedureItem(procedure: Procedure, viewModel: InterfaceState, screenModel: ActionsScreenModel) {
+    private fun ProcedureItem(procedure: Procedure, viewModel: InterfaceState, screenModel: ActionsScreenModel) {
         var expanded by remember { mutableStateOf(false) }
 
         Box(
@@ -111,7 +111,7 @@ class ListProcedures (
                 trailingContent = { Icon(painterResource(Res.drawable.expand_more_24px), "Open Procedure Menu") }
             )
 
-            procedureMenu(
+            ProcedureMenu(
                 procedure = procedure,
                 viewModel = viewModel,
                 screenModel = screenModel,
@@ -124,7 +124,7 @@ class ListProcedures (
     }
 
     @Composable
-    private fun procedureMenu(
+    private fun ProcedureMenu(
         procedure: Procedure,
         viewModel: InterfaceState,
         screenModel: ActionsScreenModel,

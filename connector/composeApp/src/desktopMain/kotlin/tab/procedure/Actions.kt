@@ -83,18 +83,18 @@ class Actions (dbActions: List<Action>) : Screen {
                     ) {
 
                         item {
-                            header()
+                            Header()
                         }
 
                         items(
                             items = inputs,
                             key = { input -> input.id }
                         ) { item ->
-                            actionItem(item)
+                            ActionItem(item)
                         }
 
                         item {
-                            footer(navigator, viewModel, screenModel)
+                            Footer(navigator, viewModel, screenModel)
                         }
                     }
 
@@ -112,7 +112,7 @@ class Actions (dbActions: List<Action>) : Screen {
     }
 
     @Composable
-    private fun header() {
+    private fun Header() {
         Text(
             text = "Edit Actions",
             style = MaterialTheme.typography.headlineSmall
@@ -120,7 +120,7 @@ class Actions (dbActions: List<Action>) : Screen {
     }
 
     @Composable
-    private fun actionItem(item: Action) {
+    private fun ActionItem(item: Action) {
         Column (
             verticalArrangement = Arrangement.spacedBy(itemPadding)
         ) {
@@ -174,7 +174,7 @@ class Actions (dbActions: List<Action>) : Screen {
 
     @OptIn(ExperimentalResourceApi::class)
     @Composable
-    private fun footer(navigator: Navigator, viewModel: InterfaceState, screenModel: ActionsScreenModel) {
+    private fun Footer(navigator: Navigator, viewModel: InterfaceState, screenModel: ActionsScreenModel) {
         Row (
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
