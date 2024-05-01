@@ -26,4 +26,21 @@ class XPC {
             return false
         }
     }
+
+    /**
+     * Sets a dataref in X-Plane to the set goal
+     *
+     * @param dref Dataref name in X-Plane to change the value for
+     * @param goal The value that should be set for the dataref in X-Plane
+     *
+     * @return `true` if successfully set, `false` otherwise
+     */
+    @Throws(SocketException::class, IOException::class)
+    fun runChecklist(dref: String, goal: Int) : Boolean {
+        xpc.sendDREF(dref, goal.toFloat())
+
+        val result = xpc.getDREF(dref)
+
+        return goal.toFloat() == result[0]
+    }
 }
