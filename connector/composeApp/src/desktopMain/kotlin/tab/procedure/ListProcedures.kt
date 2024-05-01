@@ -151,6 +151,7 @@ class ListProcedures (
             DropdownMenuItem(
                 text = { Text("Run Test") },
                 onClick = {
+                    viewModel.procedureId = procedure.id
                     tabNavigator.current = SimulatorTest
                 },
                 leadingIcon = {

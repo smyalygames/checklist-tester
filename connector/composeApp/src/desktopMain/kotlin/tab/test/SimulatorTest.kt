@@ -1,7 +1,8 @@
 package tab.test
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import cafe.adriel.voyager.navigator.CurrentScreen
+import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import connector.composeapp.generated.resources.Res
@@ -30,6 +31,8 @@ object SimulatorTest : Tab {
 
     @Composable
     override fun Content() {
-        Text("Simulator Test")
+        Navigator(TestContent()) {
+            CurrentScreen()
+        }
     }
 }
