@@ -1,6 +1,5 @@
 package element
 import InterfaceState
-import io.anthonyberg.connector.shared.xpc.XPC
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -15,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import connector.composeapp.generated.resources.Res
 import connector.composeapp.generated.resources.link_24px
 import connector.composeapp.generated.resources.link_off_24px
+import io.anthonyberg.connector.shared.xpc.XPC
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
@@ -43,7 +43,7 @@ class SimulatorStatus {
             ) {
                 Spacer(Modifier.size(spacer - padding))
                 if (refresh) {
-                    refreshIndicator()
+                    RefreshIndicator()
                 } else if (viewModel.simConnection) {
                     Icon(
                         painter = painterResource(Res.drawable.link_24px),
@@ -76,7 +76,7 @@ class SimulatorStatus {
     }
 
     @Composable
-    private fun refreshIndicator() {
+    private fun RefreshIndicator() {
         CircularProgressIndicator(
             modifier = Modifier.size(24.dp),
             color = MaterialTheme.colorScheme.onSecondaryContainer,
