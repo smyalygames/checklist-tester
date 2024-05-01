@@ -20,6 +20,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import connector.composeapp.generated.resources.Res
 import connector.composeapp.generated.resources.expand_more_24px
 import io.anthonyberg.connector.shared.entity.Procedure
@@ -27,6 +28,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 import tab.LoadingScreen
+import tab.test.SimulatorTest
 
 class ListProcedures (
     private val procedures: List<Procedure>
@@ -129,6 +131,8 @@ class ListProcedures (
         expanded: Boolean,
         onDismissRequest: () -> Unit
     ) {
+        val tabNavigator = LocalTabNavigator.current
+
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = onDismissRequest,
@@ -146,7 +150,9 @@ class ListProcedures (
 
             DropdownMenuItem(
                 text = { Text("Run Test") },
-                onClick = { /* TODO add logic */ },
+                onClick = {
+                    tabNavigator.current = SimulatorTest
+                },
                 leadingIcon = {
                     Icon(Icons.Outlined.PlayArrow, "Run Procedure Tests")
                 },
