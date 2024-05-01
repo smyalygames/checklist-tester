@@ -22,7 +22,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinContext
 import tab.About
 import tab.Settings
-import tab.SimulatorTest
+import tab.test.SimulatorTest
 import tab.TestResults
 import tab.procedure.Procedures
 import tab.project.Projects
@@ -126,7 +126,7 @@ fun NavigationDrawer(
 
                     Text("Tester", modifier = Modifier.padding(16.dp))
                     TabNavigationItem(tab = Procedures, drawerState = drawerState, drawerScope = drawerScope)
-                    TabNavigationItem(tab = SimulatorTest(), drawerState = drawerState, drawerScope = drawerScope)
+                    TabNavigationItem(tab = SimulatorTest, drawerState = drawerState, drawerScope = drawerScope)
                     TabNavigationItem(tab = TestResults(), drawerState = drawerState, drawerScope = drawerScope)
                     HorizontalDivider()
 

@@ -1,4 +1,4 @@
-package tab
+package tab.test
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -10,7 +10,9 @@ import connector.composeapp.generated.resources.check_box_24px
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
-class SimulatorTest : Tab {
+object SimulatorTest : Tab {
+    private fun readResolve(): Any = SimulatorTest
+
     @OptIn(ExperimentalResourceApi::class)
     override val options: TabOptions
         @Composable
