@@ -15,14 +15,18 @@ internal class ActionResultDatabase (driverFactory: DriverFactory) {
         initState: String,
         startUTC: String
     ): Long {
-        dbQuery.startResult(
-            testId = testId,
-            actionId = actionId,
-            initState = initState,
-            startUTC = startUTC
-        )
+        val id = dbQuery.transactionWithResult {
+            dbQuery.startResult(
+                testId = testId,
+                actionId = actionId,
+                initState = initState,
+                startUTC = startUTC
+            )
 
-        return dbQuery.lastInsertedRowId().executeAsOne()
+            dbQuery.lastInsertedRowId().executeAsOne()
+        }
+
+        return id
     }
 
     /**

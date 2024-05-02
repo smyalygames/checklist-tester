@@ -4,7 +4,6 @@ import io.anthonyberg.connector.shared.database.ActionResultDatabase
 import io.anthonyberg.connector.shared.database.DriverFactory
 import io.anthonyberg.connector.shared.database.TestDatabase
 import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 
 /**
  * Database transactions for testing procedures
@@ -35,15 +34,11 @@ class TestTransaction (driverFactory: DriverFactory) {
      * Tells the database that the test has ended
      *
      * @param id ID of the Test
-     *
-     * @return The final time for when the test ended
      */
-    fun endTest(id: Int): Instant {
+    fun endTest(id: Int) {
         val currentTime = Clock.System.now()
 
         testDb.endTest(testId = id.toLong(), endUTC = currentTime.toString())
-
-        return currentTime
     }
 
     /**
@@ -72,10 +67,8 @@ class TestTransaction (driverFactory: DriverFactory) {
      * Tells the database that the test has ended and adds the final state
      *
      * @param id ID of the ActionResult
-     *
-     * @return The time for when the test for the specific action finished
      */
-    fun finishAction(id: Int, endState: String): Instant {
+    fun finishAction(id: Int, endState: String) {
         val currentTime = Clock.System.now()
 
         actionResultDb.finishResult(
@@ -83,7 +76,5 @@ class TestTransaction (driverFactory: DriverFactory) {
             endState = endState,
             endUTC = currentTime.toString()
         )
-
-        return currentTime
     }
 }

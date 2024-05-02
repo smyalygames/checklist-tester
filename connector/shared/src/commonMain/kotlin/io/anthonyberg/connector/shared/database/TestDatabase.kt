@@ -10,12 +10,15 @@ internal class TestDatabase (driverFactory: DriverFactory) {
      * @return ID of the Test created
      */
     internal fun startTest(procedureId: Long, startUTC: String) : Long {
-        dbQuery.startTest(
-            procedureId = procedureId,
-            startUTC = startUTC,
-        )
+        val id = dbQuery.transactionWithResult {
+            dbQuery.startTest(
+                procedureId = procedureId,
+                startUTC = startUTC,
+            )
+            dbQuery.lastInsertedRowId().executeAsOne()
+        }
 
-        return dbQuery.lastInsertedRowId().executeAsOne()
+        return id
     }
 
     /**
