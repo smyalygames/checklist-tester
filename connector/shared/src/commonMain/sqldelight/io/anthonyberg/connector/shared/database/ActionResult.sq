@@ -1,0 +1,20 @@
+CREATE TABLE ActionResult (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    testId INTEGER NOT NULL,
+    actionId INTEGER NOT NULL,
+    initState TEXT NOT NULL,
+    endState TEXT,
+    startUTC TEXT NOT NULL,
+    endUTC TEXT,
+    FOREIGN KEY (testId) REFERENCES Test(id),
+    FOREIGN KEY (actionId) REFERENCES Action(id)
+);
+
+startResult:
+INSERT INTO ActionResult(testId, actionId, initState, startUTC)
+VALUES (?, ?, ?, ?);
+
+finishResult:
+UPDATE ActionResult
+SET endState = ?, endUTC = ?
+WHERE id = ?;
