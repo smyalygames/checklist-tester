@@ -28,6 +28,24 @@ class XPC {
     }
 
     /**
+     * Gets the state of all Datarefs
+     *
+     * @param drefs Array of Datarefs (maximum list size = 255)
+     *
+     * @return List of all the values for each Dataref
+     */
+    @Throws(IllegalArgumentException::class)
+    fun getStates(drefs: Array<String>): Array<FloatArray> {
+        if (drefs.size > 255) {
+            throw IllegalArgumentException("The drefs cannot contain more than 255 elements")
+        }
+
+        val result = xpc.getDREFs(drefs)
+
+        return result
+    }
+
+    /**
      * Sets a dataref in X-Plane to the set goal
      *
      * @param dref Dataref name in X-Plane to change the value for

@@ -25,7 +25,11 @@ class TestRun (
     private val actions: List<Action>
 ) : Screen {
 
+    private val xpc = XPC()
+    private val xpcConnected = xpc.connected()
+
     private var tested = mutableStateListOf<Boolean>()
+    private val initState = getInitState()
 
     @Composable
     override fun Content() {
@@ -37,6 +41,11 @@ class TestRun (
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            if (!xpcConnected) {
+                Text("Could not connect to the simulator!")
+                return
+            }
+
             // Progress Indicator
             if (running) {
                 LinearProgressIndicator(
@@ -50,7 +59,7 @@ class TestRun (
             ) {
                 LazyColumn {
                     items(actions) { action ->
-                        ActionItem(action)
+                        ActionItem(action, initState[action.step])
                     }
                 }
 
@@ -75,8 +84,9 @@ class TestRun (
     }
 
     @Composable
-    private fun ActionItem(action: Action) {
+    private fun ActionItem(action: Action, initState: FloatArray) {
         ListItem(
+            overlineContent = { Text("Initial State: ${initState[0]}") },
             headlineContent = { Text(action.type) },
             supportingContent = { Text("Goal: ${action.goal}") },
             leadingContent = {
@@ -103,16 +113,6 @@ class TestRun (
     }
 
     private suspend fun runSteps() {
-        val xpc = XPC()
-
-        // Checks if the simulator is running before running the other tests
-        if (!xpc.connected()) {
-            for (action in actions) {
-                tested.add(false)
-            }
-            return
-        }
-
         for (action in actions) {
             delay(1000L)
 
@@ -122,5 +122,20 @@ class TestRun (
             // TODO add more detailed results
             tested.add(result)
         }
+    }
+
+    private fun getInitState(): Array<FloatArray> {
+        if (!xpc.connected()) {
+            return Array(actions.size) { FloatArray(0) }
+        }
+
+        var initDrefs = arrayOf<String>()
+        for (action in actions) {
+            initDrefs += action.type
+        }
+
+        val result = xpc.getStates(initDrefs)
+
+        return result
     }
 }
