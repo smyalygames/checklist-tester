@@ -16,36 +16,60 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getScreenModel
 import io.anthonyberg.connector.shared.entity.Action
-import io.anthonyberg.connector.shared.xpc.XPC
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class TestRun (
     private val actions: List<Action>
 ) : Screen {
 
-    private val xpc = XPC()
-    private val xpcConnected = xpc.connected()
-
     private var tested = mutableStateListOf<Boolean>()
-    private val initState = getInitState()
 
     @Composable
     override fun Content() {
         val lazyState = rememberLazyListState(0)
         var running by remember { mutableStateOf(false) }
-        val scope = rememberCoroutineScope()
+        var step by remember { mutableIntStateOf(0) }
+
+        val screenModel = getScreenModel<TestScreenModel>()
+        val state by screenModel.state.collectAsState()
+
+        if (!running and (tested.size == 0)) {
+            running = true
+            screenModel.init()
+        }
+
+        when (val s = state) {
+            is TestState.Init -> println("Loading Simulator Tests")
+            is TestState.NoSimulator -> {
+                running = false
+                Text("Could not connect to the simulator!")
+                return
+            }
+            is TestState.Ready -> {
+                println("Loaded Simulator Tests")
+
+                screenModel.runAction(actions[step])
+            }
+            is TestState.Running -> println("Running Action: ${s.step}")
+            is TestState.Complete -> {
+                tested.add(s.pass)
+
+                step += 1
+                if (step == actions.size) {
+                    screenModel.end()
+                } else {
+                    screenModel.runAction(actions[step])
+                }
+            }
+            is TestState.Idle -> running = false
+            is TestState.Error -> return Text("An error occurred!")
+        }
 
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            if (!xpcConnected) {
-                Text("Could not connect to the simulator!")
-                return
-            }
-
             // Progress Indicator
             if (running) {
                 LinearProgressIndicator(
@@ -59,7 +83,7 @@ class TestRun (
             ) {
                 LazyColumn {
                     items(actions) { action ->
-                        ActionItem(action, initState[action.step])
+                        ActionItem(action)
                     }
                 }
 
@@ -73,20 +97,11 @@ class TestRun (
                 )
             }
         }
-
-        if (!running and (tested.size == 0)) {
-            scope.launch {
-                running = true
-                runSteps()
-                running = false
-            }
-        }
     }
 
     @Composable
-    private fun ActionItem(action: Action, initState: FloatArray) {
+    private fun ActionItem(action: Action) {
         ListItem(
-            overlineContent = { Text("Initial State: ${initState[0]}") },
             headlineContent = { Text(action.type) },
             supportingContent = { Text("Goal: ${action.goal}") },
             leadingContent = {
@@ -110,32 +125,5 @@ class TestRun (
         )
 
         HorizontalDivider()
-    }
-
-    private suspend fun runSteps() {
-        for (action in actions) {
-            delay(1000L)
-
-            // TODO add try catch
-            val result = xpc.runChecklist(action.type, action.goal.toInt())
-
-            // TODO add more detailed results
-            tested.add(result)
-        }
-    }
-
-    private fun getInitState(): Array<FloatArray> {
-        if (!xpc.connected()) {
-            return Array(actions.size) { FloatArray(0) }
-        }
-
-        var initDrefs = arrayOf<String>()
-        for (action in actions) {
-            initDrefs += action.type
-        }
-
-        val result = xpc.getStates(initDrefs)
-
-        return result
     }
 }

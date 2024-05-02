@@ -46,19 +46,31 @@ class XPC {
     }
 
     /**
+     * Gets the state of a specific Dataref
+     *
+     * @param dref Dataref name to get the value for
+     * @return Value of the Dataref
+     */
+    fun getState(dref: String): FloatArray {
+        val result = xpc.getDREF(dref)
+
+        return result
+    }
+
+    /**
      * Sets a dataref in X-Plane to the set goal
      *
      * @param dref Dataref name in X-Plane to change the value for
      * @param goal The value that should be set for the dataref in X-Plane
      *
-     * @return `true` if successfully set, `false` otherwise
+     * @return The state of the Dataref in the simulator
      */
     @Throws(SocketException::class, IOException::class)
-    fun runChecklist(dref: String, goal: Int) : Boolean {
+    fun runChecklist(dref: String, goal: Int) : FloatArray {
         xpc.sendDREF(dref, goal.toFloat())
 
         val result = xpc.getDREF(dref)
 
-        return goal.toFloat() == result[0]
+        return result
     }
 }

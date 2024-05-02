@@ -5,6 +5,7 @@ class InterfaceState : KoinComponent {
     var simConnection = mutableStateOf(false)
     var projectId: Int? = null
     var procedureId: Int? = null
+    var testId: Int? = null
 
     val projectSelected: Boolean
         get() = projectId != null
