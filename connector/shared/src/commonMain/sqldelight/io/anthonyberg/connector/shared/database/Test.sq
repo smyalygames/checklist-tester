@@ -14,3 +14,6 @@ endTest:
 UPDATE Test
 SET endUTC = ?
 WHERE id = ?;
+
+lastInsertedRowId:
+SELECT last_insert_rowid();
