@@ -1,7 +1,8 @@
+import androidx.compose.runtime.mutableStateOf
 import org.koin.core.component.KoinComponent
 
 class InterfaceState : KoinComponent {
-    var simConnection: Boolean = false
+    var simConnection = mutableStateOf(false)
     var projectId: Int? = null
     var procedureId: Int? = null
 

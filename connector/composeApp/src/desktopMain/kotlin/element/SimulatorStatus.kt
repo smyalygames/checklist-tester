@@ -44,7 +44,7 @@ class SimulatorStatus {
                 Spacer(Modifier.size(spacer - padding))
                 if (refresh) {
                     RefreshIndicator()
-                } else if (viewModel.simConnection) {
+                } else if (viewModel.simConnection.value) {
                     Icon(
                         painter = painterResource(Res.drawable.link_24px),
                         contentDescription = "Simulator connected"
@@ -89,6 +89,6 @@ class SimulatorStatus {
      */
     private fun loadSimulator(viewModel: InterfaceState) {
         val xpc = XPC()
-        viewModel.simConnection = xpc.connected()
+        viewModel.simConnection.value = xpc.connected()
     }
 }
