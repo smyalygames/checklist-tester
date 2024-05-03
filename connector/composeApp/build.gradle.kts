@@ -11,6 +11,8 @@ val voyagerVersion = "1.0.0"
 val kotlinxVersion = "1.8.0"
 val koinVersion = "3.5.3"
 val kodeinVersion = "7.21.2"
+val kotlinLogging = "5.1.0"
+val sl4jVersion = "2.0.13"
 
 // Testing Versions
 val jupyterVersion = "5.10.1"
@@ -62,6 +64,11 @@ kotlin {
             implementation("cafe.adriel.voyager:voyager-koin:$voyagerVersion")
 
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:$kotlinxVersion")
+
+            // Kotlin Logging
+            implementation("io.github.oshai:kotlin-logging-jvm:$kotlinLogging")
+            implementation("org.slf4j:slf4j-api:$sl4jVersion")
+            implementation("org.slf4j:slf4j-reload4j:$sl4jVersion")
         }
 
         // Testing

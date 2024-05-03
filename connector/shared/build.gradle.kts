@@ -9,7 +9,7 @@ val coroutinesVersion = "1.8.0"
 val ktorVersion = "2.3.9"
 val sqlDelightVersion = "2.0.2"
 val dateTimeVersion = "0.5.0"
-val sl4jVersion = "2.0.12"
+val sl4jVersion = "2.0.13"
 val vdmjVersion = "4.5.0"
 
 // Testing Dependencies

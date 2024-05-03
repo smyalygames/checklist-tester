@@ -4,11 +4,14 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import io.anthonyberg.connector.shared.ProjectTransaction
 import io.anthonyberg.connector.shared.entity.Project
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.launch
 
 class ProjectsScreenModel (
     private val db: ProjectTransaction
 ) : StateScreenModel<ProjectState>(ProjectState.Loading) {
+
+    private val logger = KotlinLogging.logger {}
 
     fun projectExists() {
         screenModelScope.launch {
@@ -27,7 +30,7 @@ class ProjectsScreenModel (
 
     private fun getProjects(): List<Project> {
         val projects = db.getProjects()
-        println(projects)
+        logger.debug { "Loaded projects from database: $projects" }
 
         return projects
     }

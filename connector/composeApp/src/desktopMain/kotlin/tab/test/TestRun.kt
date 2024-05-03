@@ -18,11 +18,13 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import io.anthonyberg.connector.shared.entity.Action
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 class TestRun (
     private val actions: List<Action>
 ) : Screen {
 
+    private val logger = KotlinLogging.logger {}
     private var tested = mutableStateListOf<Boolean>()
 
     @Composable
@@ -40,30 +42,35 @@ class TestRun (
         }
 
         when (val s = state) {
-            is TestState.Init -> println("Loading Simulator Tests")
+            is TestState.Init -> logger.info { "Loading Simulator Tests" }
             is TestState.NoSimulator -> {
-                running = false
+                logger.warn { "Could not connect to the simulator" }
                 Text("Could not connect to the simulator!")
                 return
             }
             is TestState.Ready -> {
-                println("Loaded Simulator Tests")
+                logger.info { "Loaded Simulator Tests" }
 
                 screenModel.runAction(actions[step])
             }
-            is TestState.Running -> println("Running Action: ${s.step}")
+            is TestState.Running -> logger.info { "Running Action: ${s.step}" }
             is TestState.Complete -> {
+                logger.info { "Completed test for action: ${s.step}" }
                 tested.add(s.pass)
 
                 step += 1
                 if (step == actions.size) {
+                    logger.info { "Completed all tests" }
                     screenModel.end()
                 } else {
                     screenModel.runAction(actions[step])
                 }
             }
             is TestState.Idle -> running = false
-            is TestState.Error -> return Text("An error occurred!")
+            is TestState.Error -> {
+                logger.error { "An error occurred!" }
+                return Text("An error occurred!")
+            }
         }
 
         Column(
