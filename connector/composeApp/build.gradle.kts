@@ -6,17 +6,6 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
 }
 
-val material3Version = "1.6.1"
-val voyagerVersion = "1.0.0"
-val kotlinxVersion = "1.8.0"
-val koinVersion = "3.5.3"
-val kodeinVersion = "7.21.2"
-val kotlinLogging = "5.1.0"
-val sl4jVersion = "2.0.13"
-
-// Testing Versions
-val jupyterVersion = "5.10.1"
-
 kotlin {
     jvm("desktop")
     jvmToolchain(21)
@@ -28,6 +17,7 @@ kotlin {
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
+            implementation(compose.material3)
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
@@ -35,40 +25,24 @@ kotlin {
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
-            implementation("org.jetbrains.compose.material3:material3-desktop:$material3Version")
+            implementation(libs.kotlinx.coroutines.swing)
 
-            // Koin
-            implementation(project.dependencies.platform("io.insert-koin:koin-bom:$koinVersion"))
-            implementation("io.insert-koin:koin-core:$koinVersion")
-            implementation("io.insert-koin:koin-compose:1.1.2")
+            //Koin
+            implementation(libs.koin.core)
+            implementation(project.dependencies.platform(libs.koin.bom))
+            implementation(libs.koin.compose)
 
-            // Voyager - Navigation
-            // Multiplatform
+            // Voyager
+            implementation(libs.voyager.navigator)
+            implementation(libs.voyager.screenmodel)
+            implementation(libs.voyager.bottom.sheet.navigator)
+            implementation(libs.voyager.tab.navigator)
+            implementation(libs.voyager.transitions)
+            implementation(libs.voyager.koin)
 
-            // Navigator
-            implementation("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
-
-            // Screen Model
-            implementation("cafe.adriel.voyager:voyager-screenmodel:$voyagerVersion")
-
-            // BottomSheetNavigator
-            implementation("cafe.adriel.voyager:voyager-bottom-sheet-navigator:$voyagerVersion")
-
-            // TabNavigator
-            implementation("cafe.adriel.voyager:voyager-tab-navigator:$voyagerVersion")
-
-            // Transitions
-            implementation("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
-
-            // Koin integration
-            implementation("cafe.adriel.voyager:voyager-koin:$voyagerVersion")
-
-            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:$kotlinxVersion")
-
-            // Kotlin Logging
-            implementation("io.github.oshai:kotlin-logging-jvm:$kotlinLogging")
-            implementation("org.slf4j:slf4j-api:$sl4jVersion")
-            implementation("org.slf4j:slf4j-reload4j:$sl4jVersion")
+            implementation(libs.kotlin.logging.jvm)
+            implementation(libs.slf4j.api)
+            implementation(libs.slf4j.reload4j)
         }
 
         // Testing
@@ -78,15 +52,13 @@ kotlin {
 
             @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
             implementation(compose.uiTest)
-
-            implementation("org.junit.jupiter:junit-jupiter:$jupyterVersion")
+            implementation(libs.junit.api)
         }
         desktopTest.dependencies {
             implementation(compose.desktop.uiTestJUnit4)
             implementation(compose.desktop.currentOs)
-
-            implementation("org.junit.jupiter:junit-jupiter:$jupyterVersion")
-            implementation("io.insert-koin:koin-test:$koinVersion")
+            implementation(libs.junit.api)
+            implementation(libs.koin.test)
         }
     }
 }
