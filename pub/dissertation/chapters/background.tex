@@ -11,7 +11,8 @@
     \end{itemize}
   \item As VDM-SL is being used, it uses VDMJ to parse the model~\cite{vdmj}. This was a starting
     point for the tech stack, as VDMJ is also open source.
-  \item VDMJ uses Java, therefore my language of choice was a language related to Java.
+  \item VDMJ is written in Java~\cite{vdmj}, therefore to simplify implementing VDMJ into the
+    Checklist Tester, it would be logical to use a Java virtual machine (JVM) language.
 \end{itemize}
 
 \subsection{Formal Model}
@@ -29,12 +30,25 @@
 \end{itemize}
 
 \subsection{Checklist Tester}
+\subsubsection{JVM Langauge}
 \begin{itemize}
-  \item VDMJ uses Java, meaning the logical choice would be to use something with Java
-  \item As the tester is going to include a UI, the language choice was still important
+  \item There are multiple langauges that are made for or support JVMs~\cite{jvm-alt-lang}
+  \item Requirements for language
+    \begin{itemize}
+      \item Be able to interact with Java code because of VDMJ
+      \item Have Graphical User Interface (GUI) libraries
+      \item Have good support (the more popular, the more resources available)
+    \end{itemize}
+  \item The main contenders were Java and Kotlin~\cite{kotlin}
   \item Kotlin~\cite{kotlin} was the choice in the end as Google has been putting Kotlin first
-    compared to Java, it includes less boilerplate code (e.g. getters and setters)~\cite{android-kotlin}
-  \item There are a variety of GUI libraries to consider using
+    instead of Java. Kotlin also requires less boilerplate code (e.g. getters and setters)~\cite{android-kotlin}
+
+\end{itemize}
+
+\subsubsection{Graphical User Interface}
+\begin{itemize}
+  \item As the tester is going to include a UI, the language choice was still important
+    \item There are a variety of GUI libraries to consider using
     \begin{itemize}
       \item JavaFX~\cite{javafx}
       \item Swing~\cite{flatlaf}
