@@ -1,6 +1,8 @@
 \documentclass[../dissertation.tex]{subfiles}
 
 \begin{document}
+
+\section{Motivation}
 \subsubsection*{Context}
 \begin{itemize}
     \item Designing Emergency Checklists is difficult
@@ -43,5 +45,25 @@
       \lfcomment{Again, explain testing against what}
     \item Results in being able to see where to improve checklists
 \end{itemize}
+
+\section{Objectives}
+\begin{enumerate}
+  \item Research current checklists that may be problematic and are testable
+    in the QRH tester being made
+  \item Implement a formal model that runs through checklists, with the
+    research gathered to produce an accurate test
+    \begin{enumerate}
+      \item Understand the relative states of the aircraft that need to be captured
+      \item Ensure that the results of the checklist procedures are consistent
+    \end{enumerate}
+  \item Implement a QRH tester manager that
+    \begin{itemize}
+      \item Runs the formal model and reacts to the output of the formal model
+      \item Connect to a flight simulator to run actions from the formal model
+      \item Implement checklist procedures to be tested, run them, and get
+        feedback on how well the procedure ran
+    \end{itemize}
+\end{enumerate}
+
 \end{document}
 
