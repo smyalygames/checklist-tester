@@ -10,12 +10,8 @@ name: Java CI with Gradle
 on:
   push:
     branches: ["main"]
-    paths:
-      - "connector/**"
   pull_request:
     branches: ["main"]
-    paths:
-      - "connector/**"
 
 jobs:
   build:
