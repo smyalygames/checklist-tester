@@ -1,2 +1,5 @@
-!formal/*
-**/**
+connector/
+doc/
+plugin/
+pub/
+XPlaneConnect/
