@@ -5,7 +5,7 @@ package io.anthonyberg.connector.shared.vdmj.type
  */
 data class Aircraft(
     val items: Map<String, Switch>, // TODO value should be ItemObject type
-    val procedure: MutableList<String> // TODO change String to a ProcedureItem type
+    val procedure: MutableList<ProcedureItem>
 ) {
     /**
      * Converts variables in object to a String that can be passed into VDM
@@ -52,9 +52,8 @@ data class Aircraft(
     private fun procedureToVDMString(): String {
         var output = "["
 
-        // TODO change item type to Procedure type
-        for (item: String in procedure) {
-            output += item
+        for (item: ProcedureItem in procedure) {
+            output += item.toVDMString()
             output += ","
         }
 
