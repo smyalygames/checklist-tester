@@ -24,98 +24,53 @@ values
 
     before_start_procedure: Procedure = [fuel_chkl, pax_sign_chkl, windows_chkl, acol_chkl];
 
-    aircraft = mk_Aircraft(aircraft_panels, {"Before Start" |-> before_start_procedure});
+    aircraft = mk_Aircraft(aircraft_panels, before_start_procedure);
 types
-	--@LF can this be empty? perhaps seq1?
-    String = seq of char;
+    --@doc The dataref name in X-Plane
+    Dataref = seq1 of char;
 
     -- Aircraft
 
     -- Switches
     --@doc The state a switch can be in
-    -- 1 means off
     SwitchState = <OFF> | <MIDDLE> | <ON>;
 
 	--@LF why have a type kist as a rename?
-    ItemState = SwitchState;
+    ItemState = SwitchState; --@TODO | Button | ...
 
     --@doc A switch, with the possible states it can be in, and the state that it is in
     Switch :: 
-                position : SwitchState
-                middlePosition : bool
-                inv s == 
-                	--@LF boolean conditions like these are clearer described as
-                	-- not s.middlePosition => s.position <> <MIDDLE>
-                	-- =
-                	-- (s.position = <MIDDLE> => s.middlePosition)
-                    --
-                    --
-                    --if s.middlePosition = false then 
-                   --     s.position <> <MIDDLE>
-                    --else true;
-                    (s.position = <MIDDLE> => s.middlePosition);
+        position : SwitchState
+        middlePosition : bool
+        inv s == 
+            (s.position = <MIDDLE> => s.middlePosition);
 
     -- Knob
     Knob :: 
-            position : nat1
-            --@LF how can a state be an int? perhaps a proper type (i..e. subset of int range or a union?)
-            states : seq1 of int
-            inv k == 
-            	--@LF if k.pos <= len k.states  and pos is nat1, then states better be seq1 as well?! It implicitly already is anyhow.
-            	k.position <= len k.states;
+        position : nat
+        --@LF how can a state be an int? perhaps a proper type (i..e. subset of int range or a union?)
+        states : set1 of nat
+        inv k ==
+            k.position in set k.states;
 
     Lever = nat
         inv t == t <= 100;
 
     Throttle :: 
-                thrust: Lever
-                reverser: Lever
-                inv t ==
-                	--@LF again, this is "programming" not modelling. This one won't turn out as clear as the one for Switch
-                	--    but it is effectively this
-                	--
-                	-- (t.thrust > 0 <=> t.reverser = 0)
-                	--
-                	-- that is, if t.thurst > 0 then t.reverser = 0 and
-                	-- and    , if not (t.thurst > 0) then not t.reverser = 0
-                	--			==
-                	--			if (t.thurst <= 0) then t.reverser <> 0
-                	--
-                	-- coming to think of this, t.reverser is already >= 0 (i.e. it's a nat?). 
-                	-- so the else is spurious (i.e. it is a good as "true"). Don't you mean
-                	-- "t.reverser > 0"? (i.e. if thurst is <= 0, then reverser cannot be zero)?
-                	--
-                	-- again, this is concrete example how logic is better to illstrate issue than if-then-else. 
-                	-- arguably this is also a matter of taste. But as-is, this seems wrong. 
-                    if t.thrust > 0 then
-                        t.reverser = 0
-                    else 
-                        t.reverser >= 0;
+        thrust: Lever
+        reverser: Lever
+        inv t ==
+            (t.reverser > 0 <=> t.thrust = 0);
 
     --@doc The type that the action of the button is
     ItemType = <SWITCH> | <KNOB> | <BUTTON> | <THROTTLE>;
 
     --@doc The unique switch/knob/etc of that aircraft
+    ObjectType = Switch | Knob | Throttle;                
     ItemObject ::
         type : ItemType
-        object : Switch | Knob | Throttle
-        inv i ==
-        	--@LF here I would write differently. This is protracted. I would use pattern matching 
-            let type = i.type, object = i.object in
-                (type = <SWITCH> and is_Switch(object))
-                or (type = <KNOB> and is_Knob(object))
-                or (type = <THROTTLE> and is_Throttle(object));
-                --TODO add check for button
-
-	--@LF if type is always inline with the object, then why is it needed? 
-	--	  that is, would ItemType come from anywhere else but the way you  consutrct object type? 
-	--    this seems redudant (i.e. you just need object union type) perhaps as
-	
-	ObjectType = Switch | Knob | Throttle;                
-    ItemObject' ::
-        type : ItemType
         object : ObjectType
-        inv mk_ItemObject'(type, object) ==
+        inv mk_ItemObject(type, object) ==
         	cases type: 
         		<SWITCH> -> is_Switch(object),
         		<KNOB>   -> is_Knob(object),
@@ -125,51 +80,43 @@ types
         	end;
 
     --@doc Contains each ItemObject in the Aircraft, e.g. Fuel Pump switch
-    --@LF then String defintely shouldn't be empty. Otherwise, what does it mean to map empty to something? 
-    --    dores it really need to be string?
-    Items = map String to ItemObject;
+    Items = map Dataref to ItemObject;
 
-    --@doc Contains the panels (all the items in the aircraft) and the checklist
+    --@doc Contains the panels (all the items in the aircraft) and the procedure
     Aircraft ::
         items : Items
-        checklist : Checklist;
-    --@LF should the domains of these two maps be equal or contained? Should the maps be non-empty?
-    --e.g. 
-    -- inv mk_Aircraft(i, c) == (dom i = dom c) or (dom i subset dom c); ?
+        procedure : Procedure
+        inv mk_Aircraft(i, p) ==
+        ({ x.procedure | x in seq p } subset dom i);
 
     -- Checklist
 
     --@doc Item of a checklist, e.g. Landing gear down
     ChecklistItem ::
-    				--@LF again, empty string here doesn't make sense.
-                    procedure : String
-                    type : ItemType
-                    --TODO Check is not only SwitchState
-                    check : SwitchState
-                    checked : bool;
+        --@LF again, empty string here doesn't make sense.
+        procedure : Dataref
+        type : ItemType
+        --TODO Check is not only SwitchState
+        check : SwitchState
+        checked : bool;
 
-    --@doc This is the item with the complimentary item in the chcecklist
+    --@doc This is an item in the aircraft that complements the item in the procedure
     ItemAndChecklistItem ::
         item : ItemObject
-        --@LF this name is bad. This is not a check list but a check list item! call it checkListItem! 
-        checklist: ChecklistItem
-        inv i == i.item.type = i.checklist.type;
+        checklistItem: ChecklistItem
+        inv i == i.item.type = i.checklistItem.type;
 
     --@doc A section of a checklist, e.g. Landing Checklist
     --@LF shouldn't this be non-empty? What's the point to map a checklist name to an empty procedure? Yes.
     Procedure = seq1 of ChecklistItem
         inv p == 
-            --len p > 0 and
             --@LF the "trick" for "false not in set S" is neat. It forces a full evaluation, rather than short circuited (i.e. stops at first false).
             --    I presume this was intended.
             false not in set { 
                 let first = p(x-1).checked, second = p(x).checked in 
                 	--@LF boolean values don't need equality check
-                    (first = second) or (first and not second)--((first = true) and (second = false))
+                    second => first--((first = true) and (second = false))
                 | x in set {2,...,len p}};
-    
-    --@doc Full checklist, e.g. Startup, Descent, Landing Checklist
-    Checklist = map String to Procedure;
 
 functions
     -- PROCEDURES
@@ -254,28 +201,19 @@ functions
         -- Checks the item has been moved correctly
         check_item_in_position(RESULT.item, p.check);
 
-    --@doc Gets the procedure by the name, n.
-    get_procedure: String * Aircraft -> Procedure
-    get_procedure(n, a) ==
-        a.checklist(n)
-    pre
-        n in set dom a.checklist;
-
     --@doc Completes a procedure step by step
-    -- n = Name of procedure, a = Aircraft
-    complete_procedure: String * Aircraft -> Aircraft
-    complete_procedure(n, a) ==
-        let procedure = get_procedure(n, a) in
+    -- a = Aircraft
+    complete_procedure: Aircraft -> Aircraft
+    complete_procedure(a) ==
+        let procedure = a.procedure in
             mk_Aircraft(
                 a.items ++ { x.procedure |-> do_proc_item(a.items(x.procedure), x).item | x in seq procedure },
-                a.checklist ++ { n |-> [ complete_item(x) | x in seq procedure ] }
+                [ complete_item(x) | x in seq procedure ]
             )
     pre
-        let checklist = a.checklist in
-            n in set dom checklist
-            and not procedure_completed(checklist(n))
+        not procedure_completed(a.procedure)
     post
-        procedure_completed(RESULT.checklist(n));
+        procedure_completed(RESULT.procedure);
 
     -- AIRCRAFT ITEMS
     --@doc Marks ChecklistItem as complete
