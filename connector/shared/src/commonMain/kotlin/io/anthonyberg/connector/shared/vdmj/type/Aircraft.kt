@@ -4,7 +4,7 @@ package io.anthonyberg.connector.shared.vdmj.type
  * Aircraft record type in the VDM-SL model
  */
 data class Aircraft(
-    val items: Map<String, String>, // TODO value should be ItemObject type
+    val items: Map<String, Switch>, // TODO value should be ItemObject type
     val procedure: MutableList<String> // TODO change String to a ProcedureItem type
 ) {
     /**
@@ -33,8 +33,7 @@ data class Aircraft(
         for (dref: String in items.keys) {
             val value = items.getValue(dref)
 
-            // TODO make sure to run toString on value once items Map changes the value type
-            output += "\"$dref\" |-> $value,"
+            output += "\"$dref\" |-> ${value.toVDMString()},"
         }
 
         // Removes the last comma in the VDM map as it will error otherwise
