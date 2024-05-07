@@ -1,49 +1,30 @@
 \documentclass[../dissertation.tex]{subfiles}
 
 \begin{document}
-
-\section{Motivation}
-\subsubsection*{Context}
+\section{Scene}
 \begin{itemize}
     \item Designing Emergency Checklists is difficult
     \item Procedures in checklists must be tested in simulators~\cite{nasa-design},
       which usually means trained pilots test it, as the tests need
       to work consistently~\cite{manifesto} (making sure it's not lengthy,
       concise and gets critical procedures)
-      	\lfcomment{Testing for what? What's the baseline? I guess you will need some kind of evidence/argument that demonstrates that with and without the checklist results are markedly different. }
     \item Checklists are usually carried out in high
         workload environments, especially emergency ones
 \end{itemize}
 
-\subsubsection*{Problem}
+\section{Motivation}
 \begin{itemize}
   \item Testing procedures in checklists are often neglected~\cite{nasa-design}
     \item There are some checklists that may not be fit
         for certain scenarios - e.g. ditching (water landing)
         checklist for US Airways Flight 1549 assumed at least one engine
         was running~\cite{AWE1549}, but in this scenario, there were none
-         \lfcomment{What check lists and what scenarios?}
     \item Some checklists may make pilots \enquote{stuck}
       - not widely implemented, could be fixed with \enquote{opt out} points.
       e.g. US Airways 1549, plane below 3000ft, could have skip to
       later in the checklist to something like turn on APU, otherwise plane
       will have limited control~\cite{AWE1549}.
-    	\lfcomment{Yes, or might make them ignore the checklist. What criteria does that?}
     \item Checklists may take too long to carry out - Swissair 111
-    	\lfcomment{Yes. See Checklist manifesto test}
-\end{itemize}
-
-\subsubsection*{Rationale}
-\begin{itemize}
-    \item Test checklists in a simulated environment 
-      to find flaws in checklist for things like
-      \begin{itemize}
-        \item Can be done in an amount of time that will not endanger aircraft
-        \item Provides reproducible results
-        \item Procedures will not endanger aircraft or crew further (Crew referring to Checklist Manifesto with the cargo door blowout)
-      \end{itemize}
-      \lfcomment{Again, explain testing against what}
-    \item Results in being able to see where to improve checklists
 \end{itemize}
 
 \section{Aim}
