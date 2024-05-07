@@ -1,21 +1,34 @@
 \documentclass[../dissertation.tex]{subfiles}
 
 \begin{document}
-\section{Abstraction}
+\section{Components}
+
+Splitting up the project into multiple components has been useful for
+\begin{itemize}
+  \item Aiding in planning to make the implementation more efficient
+  \item Delegating specific work tasks
+  \item Making the project modular, for example, allowing for a different simulator
+    to be implemented with minimal need to refactor other parts of the codebase
+\end{itemize}
+
 \begin{figure}[!h]
 \centering
   \begin{tikzpicture} [align=center, node distance=4cm]
     \node (connector) [box] {Checklist Tester};
-    \node (plugin) [box, right of=connector] {X-Plane Connect};
+    \node (plugin) [box, right of=connector] {Simulator Connector Plugin};
     \node (formal) [box, left of=connector] {Formal Method};
-    \node (simulator) [box, below=0.75cm of plugin] {X-Plane 12};
+    \node (simulator) [box, below=0.75cm of plugin] {Flight Simulator};
   
     \draw [arrow] (formal) -- (connector);
     \draw [arrow] (plugin) -- (connector);
     \draw [arrow] (plugin) -- (simulator);
   \end{tikzpicture}
+  \label{fig:abstract}
   \caption{Abstract layout of components}
 \end{figure}
+
+Each of the components in Figure~\ref{fig:abstract} will be covered in detail in this
+chapter.
 
 \section{Model}
 \begin{itemize}
