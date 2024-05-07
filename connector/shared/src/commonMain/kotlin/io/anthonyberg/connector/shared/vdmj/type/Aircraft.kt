@@ -4,7 +4,7 @@ package io.anthonyberg.connector.shared.vdmj.type
  * Aircraft record type in the VDM-SL model
  */
 data class Aircraft(
-    val items: Map<String, Switch>, // TODO value should be ItemObject type
+    val items: Map<String, ItemObject>,
     val procedure: MutableList<ProcedureItem>
 ) {
     /**

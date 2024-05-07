@@ -13,20 +13,11 @@ data class Switch(val position: Int, val middlePosition: Boolean = false) {
     }
 
     /**
-     * Converts to String for a VDM representation of an ItemObject record
-     *
-     * @return String representation for VDM ItemObject
-     */
-    fun toVDMString(): String {
-        return "mk_ItemObject(<SWITCH>, ${toSwitchVDMString()})"
-    }
-
-    /**
      * Converts to String for a VDM representation of a Switch record
      *
      * @return String representation for VDM Switch
      */
-    private fun toSwitchVDMString(): String {
+    fun toVDMString(): String {
         return "mk_Switch(${getSwitchState()}, $middlePosition)"
     }
 
