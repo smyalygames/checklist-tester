@@ -5,15 +5,13 @@
 \begin{figure}[!h]
 \centering
   \begin{tikzpicture} [align=center, node distance=4cm]
-    \node (connector) [box] {Checklist Tester Interface};
-    \node (server) [box, below of=connector] {Checklist Tester Server};
-    \node (plugin) [box, right of=server] {Simulator Connector Plugin};
-    \node (formal) [box, left of=server] {Formal Method};
-    \node (simulator) [box, below of=plugin] {Flight Simulator};
+    \node (connector) [box] {Checklist Tester};
+    \node (plugin) [box, right of=connector] {X-Plane Connect};
+    \node (formal) [box, left of=connector] {Formal Method};
+    \node (simulator) [box, below=0.75cm of plugin] {X-Plane 12};
   
-    \draw [arrow] (server) -- (connector);
-    \draw [arrow] (formal) -- (server);
-    \draw [arrow] (plugin) -- (server);
+    \draw [arrow] (formal) -- (connector);
+    \draw [arrow] (plugin) -- (connector);
     \draw [arrow] (plugin) -- (simulator);
   \end{tikzpicture}
   \caption{Abstract layout of components}
