@@ -9,8 +9,10 @@ import io.ktor.utils.io.errors.*
  * VDMJ transactions used to control the aircraft in the simulator
  * and run steps
  */
-class VDMJTransaction(val actions: List<Action>, xpc: XPC) {
+class VDMJTransaction(val actions: List<Action>, private val xpc: XPC) {
     private val vdmj = VDMJ()
+
+    private val drefs: Array<String> = actions.map { it.type }.toTypedArray()
 
     private var aircraft: Aircraft
 
@@ -21,36 +23,43 @@ class VDMJTransaction(val actions: List<Action>, xpc: XPC) {
         }
 
         // Create Aircraft
-        val items: MutableMap<String, ItemObject> = mutableMapOf()
-        val procedure: MutableList<ProcedureItem> = mutableListOf()
-        for (item: Action in actions) {
-            val dref = item.type
-            val type = ItemType.SWITCH
-            val initDref = xpc.getState(dref)[0].toInt()
-            val goal = item.goal.toInt()
-            val middlePosition: Boolean = goal > 1
+        val items = getAircraftState()
 
-            items[dref] = ItemObject(
-                type = type,
-                item = Switch(
-                    position = initDref,
-                    middlePosition = middlePosition
-                )
+        val procedures: MutableList<ProcedureItem> = actions.map {
+            ProcedureItem(
+                dref = it.type,
+                type = ItemType.SWITCH,
+                goal = it.goal.toInt(),
+                complete = false
             )
-            procedure.addLast(
-                ProcedureItem(
-                    dref = dref,
-                    type = type,
-                    goal = goal,
-                    complete = false
-                )
-            )
-        }
+        }.toMutableList()
 
-        aircraft = Aircraft(items = items, procedure = procedure)
+        aircraft = Aircraft(items = items, procedure = procedures)
     }
 
     fun nextStep() {
 
+    }
+
+    /**
+     * Gets the state of all the DREFs in X-Plane for [Aircraft.items]
+     *
+     * @return Map with key that is a DREF and value [ItemObject]
+     */
+    private fun getAircraftState(): Map<String, ItemObject> {
+        val initDrefs = xpc.getStates(drefs = drefs)
+
+        val items: Map<String, ItemObject> = actions.associateBy(
+            { it.type },
+            { ItemObject(
+                type = ItemType.SWITCH,
+                item = Switch(
+                    position = initDrefs[it.step][0].toInt(),
+                    middlePosition = it.goal.toInt() > 1
+                )
+            )}
+        )
+
+        return items
     }
 }
