@@ -15,6 +15,7 @@ class VDMJTransaction(val actions: List<Action>, private val xpc: XPC) {
     private val drefs: Array<String> = actions.map { it.type }.toTypedArray()
 
     private var aircraft: Aircraft
+    private var step = 1
 
     init {
         // Check X-Plane is running
@@ -37,9 +38,19 @@ class VDMJTransaction(val actions: List<Action>, private val xpc: XPC) {
         aircraft = Aircraft(items = items, procedure = procedures)
     }
 
-    fun nextStep() {
+    suspend fun expectedEndState(): String {
+        val command = "p complete_procedure(${aircraft.toVDMString()})"
 
+        println(command)
+
+        val result = vdmj.run(command = command)
+
+        return result.output
     }
+
+//    fun nextStep() {
+//        val command = "do_proc_item("
+//    }
 
     /**
      * Gets the state of all the DREFs in X-Plane for [Aircraft.items]

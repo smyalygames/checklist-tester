@@ -57,7 +57,7 @@ class VDMJ {
      * Creates VDMJ Lifecycle with interpreter mode
      */
     private fun createLifecycle(): Lifecycle {
-        val vdmPath = Paths.get("src/main/resources/checklist.vdmsl")
+        val vdmPath = Paths.get("src/commonMain/resources/checklist.vdmsl")
 
         // Creates the arguments for VDMJ - i.e. where the file is located
         val vdmArgs = arrayOf(vdmPath.pathString, "-vdmsl", "-i", "-q")
@@ -94,8 +94,8 @@ class VDMJ {
 
         var output = byteArrayOutputStream.toString()
 
-        while(!this::exitStatus.isInitialized and output.isEmpty()) {
-            delay(10)
+        while(!this::exitStatus.isInitialized and (output.isEmpty() or (output.length <=2))) {
+            delay(100)
 
             // Convert the captured output to a string
             output = byteArrayOutputStream.toString()

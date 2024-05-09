@@ -37,7 +37,7 @@ data class Aircraft(
         }
 
         // Removes the last comma in the VDM map as it will error otherwise
-        output.dropLast(1)
+        output = output.dropLast(1)
 
         output += "}"
 
@@ -58,7 +58,7 @@ data class Aircraft(
         }
 
         // Removes the last comma in the VDM sequence as it will error otherwise
-        output.dropLast(1)
+        output = output.dropLast(1)
 
         output += "]"
 
