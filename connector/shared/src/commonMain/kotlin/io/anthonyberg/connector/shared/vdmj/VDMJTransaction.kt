@@ -10,7 +10,7 @@ import io.ktor.utils.io.errors.*
  * and run steps
  */
 class VDMJTransaction(val actions: List<Action>, private val xpc: XPC) {
-    private val vdmj = VDMJ()
+    private val vdmj = VDMJ
 
     private val drefs: Array<String> = actions.map { it.type }.toTypedArray()
 

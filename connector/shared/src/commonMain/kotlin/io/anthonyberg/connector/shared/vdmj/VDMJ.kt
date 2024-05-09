@@ -15,7 +15,7 @@ import java.nio.file.Paths
 import kotlin.io.path.pathString
 
 @OptIn(DelicateCoroutinesApi::class)
-class VDMJ {
+object VDMJ {
     // Create a ByteArrayOutputStream to capture the output
     private val byteArrayOutputStream = ByteArrayOutputStream()
     private val printStream = ConsolePrintWriter(byteArrayOutputStream)
