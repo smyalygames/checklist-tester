@@ -48,14 +48,14 @@ class TestScreenModel (
                 posi[2] = altitude.toDouble()
                 posi[6] = 0.0
                 xpc.setPOSI(posi)
+                delay(60000L)
             }
 
-            val vdm = VDMJTransaction(actions = actions, xpc = xpc)
-            val expected = vdm.expectedEndState()
 
-            logger.debug { expected }
-
-            delay(5000L)
+//            val vdm = VDMJTransaction(actions = actions, xpc = xpc)
+//            val expected = vdm.expectedEndState()
+//
+//            logger.debug { expected }
 
             // Starts the test in the database
             interfaceState.testId = db.startTest(procedureId)
@@ -89,20 +89,27 @@ class TestScreenModel (
                 return@launch
             }
 
+            val goal = action.goal.toInt()
+            val isCommand = goal == -998
+
             // Prerequisite before testing the action
-            val initDref = xpc.getState(action.type)[0]
+            val initDref = if (isCommand) goal else xpc.getState(action.type)[0]
             val actionTestId = db.startAction(
                 testId = testId,
                 actionId = action.id,
                 initState = initDref.toString()
             )
 
-            delay(1500L)
+            delay(8000L)
 
             // Running the action in the simulator
             // TODO deal with action.goal being a String in the database
-            val goal = action.goal.toInt()
-            val result = xpc.runChecklist(action.type, goal)[0]
+            val result: Float = if (!isCommand) {
+                xpc.runChecklist(action.type, goal)[0]
+            } else {
+                xpc.sendCOMM(action.type)
+                goal.toFloat()
+            }
 
             // Saving result to the database
             db.finishAction(

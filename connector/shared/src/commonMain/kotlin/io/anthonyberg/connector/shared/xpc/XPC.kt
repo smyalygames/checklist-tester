@@ -74,6 +74,10 @@ class XPC {
         return result
     }
 
+    fun sendCOMM(dref: String) {
+        xpc.sendCOMM(dref)
+    }
+
     fun getPOSI(): DoubleArray {
         return xpc.getPOSI(0)
     }
