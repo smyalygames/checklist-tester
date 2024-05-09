@@ -5,7 +5,9 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import io.anthonyberg.connector.shared.TestTransaction
 import io.anthonyberg.connector.shared.entity.Action
+import io.anthonyberg.connector.shared.vdmj.VDMJTransaction
 import io.anthonyberg.connector.shared.xpc.XPC
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -14,11 +16,12 @@ class TestScreenModel (
     private val interfaceState: InterfaceState
 ) : StateScreenModel<TestState>(TestState.Init) {
     private val xpc = XPC()
+    private val logger = KotlinLogging.logger {}
 
     /**
      * Sets up necessary connections
      */
-    fun init() {
+    fun init(actions: List<Action>) {
         screenModelScope.launch {
             mutableState.value = TestState.Init
 
@@ -46,6 +49,11 @@ class TestScreenModel (
                 posi[6] = 0.0
                 xpc.setPOSI(posi)
             }
+
+            val vdm = VDMJTransaction(actions = actions, xpc = xpc)
+            val expected = vdm.expectedEndState()
+
+            logger.debug { expected }
 
             delay(5000L)
 

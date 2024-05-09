@@ -38,7 +38,7 @@ class TestRun (
 
         if (!running and (tested.size == 0)) {
             running = true
-            screenModel.init()
+            screenModel.init(actions)
         }
 
         when (val s = state) {
