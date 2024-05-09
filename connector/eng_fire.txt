@@ -1,0 +1,9 @@
+laminar/B738/engine/mixture1_cutoff -998
+laminar/B738/fire/engine01/ext_switch_arm -998
+laminar/B738/fire/engine01/ext_switch_L -998
+laminar/B738/air/isolation_valve_pos 0
+laminar/B738/air/l_pack_pos 0
+laminar/B738/toggle_switch/bleed_air_apu_pos 0
+laminar/B738/switches/apu_start 1
+laminar/B738/switches/apu_start 2
+laminar/B738/knobs/cross_feed_pos 1
