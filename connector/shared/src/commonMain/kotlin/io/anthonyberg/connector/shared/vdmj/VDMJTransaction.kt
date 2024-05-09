@@ -38,14 +38,14 @@ class VDMJTransaction(val actions: List<Action>, private val xpc: XPC) {
         aircraft = Aircraft(items = items, procedure = procedures)
     }
 
-    suspend fun expectedEndState(): String {
+    suspend fun expectedEndState(): Aircraft {
         val command = "p complete_procedure(${aircraft.toVDMString()})"
 
         println(command)
 
         val result = vdmj.run(command = command)
 
-        return result.output
+        return parseAircraftString(result.output)
     }
 
 //    fun nextStep() {
@@ -72,5 +72,40 @@ class VDMJTransaction(val actions: List<Action>, private val xpc: XPC) {
         )
 
         return items
+    }
+
+    private fun parseAircraftString(aircraftString: String): Aircraft {
+        val itemsString = aircraftString.substringAfter("mk_Aircraft({").substringBefore("}, [")
+        val proceduresString = aircraftString.substringAfter("}, [").substringBefore("])")
+
+        val items = itemsString.split("), ").associate { itemString ->
+            val key = itemString.substringBefore(" |-> ")
+            val switch = itemString.substringAfter("mk_Switch(").substringBefore(")")
+            val valueString = switch.substringAfter("<").substringBefore(">, ")
+            val middlePosition = switch.takeLast(4) == "true"
+            val position = when (valueString) {
+                "OFF" -> 0
+                "MIDDLE" -> 1
+                "ON" -> if (middlePosition) 2 else 1
+                else -> throw IOException("Switch has incorrect switch type object")
+            }
+            key to ItemObject(ItemType.SWITCH, Switch(position, middlePosition))
+        }
+
+        val procedures = proceduresString.split("), ").map { procedureString ->
+            val parts = procedureString.removePrefix("mk_ChecklistItem(").removeSuffix(")").split(", ")
+            val dref = parts[0].removeSurrounding("\"")
+            val type = ItemType.SWITCH
+            val goal = when (parts[2]) {
+                "<OFF>" -> 0
+                "<MIDDLE>" -> 1
+                "<ON>" -> if (aircraft.items[dref]?.item?.middlePosition == true) 2 else 1
+                else -> throw IOException("Procedure has incorrect switch type object")
+            }
+            val complete = parts[3] == "true"
+            ProcedureItem(dref, type, goal, complete)
+        }.toMutableList()
+
+        return Aircraft(items, procedures)
     }
 }
