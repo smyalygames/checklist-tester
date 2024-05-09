@@ -6,6 +6,8 @@ class InterfaceState : KoinComponent {
     var projectId: Int? = null
     var procedureId: Int? = null
     var testId: Int? = null
+    var altitude: Int? = null
+    var speed: Int? = null
 
     val projectSelected: Boolean
         get() = projectId != null

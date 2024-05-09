@@ -39,6 +39,16 @@ class TestScreenModel (
                 return@launch
             }
 
+            val altitude = interfaceState.altitude
+            if (altitude != null) {
+                val posi = DoubleArray(7) { -998.0 }
+                posi[2] = altitude.toDouble()
+                posi[6] = 0.0
+                xpc.setPOSI(posi)
+            }
+
+            delay(5000L)
+
             // Starts the test in the database
             interfaceState.testId = db.startTest(procedureId)
 

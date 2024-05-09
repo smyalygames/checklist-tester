@@ -73,4 +73,12 @@ class XPC {
 
         return result
     }
+
+    fun getPOSI(): DoubleArray {
+        return xpc.getPOSI(0)
+    }
+
+    fun setPOSI(posi: DoubleArray) {
+        xpc.sendPOSI(posi, 0)
+    }
 }
