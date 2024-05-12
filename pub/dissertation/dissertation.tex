@@ -11,6 +11,30 @@
 
 \usepackage{xcolor}
 
+%\usepackage{vdmlisting}
+\usepackage{listings}
+% Taken from vdmlisting
+\lstdefinelanguage{VDM_SL}
+  {morekeywords={RESULT,\#else,\#endif,\#ifdef,\#ifndef,abs,all,always,and,as,atomic,be,be st,bool,by,card,cases,char,comp,compose,conc,dcl,def,definitions,dinter,div,dlmodule,do,dom,dunion,
+  elems,else,elseif,end,eq,error,errs,exists,exists1,exit,exports,ext,false,floor,for,for all,forall,from,functions,hd,if,imports,in,in set,inds,init,inmap,int,inter,inv,inverse,iota,is,is not yet specified,is\_,lambda,len,let,map,measure,merge,mk\_,mod,module,mu,munion,nat,nat1,nil,not,not in set,of,operations,or,ord,others,post,power,pre,psubset,pure,rat,rd,real,rem,renamed,return,reverse,rng,
+  seq,seq1,set,set1,skip,specified,st,state,struct,subset,then,tixe,tl,to,token,traces,trap,true,types,undefined,
+  union,uselib,values,while,with,wr,yet
+},
+  sensitive,
+  morecomment=[l]--,
+  morestring=[b]",
+  morestring=[b]',
+}[keywords,comments,strings]
+
+\lstset{
+  language=VDM_SL,
+  numbers=left,
+  breaklines,
+  basicstyle=\ttfamily,
+  commentstyle=\color{gray},
+  prebreak=\textrightarrow,
+}
+
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows, positioning}
 
@@ -82,6 +106,10 @@ This is the acknowledgements.
 
 \chapter{Conclusion}
 \subfile{chapters/conclusion.tex}
+
+\appendix
+\chapter{Formal Model}
+\subfile{chapters/appendix/formal.tex}
 
 % References
 \nocite{*}
