@@ -127,7 +127,81 @@ Brief overview of what it is supposed to do... % TODO
 \end{figure}
 
 \subsection{Storing Data}
+\begin{figure}
+  \centering
+  \begin{tikzpicture}[
+    auto,
+    node distance = 1.5cm
+  ]
+    % PROCEDURE
+    \node[entity] (procedure) {Procedure}
+      [grow=up, sibling distance=2.25cm]
+      child[grow=down] {node[attribute] {\textbf{id}}}
+      child {node[attribute] {name}}
+      child {node[attribute] {type}}
+      child [grow=north west, level distance=2.15cm]{node[attribute] {description}}
+      child [grow=right, level distance=3cm] {node[attribute] {createdUTC}}
+      child [grow=left, level distance=3cm] {node[attribute] {modifiedUTC}};
 
+    \node[relationship] (procProj) [above = of procedure] {Contains};
+
+    % PROJECT
+    \node[entity] (project) [right = of procProj] {Project}
+      [grow=up, sibling distance=2cm]
+      child {node[attribute] {name}}
+      child {node[attribute] {\textbf{id}}}
+      child {node[attribute] {aircraftType}}
+      child[grow=right, level distance=3cm] {node[attribute] {createdUTC}}
+      child[grow=south east, level distance=3cm] {node[attribute] {modifiedUTC}};
+
+    \node[relationship] (procAct) [below left = of procedure] {Contains};
+
+    % ACTION
+    \node[entity] (action) [below left = of procAct] {Action}
+      child[grow=up, level distance=2cm] {node[attribute] {step}}
+      child[grow=right, level distance=2cm] {node[attribute] {\textbf{id}}}
+      child[grow=north west, level distance=2cm] {node[attribute] {type}}
+      child[grow=down, level distance=2cm] {node[attribute] {goal}};
+
+    \node[relationship] (actionResult) [below right = of action] {Contains};
+
+    % ACTION RESULT
+    \node[entity] (result) [below right = of actionResult] {ActionResult}
+      child[grow=up, level distance=2cm] {node[attribute] {\textbf{id}}}
+      child[grow=left, level distance=3cm] {node[attribute] {startUTC}}
+      child[grow=right, level distance=3cm] {node[attribute] {endUTC}}
+      child[grow=south west, level distance=2cm] {node[attribute] {initState}}
+      child[grow=south east, level distance=2cm] {node[attribute] {endState}};
+
+    \node[relationship] (testAR) [above right = of result] {Contains};
+
+    % TEST
+    \node[relationship] (procTest) [below right = of procedure] {Contains};
+    
+    \node[entity] (test) [above right = of testAR] {Test}
+      child[grow=left, level distance=2cm] {node[attribute] {\textbf{id}}}
+      child[grow=north east, level distance=2cm] {node[attribute] {startUTC}}
+      child[grow=south east, level distance=2cm] {node[attribute] {endUTC}};
+
+    % RELATIONSHIP PATHS
+    \path (procProj) edge node {\(N\)} (procedure)
+      edge node {1} (project);
+
+    \path (procTest) edge node {1} (procedure)
+      edge node {\(N\)} (test);
+
+    \path (procAct) edge node {1} (procedure)
+      edge node {\(N\)} (action);
+
+    \path (actionResult) edge node {1} (action)
+      edge node {\(N\)} (result);
+
+    \path (testAR) edge node {1} (test)
+      edge node {\(N\)} (result);
+  \end{tikzpicture}
+  \caption[Connector ER Diagram]{Entity Relationship Diagram for the database in Checklist Connector}
+  \label{fig:db-erd}
+\end{figure}
 
 \subsection{VDMJ Wrapper}
 
