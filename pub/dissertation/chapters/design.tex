@@ -1,6 +1,7 @@
 \documentclass[../dissertation.tex]{subfiles}
 
 \begin{document}
+%%%%% COMPONENTS %%%%%
 \section{Components}
 
 Splitting up the project into multiple components has been useful for
@@ -30,7 +31,9 @@ Splitting up the project into multiple components has been useful for
 Each of the components in Figure~\ref{fig:abstract} will be covered in detail in this
 chapter.
 
-\section{Model}
+
+%%%%% FORMAL METHOD %%%%%
+\section{Formal Method}
 \begin{itemize}
   \item Formal modelling is the heart of the logic for testing checklists
   \item Formal model created using VDM-SL
@@ -50,6 +53,49 @@ chapter.
     \end{itemize}
 \end{itemize}
 
+
+%%%%% CHECKLIST TESTER %%%%%
+\section{Checklist Tester}
+Brief overview of what it is supposed to do... % TODO
+
+\subsection{Designing}
+\begin{itemize}
+  \item Used Figma to create a design for the application
+  \item Allows for implementing the front end to be faster because:
+    \begin{itemize}
+      \item They act as a requirement for code
+      \item You do not forget what needs to be implemented
+      \item Keeps everything consistent
+      \item Allows to think about making parts of the GUI modular and what components can be reused
+    \end{itemize}
+  \item Figma allows for plugins such as Material 3 colours and Material 3 components
+  \item Figure~\ref{fig:figma-gui} is the final design that will be used for the
+    program
+\end{itemize}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\columnwidth]{images/figma-gui.pdf}
+  \caption[GUI in Figma]{Design for the Checklist Connector GUI in Figma}
+  \label{fig:figma-gui}
+\end{figure}
+
+\subsubsection{Limitations of Figma}
+\begin{itemize}
+  \item The Material 3 Components in Figma do not include features that are available in
+    Jetpack Compose
+  \item In this project, the \enquote{Simulator Test} at the bottom of Figure~\ref{fig:figma-gui}
+    does not include a leading icon~\cite{material:lists}, and therefore had to be a trailing
+    checkbox
+  \item This was overcome by adding comments in Figma as a reminder of how the actual implementation
+    should be like
+  \item Another limitation is that in Figure~\ref{fig:figma-gui}, the title of the screen in the
+    top app bar~\cite{material:top-app-bar} is not centered, and that is because the auto layout
+    feature in Figma allows for equal spacing, rather than having each in a set position
+\end{itemize}
+
+
+%%%%% SCENARIOS %%%%%
 \section{Scenarios}
 \begin{itemize}
   \item Use a Quick Reference Handbook (QRH) to find potential list of checklists to test
@@ -60,5 +106,7 @@ chapter.
     look out for
 \end{itemize}
 
+
+%%%%% DECISIONS %%%%%
 \section{Decisions}
 \end{document}
