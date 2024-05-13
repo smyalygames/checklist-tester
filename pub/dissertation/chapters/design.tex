@@ -102,8 +102,9 @@ Brief overview of what it is supposed to do... % TODO
     for runtime environments to be specified (in this case, Desktop and Server)
   \item Provides necessary build configurations in Gradle
   \item Planning what to implement important as Compose is designed to use modular
-    components, otherwise a nested mess would happen, code harder to read
-    % TODO add example
+    components, otherwise a nested mess would happen, code harder to read.
+    Figure~\ref{fig:compose-modular} shows example of using modular code
+    from the Actions screen in project (with code omissions)
   \item Used Voyager~\cite{voyager} to handle screens
   \item Used Koin~\cite{koin} for dependency injection, to be able to get data from the
     database and VDMJ
@@ -114,6 +115,16 @@ Brief overview of what it is supposed to do... % TODO
       \item Used asynchronous coroutines to prevent the program from being blocked
     \end{itemize}
 \end{itemize}
+
+\begin{figure}
+  \centering
+  \inputminted[
+    linenos,
+    breaklines,
+    ]{kotlin}{code/compose-modular.kt}
+  \caption[Compose Modular Example]{Example of modular code in Compose}
+  \label{fig:compose-modular}
+\end{figure}
 
 \subsection{Storing Data}
 
