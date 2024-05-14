@@ -105,7 +105,7 @@ Brief overview of what it is supposed to do... % TODO
     components, otherwise a nested mess would occur as Compose is designed to have
     Composable functions passed in to a Composable function and therefore by design
     function nests will occur and the code will be harder to read if not managed correctly.
-    Figure~\ref{fig:compose-modular} shows example of using modular code
+    Listing~\ref{list:compose-modular} shows example of using modular code
     from the Actions screen in project (with code omissions shown in comments)
   \item Used Voyager~\cite{voyager} to handle screens
   \item Used Koin~\cite{koin} for dependency injection, to be able to get data from the
@@ -118,15 +118,14 @@ Brief overview of what it is supposed to do... % TODO
     \end{itemize}
 \end{itemize}
 
-\begin{figure}
-  \centering
-  \inputminted[
-    linenos,
-    breaklines,
-    ]{kotlin}{code/compose-modular.kt}
-  \caption[Compose Modular Example]{Example of modular code in Compose}
-  \label{fig:compose-modular}
-\end{figure}
+\begin{listing}
+\inputminted[
+  linenos,
+  breaklines,
+]{kotlin}{code/compose-modular.kt}
+\caption{Example of modular code in Compose}
+\label{list:compose-modular}
+\end{listing}
 
 \subsection{Storing Data}
 \begin{itemize}
@@ -251,14 +250,14 @@ Brief overview of what it is supposed to do... % TODO
   \begin{itemize}
     \item There was not a lot of documentation
     \item Ambiguous on how to define directory for where the Java library is located in the Git repository
-    \item However, as XPC was only built with Maven, Gradle was not able add the dependency as \verb|gitRepository()|
+    \item However, as XPC was only built with Maven, Gradle was not able add the dependency as \lstinline|gitRepository()|
       only works with Gradle builds~\cite{gradle:gitRepoGradleOnly}
   \end{itemize}
 \item Resorted to using a compiled Jar file and adding the dependency to Gradle
 \item Not happy about that because it means maintaining it will be more difficult as
   it is not as simple as just changing the version number
 \item Later, resorted to adding Gradle build files to XPC
-\item Used automatic conversion from Maven to Gradle using \verb|gradle init| command~\cite{gradle:migratePOM}
+\item Used automatic conversion from Maven to Gradle using \lstinline|gradle init| command~\cite{gradle:migratePOM}
 \item Had to add local dependencies due to how Gradle works differently
 \item Had to fix previous structure of Maven POM as the grouping as not good
 \end{itemize}

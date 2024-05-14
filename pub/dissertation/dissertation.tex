@@ -14,6 +14,13 @@
 %\usepackage{vdmlisting}
 \usepackage{listings}
 \usepackage{minted}
+
+\AtBeginDocument{%
+  \renewcommand{\thelisting}{%
+    \thechapter.\arabic{listing}%
+  }
+}
+
 % Taken from vdmlisting
 \lstdefinelanguage{VDM_SL}
   {morekeywords={RESULT,\#else,\#endif,\#ifdef,\#ifndef,abs,all,always,and,as,atomic,be,be st,bool,by,card,cases,char,comp,compose,conc,dcl,def,definitions,dinter,div,dlmodule,do,dom,dunion,
