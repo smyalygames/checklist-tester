@@ -102,9 +102,11 @@ Brief overview of what it is supposed to do... % TODO
     for runtime environments to be specified (in this case, Desktop and Server)
   \item Provides necessary build configurations in Gradle
   \item Planning what to implement important as Compose is designed to use modular
-    components, otherwise a nested mess would happen, code harder to read.
+    components, otherwise a nested mess would occur as Compose is designed to have
+    Composable functions passed in to a Composable function and therefore by design
+    function nests will occur and the code will be harder to read if not managed correctly.
     Figure~\ref{fig:compose-modular} shows example of using modular code
-    from the Actions screen in project (with code omissions)
+    from the Actions screen in project (with code omissions shown in comments)
   \item Used Voyager~\cite{voyager} to handle screens
   \item Used Koin~\cite{koin} for dependency injection, to be able to get data from the
     database and VDMJ
@@ -127,7 +129,11 @@ Brief overview of what it is supposed to do... % TODO
 \end{figure}
 
 \subsection{Storing Data}
-\begin{figure}
+\begin{itemize}
+  \item Used SQLite databse with SQLDelight which creates typesafe Kotlin APIs
+    to interact with the database
+\end{itemize}
+\begin{figure}[!h]
   \centering
   \begin{tikzpicture}[
     auto,
@@ -177,7 +183,7 @@ Brief overview of what it is supposed to do... % TODO
 
     % TEST
     \node[relationship] (procTest) [below right = of procedure] {Contains};
-    
+ 
     \node[entity] (test) [above right = of testAR] {Test}
       child[grow=left, level distance=2cm] {node[attribute] {\textbf{id}}}
       child[grow=north east, level distance=2cm] {node[attribute] {startUTC}}
