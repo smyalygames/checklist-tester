@@ -129,10 +129,28 @@ Brief overview of what it is supposed to do... % TODO
 
 \subsection{Storing Data}
 \begin{itemize}
-  \item Used SQLite databse with SQLDelight which creates typesafe Kotlin APIs
-    to interact with the database
+  \item SQLDelight was used to handle the database by allowing for typesafe Kotlin APIs when interacting with the database.
+    Specifically chosen as it provides support for Compose Multiplatform~\cite{sqldelight}
+  \item It only allows for queries to be written in SQL, which would allow for more complex SQL queries if needed
+  \item SQLite was used for the Relational Database Management System (RDBMS) as it is an embedded database~\cite{sqlite:about},
+    meaning that the database will run in the application, rather than running on a server,
+    either remotely or through local containerization through something like Docker~\cite{docker:container},
+    which could take more time and add complexity as it means implementing additional dependencies
+  \item SQLite also has 100\%~\cite{sqlite:tests} which necessary for ensuring that the database will
+    not cause artefacts to the results
 \end{itemize}
-\begin{figure}[H]
+
+\subsubsection{Designing the Database}
+\begin{itemize}
+  \item The database could be thought as having 2 sections
+    \begin{itemize}
+      \item The user inputs to control the tester, i.e. the steps a procedure contains.
+        The tables for these are \textit{Project}, \textit{Procedure}, and \textit{Action}
+      \item The test results for a procedure which are in the \textit{Test}, and \textit{ActionResult} tables
+    \end{itemize}
+\end{itemize}
+
+\begin{figure}[!htp]
   \centering
   \begin{tikzpicture}[
     auto,
@@ -207,6 +225,39 @@ Brief overview of what it is supposed to do... % TODO
   \caption[Connector ER Diagram]{Entity Relationship Diagram for the database in Checklist Connector}
   \label{fig:db-erd}
 \end{figure}
+
+\begin{itemize} 
+  \item The design of the database had relationships in mind as the goal was to
+    have a detailed tracking of statistics for each step in the procedure,
+    hence in Figure~\ref{fig:db-erd}
+  \item A \textit{Procedure} can have multiple \textit{Tests}, where each \textit{Test}
+    each contains the result of how each \textit{Action} in \textit{ActionResults}
+  \item The choice of a \textit{Project} was to allow for the segregation of testing
+    different aircrafts, as each aircraft has different cockpit layouts
+    and different systems
+\end{itemize}
+
+\subsubsection{Implementing into Compose Multiplatform}
+\begin{itemize}
+  \item Compose Multiplatform has support for different runtime environments,
+    however as this project was only being developed for Desktop, the JVM
+    SQLite driver only had to be considered
+  \item However, the functions for the database were written in the \textit{shared/commonMain}
+    module as there may be a potential for adding Android and iOS support as it
+    as it may be helpful run the tests on a tablet
+  \item A database transaction had two modules
+    \begin{itemize}
+      \item A class handling SQLDelight API calls only; meaning no conversion of types, which are
+        functions only accessible within module internally, which is located in\\
+        \textit{io.anthonyberg.connector.shared.database}
+      \item SDKs that can handle multiple tables, such as \textit{TestTransaction} which handles database calls
+        when checklists are being tested in the application.
+        And allows for converting types, such as \lstinline|Int| to \lstinline|Long|
+    \end{itemize}
+  \item The separation of these modules was to have in mind unit testing, as
+    it will make it easier to debug if a problem is with SQLDelight transactions
+    are handled, or if there is a conversion error occurring
+\end{itemize}
 
 \subsection{VDMJ Wrapper}
 
