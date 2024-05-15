@@ -59,16 +59,24 @@
 
 \usepackage{graphicx}
 
+\usepackage{verbatim}
+
+% For word counts
+\immediate\write18{texcount -1 -sum -inc \jobname.tex -out=\jobname.sum}
+
+\newcommand\wordcount{\input{\jobname.sum}}
+
 % For referencing
 \usepackage[citestyle=ieee]{biblatex}
 \addbibresource{references.bib}
 
 % This should be loaded last
-\usepackage[colorlinks]{hyperref}
+\usepackage[colorlinks,breaklinks]{hyperref}
 \usepackage{subfiles}
 
 \author{Anthony Berg (200871682)\\
-Supervisor: Dr Leo Freitas}
+Supervisor: Dr Leo Freitas\\\\
+Word Count: \wordcount}
 \title{Testing Quick Reference Handbooks in Flight Simulators}
 
 \hypersetup{
