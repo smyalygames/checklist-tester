@@ -53,6 +53,15 @@ chapter.
     \end{itemize}
 \end{itemize}
 
+\subsubsection{Testing}
+\begin{itemize}
+  % TODO add references
+  \item Since VDMJ version 4.5, it provides the QuickCheck tool
+  \item This allows for providing counter examples to the model
+  \item The counter examples were helpful to create pre and post conditions
+    to avoid any unexpected results from the model
+\end{itemize}
+
 
 %%%%% CHECKLIST TESTER %%%%%
 \section{Checklist Tester}
@@ -343,7 +352,31 @@ Brief overview of what it is supposed to do... % TODO
 
 
 \subsection{Testing}
+\begin{itemize}
+  \item Testing can be run with Gradle when it comes to running unit tests
+  \item Decided to use JUnit 5 as it provides additional tools such as
+    statistics, integration with IntelliJ to view code coverage,
+    or being run in continuous integration tests
+  \item The testable components in this project is mostly backend modules as
+    the GUI made in Compose is not the focus of the project and it would
+    require a lot of extra time
+  \item Unit tests have been made for the database and Koin
+  \item Koin comes with tests that can be automatically be generated
+  \item Ethos when testing was to try and find exploits, act as a
+    user who may mishandle inputs, and stress testing functions
+    by passing parameter with hundreds of objects
+\end{itemize}
 
+\subsubsection{Testing for Resource Usage}
+\begin{itemize}
+  \item The application was tested using the \textit{Profiler} tool on
+    IntelliJ IDEA 2024 (Ultimate Edition) to find potential
+    memory leaks
+  \item One problem found was the initial VDMJ wrapper which would use the execute
+    command instead of the interpreter, which would require reinitializing
+    the entirety of VDMJ, which resulted in a slight memory leak and a
+    massive write usage
+\end{itemize}
 
 
 
