@@ -28,7 +28,7 @@ Splitting up the project into multiple components has been useful for
   \caption{Abstract layout of components}
 \end{figure}
 
-Each of the components in Figure~\ref{fig:abstract} will be covered in detail in this
+Each of the components in \autoref{fig:abstract} will be covered in detail in this
 chapter.
 
 
@@ -69,7 +69,7 @@ Brief overview of what it is supposed to do... % TODO
       \item Allows to think about making parts of the GUI modular and what components can be reused
     \end{itemize}
   \item Figma allows for plugins such as Material 3 colours and Material 3 components
-  \item Figure~\ref{fig:figma-gui} is the final design that will be used for the
+  \item \autoref{fig:figma-gui} is the final design that will be used for the
     program
 \end{itemize}
 
@@ -84,12 +84,12 @@ Brief overview of what it is supposed to do... % TODO
 \begin{itemize}
   \item The Material 3 Components in Figma do not include features that are available in
     Jetpack Compose
-  \item In this project, the \enquote{Simulator Test} at the bottom of Figure~\ref{fig:figma-gui}
+  \item In this project, the \enquote{Simulator Test} at the bottom of \autoref{fig:figma-gui}
     does not include a leading icon~\cite{material:lists}, and therefore had to be a trailing
     checkbox
   \item This was overcome by adding comments in Figma as a reminder of how the actual implementation
     should be like
-  \item Another limitation is that in Figure~\ref{fig:figma-gui}, the title of the screen in the
+  \item Another limitation is that in \autoref{fig:figma-gui}, the title of the screen in the
     top app bar~\cite{material:top-app-bar} is not centered, and that is because the auto layout
     feature in Figma allows for equal spacing, rather than having each in a set position
 \end{itemize}
@@ -105,7 +105,7 @@ Brief overview of what it is supposed to do... % TODO
     components, otherwise a nested mess would occur as Compose is designed to have
     Composable functions passed in to a Composable function and therefore by design
     function nests will occur and the code will be harder to read if not managed correctly.
-    Listing~\ref{list:compose-modular} shows example of using modular code
+    \autoref{list:compose-modular} shows example of using modular code
     from the Actions screen in project (with code omissions shown in comments)
   \item Used Voyager~\cite{voyager} to handle screens
   \item Used Koin~\cite{koin} for dependency injection, to be able to get data from the
@@ -229,7 +229,7 @@ Brief overview of what it is supposed to do... % TODO
 \begin{itemize} 
   \item The design of the database had relationships in mind as the goal was to
     have a detailed tracking of statistics for each step in the procedure,
-    hence in Figure~\ref{fig:db-erd}
+    hence in \autoref{fig:db-erd}
   \item A \textit{Procedure} can have multiple \textit{Tests}, where each \textit{Test}
     each contains the result of how each \textit{Action} in \textit{ActionResults}
   \item The choice of a \textit{Project} was to allow for the segregation of testing
