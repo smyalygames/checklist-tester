@@ -260,6 +260,66 @@ Brief overview of what it is supposed to do... % TODO
 \end{itemize}
 
 \subsection{VDMJ Wrapper}
+\begin{itemize}
+  \item VDMJ is written in Java and it is free open source software that is accessible on
+    GitHub
+  \item This allows for VDMJ to be used as per the license, GNU General Public License v3
+    (GPLv3)~\cite{vdmj:license}~\cite{gpl3}. This means that as VDMJ is being used as a
+    library, the code for this project has to be licensed with GPLv3 or any GPLv3 compatible
+    license~\cite{gpl3:library}
+\end{itemize}
+
+\subsubsection{Implementing VDMJ}
+\begin{itemize}
+  \item VDMJ has packages available on Maven Central making adding it as a dependency simple
+  \item The package used was \lstinline|dk.au.ece.vdmj:vdmj| with version \lstinline|4.5.0|
+  \item However, initially when implementing VDMJ, \lstinline|4.5.0-P| was used accidentally
+    and it led to debugging why imports were not working; and therefore the \lstinline|-P|
+    versions are not suitable
+  \item The initial method of implementation was using a Ktor server that would have run
+    alongside the desktop application, where the server would handle Representational State Transfer (REST)
+    API calls
+  \item This was unnecessary as the \textit{interactive} mode of VDMJ was able to run on
+    the desktop application itself. However, the Ktor was useful for debugging and testing as
+    an API route was created to allow VDMJ commands to be executed through a URL
+
+  \item To be able to get the outputs from VDMJ, a \lstinline|ConsolePrintWriter| new had to be
+    created from the \lstinline|com.fujitsu.vdmj.messages| package; which handles writing to
+    the console \textit{stdout}. This then gets used to replace the \lstinline|Console.out| and
+    \lstinline|Console.err| in the \lstinline|com.fujitsu.vdmj.messages| package
+
+  \item Parsing commands into VDMJ interface - was more difficult
+    \footnote{The objects created here are provided by the \lstinline|java.io| package.}
+  \begin{itemize}
+    \item Created a \lstinline|PipedInputStream| object, that gets connected to a \lstinline|PipedOutputStream|
+      object by passing the latter object in as a parameter. The \lstinline|PipedOutputStream| is then used
+      to pass inputs into \lstinline|PipedInputStream|
+    \item To be able to write to this stream, a \lstinline|BufferedWriter| is created by passing the \lstinline|PipedOutputStream|
+      with a bridge \lstinline|OutputStreamWriter| that encodes characters into bytes
+    \item For VDMJ to be able to read the input stream, a separate object had to be created, \lstinline|BufferedReader|,
+      where the \lstinline|PipedInputStream| gets parsed through a bridge, \lstinline|InputStreamReader| that converts
+      bytes to characters
+      % TODO create a diagram of this (better than having code)
+      % BufferedWriter -> encode to byte -> Stream -> decode to char -> VDMJ
+  \end{itemize}
+\end{itemize}
+
+\begin{listing}
+\inputminted[
+  linenos,
+  breaklines,
+]{kotlin}{code/vdmj-interact.kt}
+\caption[VDMJ IO Stream]{Snippet of controlling VDMJ interactive mode Input/Output streams}
+\label{list:vdmj-io}
+\end{listing}
+
+\subsubsection{Handling VDMJ Outputs}
+\begin{itemize}
+  \item VDMJ outputs are handled using string manipulation
+  \item Created into objects that are replicas of types in VDM-SL
+  \item The string manipulation allows to specify where the outputs
+    of the object go
+\end{itemize}
 
 
 % Talk about how XPC was used here, not how it was implemented
