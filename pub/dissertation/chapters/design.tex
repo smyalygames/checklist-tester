@@ -20,9 +20,9 @@ Splitting up the project into multiple components has been useful for
     \node (formal) [box, left of=connector] {Formal Method};
     \node (simulator) [box, below=0.75cm of plugin] {Flight Simulator};
   
-    \draw [arrow] (formal) -- (connector);
-    \draw [arrow] (plugin) -- (connector);
-    \draw [arrow] (plugin) -- (simulator);
+    \draw [<->, arrow] (formal) -- (connector);
+    \draw [<->, arrow] (plugin) -- (connector);
+    \draw [<->, arrow] (plugin) -- (simulator);
   \end{tikzpicture}
   \label{fig:abstract}
   \caption{Abstract layout of components}
@@ -304,14 +304,30 @@ Brief overview of what it is supposed to do... % TODO
   \end{itemize}
 \end{itemize}
 
-\begin{listing}
-\inputminted[
-  linenos,
-  breaklines,
-]{kotlin}{code/vdmj-interact.kt}
-\caption[VDMJ IO Stream]{Snippet of controlling VDMJ interactive mode Input/Output streams}
-\label{list:vdmj-io}
-\end{listing}
+\begin{figure}
+  \begin{tikzpicture}[node distance=2cm, align=center]
+    \node (write) [box] {Run VDM command};
+    \node (buffWrite) [box, below of=write] {BufferedWriter};
+    \node (outputStream) [box, below of=buffWrite] {Encode to byte};
+    \node (pOutputStream) [box, below of=outputStream] {PipedOutputStream};
+    \node (pInputStream) [box, right of=pOutputStream, xshift=3cm] {PipedInputStream};
+    \node (inputStream) [box, above of=pInputStream] {Decode to charset};
+    \node (buffRead) [box, above of=inputStream] {BufferedReader};
+    \node (vdmj) [box, above of=buffRead] {Read by VDMJ};
+
+    \draw[->, arrow] (write) -- (buffWrite);
+    \draw[->, arrow] (buffWrite) -- (outputStream);
+    \draw[->, arrow] (outputStream) -- (pOutputStream);
+    \draw[<->, arrow] (pOutputStream) -- (pInputStream);
+    \draw[->, arrow] (pInputStream) -- (inputStream);
+    \draw[->, arrow] (inputStream) -- (buffRead);
+    \draw[->, arrow] (buffRead) -- (vdmj);
+  \end{tikzpicture}
+  \centering
+  \caption[VDMJ IO Stream]{Flowchart of VDMJ Input/Output Stream handling}
+  \label{list:vdmj-io}
+\end{figure}
+
 
 \subsubsection{Handling VDMJ Outputs}
 \begin{itemize}
