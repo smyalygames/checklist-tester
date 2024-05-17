@@ -1,6 +1,89 @@
 \documentclass[../dissertation.tex]{subfiles}
 
 \begin{document}
+\section{Final Prototype}
+\subsection{Formal Model}
+\begin{itemize}
+  \item The model is mostly designed to imitate a Boeing 737-800,
+    as the types modelled, have user inputs which are different from
+    other aircraft types
+    \begin{itemize}
+      \item For example, the Airbus A320 has push buttons whereas
+      they are not there on the 737-800
+      \item However, further user input types could be added to the model
+        and as a result, further aircraft types could have their
+        procedures run through the formal model
+    \end{itemize}
+  \item The \lstinline|Procedure| type makes sure that the items on
+    the procedure is completed in order, and if a step is missed,
+    that would result in an invariant failure, resulting in the
+    checklist test failing
+  % TODO write more
+  % Stuff like:
+  % - How items are handled
+  % - Functions such as auto complete or step by step
+  % - Why Aircraft?
+\end{itemize}
+
+\subsection{Checklist Tester}
+\begin{itemize}
+  \item The main features of GUI have been completed, it has all the sections desired
+  \begin{itemize}
+    \item Projects can be created to split up different aircraft
+      or revisions of checklists
+    \item Procedures can be created and tested
+    \item These procedures get tested in the flight simulator automatically
+      and gives the results of how the procedure has been doing in
+      real time
+  \end{itemize}
+\end{itemize}
+
+\subsection{Setting up Tests}
+\begin{itemize}
+  \item Each test is set up by defining each action in the procedure,
+    on the Procedure screen
+  \item To be able to define each action is supposed to do, it uses
+    the Dataref variables in X-Plane, which is what stores the state
+    of the aircraft. Each switch has their own unique Dataref
+  \item In the checklist tester then, each action asks for a
+    Dataref and a desired goal value
+  \item Some Datarefs are read only, but there are other Datarefs
+    for the item desired, but are only \enquote{command}s, which
+    can only be called and not have its value changed; this can be
+    run by setting the desired goal value to be -988 (because XPC uses that value)
+\end{itemize}
+
+\subsubsection{Running Tests}
+\begin{itemize}
+  \item Tests are run by connecting to the flight simulator, X-Plane
+  \item The tester goes through each action in the procedure one by one
+    and waits for the current action to complete before proceeding on to
+    the next one
+  \item The checklist tester is not advanced enough to be able to control
+    fly the aircraft; hence the tester would be able to engage autopilot
+    first, or control the aircraft themselves, where the checklist tester
+    would be acting like a first officer
+\end{itemize}
+
+\subsubsection{Storing Test Results}
+\begin{itemize}
+  \item There is a database storing the results of each of the tests
+  \item Each tests store
+  \begin{description}
+    \item[Time taken] for each of the actions in the procedure to complete
+    \item[Start state] for the state that the action in the procedure was at
+    \item[End state] for the state that the action in the procedure finished
+      the item at
+    \item[Overall test time] Stores the time taken from when the test started
+      to when the test ended
+  \end{description}
+  \item This gives feedback/statistics for the checklist designers
+    to find areas of improvement on the procedure, such as one action
+    in the procedure taking too long, may point out a potential flaw
+    to the designer and as a result aid finding potential alternative
+    options for that step in the procedure
+\end{itemize}
+
 \section{Problems Found}
 
 
