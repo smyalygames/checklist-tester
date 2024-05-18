@@ -3,7 +3,33 @@
 \begin{document}
 % What changes were made?
 \section{Changes}
-
+\begin{itemize}
+  \item Added the checklist manager which was not a part of the original
+    objectives
+  \begin{itemize}
+    \item Helped more to visualize the project
+    \item Aided in gathering statistics for how well the checklist performed
+    \item Using Kotlin helped speed up development, it simplifies parts
+      of Java and omitted a lot of boilerplate code that is required in Java,
+      such as setters and getters
+  \end{itemize}
+  \item How the Formal Model would interact was modified
+  \begin{itemize}
+    \item Initially was designed so that the formal model would complete
+      the entirety of the checklist, however, it was not useful for interacting
+      with the flight simulator
+    \item Modified the model to provide it would be similar to actions pilots can
+      do in the cockpit
+    \item Therefore acts like Read Checklist → Pilot Action (VDM) → Do action (XPC)
+  \end{itemize}
+  \item Originally was supposed to write an original plugin to connect to the flight simulator
+  \begin{itemize}
+    \item Whilst creating the plugin, sockets were confusing and accidentally stumbled
+      on the X-Plane Connect GitHub repository
+    \item This could have been prevented if a design document was created and
+      time was spent researching for tools in obscure places
+  \end{itemize}
+\end{itemize}
 
 % What objectives were met?
 \section{Objectives}
