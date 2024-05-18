@@ -20,7 +20,7 @@
       with the flight simulator
     \item Modified the model to provide it would be similar to actions pilots can
       do in the cockpit
-    \item Therefore acts like Read Checklist → Pilot Action (VDM) → Do action (XPC)
+    \item Therefore acts like Read Checklist → Pilot Logic (VDM) → Do Action (XPC)
   \end{itemize}
   \item Originally was supposed to write an original plugin to connect to the flight simulator
   \begin{itemize}
@@ -33,6 +33,37 @@
 
 % What objectives were met?
 \section{Objectives}
+\begin{itemize}
+  \item Most of the objectives were met
+  \item One of the original objectives was to research pilot
+    reaction times and how long it takes pilots to complete an action
+  \begin{itemize}
+    \item However, not able to do that as there are too many factors
+      that can affect a pilot's reaction time, such as age,
+      experience on an aircraft, total experience, how far a button is
+      from the pilot, etc.
+  \end{itemize}
+  \item Objective 2.a. was met to an extent
+  \begin{itemize}
+    \item There could be more variables that could be monitored. Such
+      as engine fire, could monitor the engine temperature or thrust
+      produced by engine
+    \item This would have required a substantial amount of planning
+      as checklists does have a bit of logic like if statements,
+      for example \enquote{If APU is available, then do \ldots else do \ldots}
+  \end{itemize}
+  \item Objective 2.b was also met to an extent
+  \begin{itemize}
+    \item However, it is manual at this stage due to limitations of XPC
+      and setting up the aircraft
+    \item The test data is stored on the database, hence test results
+      can be analysed to see the consistency between each test
+  \end{itemize}
+  \item The Checklist Tester does not currently run actions from the
+    Formal Model due to implementing the functions from VDMJ being
+    laborious
+  \item Hence focus was put on XPC first, as it would produce direct results
+\end{itemize}
 
 
 \section{What Next}
