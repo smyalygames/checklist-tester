@@ -37,7 +37,7 @@ chapter.
 \begin{itemize}
   \item Formal modelling is the heart of the logic for testing checklists
   \item Formal model created using VDM-SL
-  \item It allows to test that the checklists have been completed in a proper manner
+  \item It allows to test that the checklists have been completed properly
     - and that it is provable
   \item Model keeps track of
     \begin{itemize}
@@ -99,7 +99,7 @@ Brief overview of what it is supposed to do... % TODO
   \item This was overcome by adding comments in Figma as a reminder of how the actual implementation
     should be like
   \item Another limitation is that in \autoref{fig:figma-gui}, the title of the screen in the
-    top app bar~\cite{material:top-app-bar} is not centered, and that is because the auto layout
+    top app bar~\cite{material:top-app-bar} is not centred, and that is because the auto layout
     feature in Figma allows for equal spacing, rather than having each in a set position
 \end{itemize}
 
@@ -113,7 +113,7 @@ Brief overview of what it is supposed to do... % TODO
   \item Planning what to implement important as Compose is designed to use modular
     components, otherwise a nested mess would occur as Compose is designed to have
     Composable functions passed in to a Composable function and therefore by design
-    function nests will occur and the code will be harder to read if not managed correctly.
+    function nests will occur, and the code will be harder to read if not managed correctly.
     \autoref{list:compose-modular} shows example of using modular code
     from the Actions screen in project (with code omissions shown in comments)
   \item Used Voyager~\cite{voyager} to handle screens
@@ -252,8 +252,8 @@ Brief overview of what it is supposed to do... % TODO
     however as this project was only being developed for Desktop, the JVM
     SQLite driver only had to be considered
   \item However, the functions for the database were written in the \textit{shared/commonMain}
-    module as there may be a potential for adding Android and iOS support as it
-    as it may be helpful run the tests on a tablet
+    module as there may be a potential for adding Android and iOS support as it may be
+    helpful run the tests on a tablet
   \item A database transaction had two modules
     \begin{itemize}
       \item A class handling SQLDelight API calls only; meaning no conversion of types, which are
@@ -272,17 +272,17 @@ Brief overview of what it is supposed to do... % TODO
 \begin{itemize}
   \item VDMJ is written in Java and it is free open source software that is accessible on
     GitHub
-  \item This allows for VDMJ to be used as per the license, GNU General Public License v3
+  \item This allows for VDMJ to be used as per the licence, GNU General Public License v3
     (GPLv3)~\cite{vdmj:license}~\cite{gpl3}. This means that as VDMJ is being used as a
     library, the code for this project has to be licensed with GPLv3 or any GPLv3 compatible
-    license~\cite{gpl3:library}
+    licence~\cite{gpl3:library}
 \end{itemize}
 
 \subsubsection{Implementing VDMJ}
 \begin{itemize}
   \item VDMJ has packages available on Maven Central making adding it as a dependency simple
   \item The package used was \lstinline|dk.au.ece.vdmj:vdmj| with version \lstinline|4.5.0|
-  \item However, initially when implementing VDMJ, \lstinline|4.5.0-P| was used accidentally
+  \item However, initially when implementing VDMJ, \lstinline|4.5.0-P| was used accidentally,
     and it led to debugging why imports were not working; and therefore the \lstinline|-P|
     versions are not suitable
   \item The initial method of implementation was using a Ktor server that would have run
@@ -313,7 +313,7 @@ Brief overview of what it is supposed to do... % TODO
   \end{itemize}
 \end{itemize}
 
-\begin{figure}
+\begin{figure}[!htp]
   \begin{tikzpicture}[node distance=2cm, align=center]
     \node (write) [box] {Run VDM command};
     \node (buffWrite) [box, below of=write] {BufferedWriter};
@@ -342,13 +342,34 @@ Brief overview of what it is supposed to do... % TODO
 \begin{itemize}
   \item VDMJ outputs are handled using string manipulation
   \item Created into objects that are replicas of types in VDM-SL
-  \item The string manipulation allows to specify where the outputs
+  \item The string manipulation allows specifying where the outputs
     of the object go
 \end{itemize}
 
 
 % Talk about how XPC was used here, not how it was implemented
 \subsection{Connecting to the Flight Simulator}
+\begin{itemize}
+  \item Implemented XPC into the flight simulator
+  \item Allowed being able to
+  \begin{itemize}
+    \item Read data from the simulator
+    \item Override dataref variables in the simulator
+    \item Execute other commands that can manipulate certain switches
+      where otherwise unable to by changing the value of the dataref
+  \end{itemize}
+  \item Made sure to check that the simulator is connected before running
+    the test to avoid exceptions being thrown
+  \item Logic behind doing an action is to fetch the action's initial state
+    from the dataref variable name, run the action, then get the final state
+    of the dataref
+  \item There is an artificial delay added before running the action to
+    try and simulate a delay of the crew's lag between reading the step of the
+    checklist and doing the action
+  \item Because of this, XPC had to be run asynchronously to prevent the
+    GUI from hanging as a function is waiting to complete - prevents misleading
+    user that the application has crashed, and it looks better 
+\end{itemize}
 
 
 \subsection{Testing}
@@ -358,7 +379,7 @@ Brief overview of what it is supposed to do... % TODO
     statistics, integration with IntelliJ to view code coverage,
     or being run in continuous integration tests
   \item The testable components in this project is mostly backend modules as
-    the GUI made in Compose is not the focus of the project and it would
+    the GUI made in Compose is not the focus of the project, and it would
     require a lot of extra time
   \item Unit tests have been made for the database and Koin
   \item Koin comes with tests that can be automatically be generated
@@ -410,7 +431,7 @@ Brief overview of what it is supposed to do... % TODO
   \begin{itemize}
     \item There was not a lot of documentation
     \item Ambiguous on how to define directory for where the Java library is located in the Git repository
-    \item However, as XPC was only built with Maven, Gradle was not able add the dependency as \lstinline|gitRepository()|
+    \item However, as XPC was only built with Maven, Gradle was not able to add the dependency as \lstinline|gitRepository()|
       only works with Gradle builds~\cite{gradle:gitRepoGradleOnly}
   \end{itemize}
 \item Resorted to using a compiled Jar file and adding the dependency to Gradle
