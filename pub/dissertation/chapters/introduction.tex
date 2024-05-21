@@ -2,30 +2,57 @@
 
 \begin{document}
 \section{Scene}
-\begin{itemize}
-    \item Designing Emergency Checklists is difficult
-    \item Procedures in checklists must be tested in simulators~\cite{nasa:design},
-      which usually means trained pilots test it, as the tests need
-      to work consistently~\cite{manifesto} (making sure it's not lengthy,
-      concise and gets critical procedures)
-    \item Checklists are usually carried out in high
-        workload environments, especially emergency ones
-\end{itemize}
+% \begin{itemize}
+%     \item Designing Emergency Checklists is difficult
+%     \item Procedures in checklists must be tested in simulators~\cite{nasa:design},
+%       which usually means trained pilots test it, as the tests need
+%       to work consistently~\cite{manifesto} (making sure it's not lengthy,
+%       concise and gets critical procedures)
+%     \item Checklists are usually carried out in high
+%         workload environments, especially emergency ones
+% \end{itemize}
+
+Designing aviation checklists is difficult and requires time to test them
+in simulators and the real world.~\cite{nasa:design}
+The simulators require trained pilots to test the checklist and make sure that they
+work consistently~\cite{manifesto}; testing that the steps in the checklist
+are concise, achieves the goal of the checklist, and will not take too
+long to complete to the point it could compromise the safety of the aircraft.
+These checklists are also carried out by the crew in high workload environments,
+where this workload would be elevated if an emergency were to occur.~\cite{caa:emergency}
 
 \section{Motivation}
-\begin{itemize}
-  \item Testing procedures in checklists are often neglected~\cite{nasa:design}
-    \item There are some checklists that may not be fit
-        for certain scenarios - e.g. ditching (water landing)
-        checklist for US Airways Flight 1549 assumed at least one engine
-        was running~\cite{ntsb:AWE1549}, but in this scenario, there were none
-    \item Some checklists may make pilots \enquote{stuck}
-      - not widely implemented, could be fixed with \enquote{opt out} points.
-      e.g. US Airways 1549, plane below 3000ft, could have skip to
-      later in the checklist to something like turn on APU, otherwise plane
-      will have limited control~\cite{ntsb:AWE1549}.
-    \item Checklists may take too long to carry out - Swissair 111
-\end{itemize}
+% \begin{itemize}
+%   \item Testing procedures in checklists are often neglected~\cite{nasa:design}
+%     \item There are some checklists that may not be fit
+%         for certain scenarios - e.g. ditching (water landing)
+%         checklist for US Airways Flight 1549 assumed at least one engine
+%         was running~\cite{ntsb:AWE1549}, but in this scenario, there were none
+%     \item Some checklists may make pilots \enquote{stuck}
+%       - not widely implemented, could be fixed with \enquote{opt out} points.
+%       e.g. US Airways 1549, plane below 3000ft, could have skip to
+%       later in the checklist to something like turn on APU, otherwise plane
+%       will have limited control~\cite{ntsb:AWE1549}.
+%     \item Checklists may take too long to carry out - Swissair 111
+% \end{itemize}
+
+Testing procedures in checklists is often neglected by designers.~\cite{nasa:design}
+This is shown in historic incidents, where the checklists to aid resolve the problem
+at the time was not fit for the specific scenario that crew was in.
+
+An example of this is the checklist used on US Airways Flight 1549. This flight
+suffered a dual engine failure due to a bird strike at an altitude of \qty{2818}{ft} (\qty{859}{\meter}).
+The first action by the pilot was to turn on the Auxiliary Power Unit (APU), allowing
+critical systems, such as the flight controls and navigational aids, to be powered as
+the engines were no longer able to power those systems. However, if the first call
+was to run through the dual engine failure checklist (the one used on the flight),
+it would have been the \nth{11} item on the checklist.
+Using the checklist from the beginning could have resulted in a worse outcome of the incident,
+but due to the crew's experience, they managed to execute the most successful
+ditching (water landing) in history.~\cite{ntsb:AWE1549}
+
+Therefore, this calls for a way to implement a way to test checklists for aspects
+that may have been overlooked during the development of the checklist.
 
 \section{Aim}
 The goal of this project is to test checklists in Quick Reference Handbooks (QRH)
@@ -39,18 +66,18 @@ flight conditions.
   \item Research current checklists that may be problematic and are testable
     in the QRH tester being made
   \item Implement a formal model that runs through checklists, with the
-    research gathered to produce an accurate test
+    research gathered, to produce an accurate test
     \begin{enumerate}
       \item Understand the relative states of the aircraft that need to be captured
       \item Ensure that the results of the checklist procedures are consistent
     \end{enumerate}
   \item Implement a QRH tester manager that
-    \begin{itemize}
+    \begin{enumerate}
       \item Runs the formal model and reacts to the output of the formal model
       \item Connect to a flight simulator to run actions from the formal model
       \item Implement checklist procedures to be tested, run them, and get
         feedback on how well the procedure ran
-    \end{itemize}
+    \end{enumerate}
 \end{enumerate}
 
 \end{document}
