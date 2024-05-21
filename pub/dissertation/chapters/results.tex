@@ -162,13 +162,31 @@ Figma was very useful in implementations as
 \end{itemize}
 
 \section{Time Spent}
-\begin{figure}[h!]
+\begin{itemize}
+  \item Time spent was recorded using Wakatime, other than time spent
+    researching, which had to be recorded manually, using Leantime
+  \item The time spent on GUI is also time spent on connecting other tools
+    such as the VDMJ wrapper, XPC, and the database
+\end{itemize}
+\begin{figure}[!htp]
   \centering
   % TODO make it show how many hours were spent instead of percentages
   \begin{tikzpicture}
-    \pie[text=legend]{70/Coding, 20/Research}
+    \pie[sum=auto, text=legend]{%
+      40/GUI,
+      11.5/Database,
+      2/Unit Tests,
+      14.5/Configuring Connector,
+      15.5/Formal Modelling,
+      13/VDMJ Wrapper,
+      6/Packaging XPC,
+      32/Research%
+    }
+    % Used to make the 2 go to the outside of the pie chart 
+    \pie[sum=134.5, hide number]{40/, 11.5/, 2/2}
+    \pie[sum=134.5]{40/, 11.5/}
   \end{tikzpicture}
-  \caption{Time spent on sections of project}
+  \caption{Time spent on sections of project (in hours)}
 \end{figure}
 
 \end{document}
