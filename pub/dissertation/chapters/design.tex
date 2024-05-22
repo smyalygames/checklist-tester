@@ -595,27 +595,56 @@ to an identical \textit{VDM-SL} representation of the values in that type.
 
 % Talk about how XPC was used here, not how it was implemented
 \subsection{Connecting to the Flight Simulator}
-\begin{itemize}
-  \item Implemented XPC into the flight simulator
-  \item Allowed being able to
-  \begin{itemize}
-    \item Read data from the simulator
-    \item Override dataref variables in the simulator
-    \item Execute other commands that can manipulate certain switches
-      where otherwise unable to by changing the value of the dataref
-  \end{itemize}
-  \item Made sure to check that the simulator is connected before running
-    the test to avoid exceptions being thrown
-  \item Logic behind doing an action is to fetch the action's initial state
-    from the dataref variable name, run the action, then get the final state
-    of the dataref
-  \item There is an artificial delay added before running the action to
-    try and simulate a delay of the crew's lag between reading the step of the
-    checklist and doing the action
-  \item Because of this, XPC had to be run asynchronously to prevent the
-    GUI from hanging as a function is waiting to complete - prevents misleading
-    user that the application has crashed, and it looks better 
-\end{itemize}
+% \begin{itemize}
+%   \item Implemented XPC into the flight simulator
+%   \item Allowed being able to
+%   \begin{itemize}
+%     \item Read data from the simulator
+%     \item Override dataref variables in the simulator
+%     \item Execute other commands that can manipulate certain switches
+%       where otherwise unable to by changing the value of the dataref
+%   \end{itemize}
+%   \item Made sure to check that the simulator is connected before running
+%     the test to avoid exceptions being thrown
+%   \item Logic behind doing an action is to fetch the action's initial state
+%     from the dataref variable name, run the action, then get the final state
+%     of the dataref
+%   \item There is an artificial delay added before running the action to
+%     try and simulate a delay of the crew's lag between reading the step of the
+%     checklist and doing the action
+%   \item Because of this, XPC had to be run asynchronously to prevent the
+%     GUI from hanging as a function is waiting to complete - prevents misleading
+%     user that the application has crashed, and it looks better 
+% \end{itemize}
+
+X-Plane Connect (XPC) was used to connect the desktop application to the flight simulator.
+X-Plane stores values of the aircraft states in what they call \enquote{datarefs}.
+XPC allows to use these datarefs in external programs through libraries that complement the
+plugin used in X-Plane. The features that XPC brings is the ability to read data from the
+simulator, override dataref values, and execute other commands that can manipulate
+certain switches of the aircraft, where otherwise unable to by changing the value of the
+dataref.
+
+Before running commands through XPC in the Checklist Tester, a check was run to verify
+that the X-Plane was running to avoid exceptions being thrown by XPC if it was not able
+to connect to the flight simulator.
+
+When running the tests, each step in the checklist (referred to as \enquote{action} in 
+the logic implemented with XPC below) would go through an order with XPC.
+The first step is to fetch the initial state of the action in the simulator.
+Then, artificial delay is added before doing the
+action in the flight simulator, to imitate delay of the crew's lag between reading the step of
+the checklist and doing the action. Finally, XPC will execute the action in the flight simulator
+and get the final state of the action's sate in the flight simulator.
+Then in the Checklist Tester, it checks if the goal of the action was achieved in the final
+state.
+
+Whilst running these actions in XPC, the initial state and time, and final state and time
+is recorded on the database to be used for the results of the test. These actions of
+running the XPC commands and storing the data on a database is run asynchronously to prevent
+the GUI from freezing as the application is waiting for a function to complete. This avoids
+misleading the user that the application has crashed, whilst allowing for test running animations
+within the GUI to continue being shown, making it look nicer.
 
 
 \subsection{Testing}
