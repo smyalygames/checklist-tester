@@ -3,86 +3,165 @@
 \begin{document}
 \section{Final Prototype}
 \subsection{Formal Model}
-\begin{itemize}
-  \item The model is mostly designed to imitate a Boeing 737-800,
-    as the types modelled, have user inputs which are different from
-    other aircraft types
-    \begin{itemize}
-      \item For example, the Airbus A320 has push buttons whereas
-      they are not there on the 737-800
-      \item However, further user input types could be added to the model
-        and as a result, further aircraft types could have their
-        procedures run through the formal model
-    \end{itemize}
-  \item The \lstinline|Procedure| type makes sure that the items on
-    the procedure is completed in order, and if a step is missed,
-    that would result in an invariant failure, resulting in the
-    checklist test failing
-  % TODO write more
-  % Stuff like:
-  % - How items are handled
-  % - Functions such as auto complete or step by step
-  % - Why Aircraft?
-\end{itemize}
+% \begin{itemize}
+%   \item The model is mostly designed to imitate a Boeing 737-800,
+%     as the types modelled, have user inputs which are different from
+%     other aircraft types
+%     \begin{itemize}
+%       \item For example, the Airbus A320 has push buttons whereas
+%       they are not there on the 737-800
+%       \item However, further user input types could be added to the model
+%         and as a result, further aircraft types could have their
+%         procedures run through the formal model
+%     \end{itemize}
+%   \item The \lstinline|Procedure| type makes sure that the items on
+%     the procedure is completed in order, and if a step is missed,
+%     that would result in an invariant failure, resulting in the
+%     checklist test failing
+%   % TODO write more
+%   % Stuff like:
+%   % - How items are handled
+%   % - Functions such as auto complete or step by step
+%   % - Why Aircraft?
+% \end{itemize}
+
+The formal model was designed using the Boeing 737-800 to create the
+types for inputs types that exist on the aircraft, for example
+switches, buttons, etc. This is significant as other aircraft
+have different input interfaces, such as the Airbus A320, where the
+majority of the inputs use buttons that click on as an alternative to switches.
+However, further forms of aircraft input types can be added to the formal model
+in the future which would allow for the formal model to be compatible with
+a larger variety of aircraft.
+
+There are multiple well-formed checks implemented through invariants,
+pre- and post-conditions, with an example being the \lstinline|Procedure| type
+having an invariant that makes sure that the items in the procedure/checklist is
+completed in order, and if a step is skipped, it would result in an invariant violation,
+meaning that the test for the checklist has failed.
 
 \subsection{Checklist Tester}
-\begin{itemize}
-  \item The main features of GUI have been completed, it has all the sections desired
-  \begin{itemize}
-    \item Projects can be created to split up different aircraft
-      or revisions of checklists
-    \item Procedures can be created and tested
-    \item These procedures get tested in the flight simulator automatically
-      and gives the results of how the procedure has been doing in
-      real time
-  \end{itemize}
-\end{itemize}
+% \begin{itemize}
+%   \item The main features of GUI have been completed, it has all the sections desired
+%   \begin{itemize}
+%     \item Projects can be created to split up different aircraft
+%       or revisions of checklists
+%     \item Procedures can be created and tested
+%     \item These procedures get tested in the flight simulator automatically
+%       and gives the results of how the procedure has been doing in
+%       real time
+%   \end{itemize}
+% \end{itemize}
 
-\subsection{Setting up Tests}
-\begin{itemize}
-  \item Each test is set up by defining each action in the procedure,
-    on the Procedure screen
-  \item To be able to define each action is supposed to do, it uses
-    the Dataref variables in X-Plane, which is what stores the state
-    of the aircraft. Each switch has their own unique Dataref
-  \item In the checklist tester then, each action asks for a
-    Dataref and a desired goal value
-  \item Some Datarefs are read only, but there are other Datarefs
-    for the item desired, but are only \enquote{command}s, which
-    can only be called and not have its value changed; this can be
-    run by setting the desired goal value to be -988 (because XPC uses that value)
-\end{itemize}
+All the desired sections of the GUI has been implemented, allowing for
+the checklist tester to be used to meet the objectives of this project.
+
+The GUI allows for projects to be created, allowing separation of aircraft and
+revisions of QRHs. In each project, checklists can be created, and the steps
+for the checklist can be defined and edited if needed. Once the steps in
+the checklist are defined, the test for the checklist can be run
+and the Checklist Tester will automatically run each step of the checklist
+and show the progress through the checklist in real time and if each step
+in the checklist is being completed correctly or failing.
+
+\subsubsection{Setting up Tests}
+% \begin{itemize}
+%   \item Each test is set up by defining each action in the procedure,
+%     on the Procedure screen
+%   \item To be able to define each action is supposed to do, it uses
+%     the Dataref variables in X-Plane, which is what stores the state
+%     of the aircraft. Each switch has their own unique Dataref
+%   \item In the checklist tester then, each action asks for a
+%     Dataref and a desired goal value
+%   \item Some Datarefs are read only, but there are other Datarefs
+%     for the item desired, but are only \enquote{command}s, which
+%     can only be called and not have its value changed; this can be
+%     run by setting the desired goal value to be -988 (because XPC uses that value)
+% \end{itemize}
+
+Each test is set up by defining each step of the checklist from the
+\textit{Procedure} screen in the Checklist Tester.
+To be able to define what each step of the checklist is supposed to do,
+it requires the dataref variable, which are the variables that
+store the state of the aircraft in X-Plane, to be referenced for the specific
+input in the aircraft for that step in the checklist. To identify dataref name required
+for the specific input, there is an X-Plane plugin DataRefTool
+which also allows to see the current state that the datatref is, and it is a read only
+variable. Then, to set the desired goal of the step in the checklist, the input can be put
+to the desired state in the flight simulator, and the value of the dataref can be taken
+and be set in the Checklist Tester.
+
+However, some aircraft in X-Plane have read-only dataref variables that can only
+be modified by running a command, calling a specific dataref. So to be able to
+test that step in the checklist, the desired state of the step can be set as
+--988 (that value was chosen because XPC uses that value to not modify variables).
+This will mean that the checklist tester will not attempt to change the variable
+of the dataref.
 
 \subsubsection{Running Tests}
-\begin{itemize}
-  \item Tests are run by connecting to the flight simulator, X-Plane
-  \item The tester goes through each action in the procedure one by one
-    and waits for the current action to complete before proceeding on to
-    the next one
-  \item The checklist tester is not advanced enough to be able to control
-    fly the aircraft; hence the tester would be able to engage autopilot
-    first, or control the aircraft themselves, where the checklist tester
-    would be acting like a first officer
-\end{itemize}
+% \begin{itemize}
+%   \item Tests are run by connecting to the flight simulator, X-Plane
+%   \item The tester goes through each action in the procedure one by one
+%     and waits for the current action to complete before proceeding on to
+%     the next one
+%   \item The checklist tester is not advanced enough to be able to control
+%     fly the aircraft; hence the tester would be able to engage autopilot
+%     first, or control the aircraft themselves, where the checklist tester
+%     would be acting like a first officer
+% \end{itemize}
+
+Running a test for a checklist requires an active instance of X-Plane
+to be running with the plane loaded in, as the Checklist Tester
+checks for an active simulator connection, otherwise it will not run.
+
+Once the test has been started, the Checklist Tester goes through each action
+in the checklist one by one and waits for the current step to complete before
+proceeding to the next one.
+
+The Checklist Tester is not advanced enough to control the flight controls
+of the aircraft, meaning that the aircraft has to be flown manually,
+have autopilot set manually, or add steps to control the autopilot in the Checklist Tester,
+avoiding the need to set up the autopilot manually each time.  
 
 \subsubsection{Storing Test Results}
-\begin{itemize}
-  \item There is a database storing the results of each of the tests
-  \item Each tests store
-  \begin{description}
-    \item[Time taken] for each of the actions in the procedure to complete
-    \item[Start state] for the state that the action in the procedure was at
-    \item[End state] for the state that the action in the procedure finished
-      the item at
-    \item[Overall test time] Stores the time taken from when the test started
-      to when the test ended
-  \end{description}
-  \item This gives feedback/statistics for the checklist designers
-    to find areas of improvement on the procedure, such as one action
-    in the procedure taking too long, may point out a potential flaw
-    to the designer and as a result aid finding potential alternative
-    options for that step in the procedure
-\end{itemize}
+% \begin{itemize}
+%   \item There is a database storing the results of each of the tests
+%   \item Each tests store
+%   \begin{description}
+%     \item[Time taken] for each of the actions in the procedure to complete
+%     \item[Start state] for the state that the action in the procedure was at
+%     \item[End state] for the state that the action in the procedure finished
+%       the item at
+%     \item[Overall test time] Stores the time taken from when the test started
+%       to when the test ended
+%   \end{description}
+%   \item This gives feedback/statistics for the checklist designers
+%     to find areas of improvement on the procedure, such as one action
+%     in the procedure taking too long, may point out a potential flaw
+%     to the designer and as a result aid finding potential alternative
+%     options for that step in the procedure
+% \end{itemize}
+
+Whilst checklists are being tested in the Checklist Tester,
+there are multiple aspects being tracked and stored on the database to be
+used as results for the tests that run. The results are stored on the
+\lstinline|Test| and \lstinline|ActionResult| table, which can be seen on the
+entity relationship diagram in~\autoref{fig:db-erd}, with the respective values
+that are stored.
+
+The aspects that the database store are the time taken for the entire
+checklist, by taking the time when the test started, and when the last step in the
+checklist was completed. These are stored as a start and end time on the \lstinline|Test|
+table, in Coordinated Universal Time (UTC) format.
+
+Each step that is tested in the checklist gets tracked separately in
+the \lstinline|ActionResult| table, where the start and end state of the dataref
+is tracked, with the start end end time in UTC format.
+
+This gives feedback/statistics for the checklist designers to find
+areas of improvement on the procedure, such as one action in the
+procedure taking too long, may point out a potential flaw to the designer,
+as a result aiding finding potential other options for that step in the procedure.
 
 \subsection{Submitting a Pull Request for X-Plane Connect}
 % What I did:
@@ -121,82 +200,91 @@
   \item Submitted the pull request stating the changes made\footnote{\url{https://github.com/nasa/XPlaneConnect/pull/313}}
 \end{itemize}
 
-\section{Problems Found}
-
-
-\section{LOC?}
-% TODO I don't know what LOC meant, was it Language of Choice?
-
 
 \section{Reflection}
 \subsection{Planning}
-\subsubsection{Gantt Chart}
-Used Gantt chart to create a plan for what would be needed from this project
+% Used Gantt chart to create a plan for what would be needed from this project
 
-\textbf{Pros:}
-\begin{itemize}
-  \item Was useful for the first part because it set expectations
-    of what was needed and how much time there was to complete them
-  \item Helped visualize the different components of the project
-  \item Helped in the beginning being accompanied by a Kanban in Leantime\footnote{\url{https://leantime.io/}}
-\end{itemize}
+% \textbf{Pros:}
+% \begin{itemize}
+%   \item Was useful for the first part because it set expectations
+%     of what was needed and how much time there was to complete them
+%   \item Helped visualize the different components of the project
+%   \item Helped in the beginning being accompanied by a Kanban in Leantime\footnote{\url{https://leantime.io/}}
+% \end{itemize}
 
-\textbf{Cons:}
-\begin{itemize}
-  \item Was not detailed enough, and a design document would have been useful
-    to accompany the Gantt chart for each section
-  \item The lack of detail was not helpful when falling behind as having
-    attention deficit hyperactivity disorder (ADHD) 
-    added to the burden of feeling like each section was a massive project
-  \item Leantime's claim for being \enquote{built with ADHD [\ldots] in mind}
-    felt misleading as navigating through it felt worse than using the front page
-    of Stack Overflow\footnote{\url{https://stackoverflow.com/}}
-  \item Todoist\footnote{\url{https://todoist.com/}} was a good alternative though
-\end{itemize}
+% \textbf{Cons:}
+% \begin{itemize}
+%   \item Was not detailed enough, and a design document would have been useful
+%     to accompany the Gantt chart for each section
+%   \item The lack of detail was not helpful when falling behind as having
+%     attention deficit hyperactivity disorder (ADHD) 
+%     added to the burden of feeling like each section was a massive project
+%   \item Leantime's claim for being \enquote{built with ADHD [\ldots] in mind}
+%     felt misleading as navigating through it felt worse than using the front page
+%     of Stack Overflow\footnote{\url{https://stackoverflow.com/}}
+%   \item Todoist\footnote{\url{https://todoist.com/}} was a good alternative though
+% \end{itemize}
 
-\subsubsection{GUI Design}
-Figma was very useful in implementations as
+A Gantt chart was used to create a plan for what would be needed from this project
+and when these parts of the project should be completed.
 
-\textbf{Pros:}
-\begin{itemize}
-  \item It helped with timing and knowing what to do
-  \item Made things feel manageable as it was split up to different sections
-  \item Meant features will not be forgotten
-\end{itemize}
+The Gantt chart was useful for the first part of the project because it set expectations
+of what was required and how much time there was to complete them. It also helped
+visualize the different components of the project. Implementing the Gantt chart into
+Leantime\footnote{\url{https://leantime.io/}} was helpful at first as it was able to
+be accompanied by a Kanban.
 
-\textbf{Cons:}
-\begin{itemize}
-  \item Certain features being too simple and annoying to use
-  \item A bit of a learning curve for using other components, compared
-    to using plugins
-\end{itemize}
+However, there were multiple downfalls of the Gantt chart. One of the problem was that
+the design of the Gantt chart lacked detail for each of the components. A way this could
+have been fixed was by making the Gantt chart more detailed, or create a design document
+to accompany the Gantt chart. The lack of detail was later made worse as when falling behind
+with attention deficit hyperactivity disorder (ADHD), it felt like a burden to progress
+as each section felt like a massive project, when in reality it could have been split up
+into subtasks.
+
+Leantime's claim for being \enquote{built with ADHD [\ldots] in mind} felt misleading 
+as navigating through it felt worse than using the front page of 
+Stack Overflow\footnote{\url{https://stackoverflow.com/}} as it was very cluttered to access
+what was desired, such as the Kanban requiring multiple pages to navigate through.
+For the future, it would be helpful to find an alternative to Leantime to aid in
+progress tracking. 
 
 \subsection{Implementation}
 
 \subsubsection{Checklist Tester}
-\begin{itemize}
-  \item Implementing the GUI was useful to split up the sections required
-    for the project and having a goal for what to be done
-  \item However, a bit too much time was spent on creating a GUI when it
-    could have been used for development
-  \item It was useful for motivational reasons to feel like something
-    materialistic has been produced rather than something theoretical
-  \item Was originally intended to be used to interact with custom
-    plugin for X-Plane as it would have been difficult otherwise
-\end{itemize}
+% \begin{itemize}
+%   \item Implementing the GUI was useful to split up the sections required
+%     for the project and having a goal for what to be done
+%   \item However, a bit too much time was spent on creating a GUI when it
+%     could have been used for development
+%   \item It was useful for motivational reasons to feel like something
+%     materialistic has been produced rather than something theoretical
+%   \item Was originally intended to be used to interact with custom
+%     plugin for X-Plane as it would have been difficult otherwise
+% \end{itemize}
 
-\subsubsection{Connecting to the Flight Simulator}
-\begin{itemize}
-  \item Would have been more useful to search a bit further if there was
-    another plugin available, as found Dataref Editor on the X-Plane docs,
-    so could have looked for a similar plugin for connecting to X-Plane
-  \item At first spent about a week developing a C++ X-Plane plugin from scratch,
-    requiring to figure out sockets
-  \item At the same time finding out XPC exists and having wasted that time
-  \item However, it did teach me more about understanding how sockets work and
-    more about C++ and setting up a project with CMake and adding packages with
-    vcpkg
-\end{itemize}
+Implementing the GUI was useful to split up the sections required for the project,
+and having an informal requirement for each section of the project.
+However, a bit too much time was spent on creating a GUI when it could have been
+used for development or creating a design document which would have aided in
+productivity.
+
+However, implementing the GUI was useful to an extent as it provided motivation
+by having something tangible rather than something theoretical or a command line interface.
+
+% \subsubsection{Connecting to the Flight Simulator}
+% \begin{itemize}
+%   \item Would have been more useful to search a bit further if there was
+%     another plugin available, as found Dataref Editor on the X-Plane docs,
+%     so could have looked for a similar plugin for connecting to X-Plane
+%   \item At first spent about a week developing a C++ X-Plane plugin from scratch,
+%     requiring to figure out sockets
+%   \item At the same time finding out XPC exists and having wasted that time
+%   \item However, it did teach me more about understanding how sockets work and
+%     more about C++ and setting up a project with CMake and adding packages with
+%     vcpkg
+% \end{itemize}
 
 \section{Time Spent}
 \begin{itemize}
