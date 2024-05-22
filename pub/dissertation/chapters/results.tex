@@ -84,6 +84,43 @@
     options for that step in the procedure
 \end{itemize}
 
+\subsection{Submitting a Pull Request for X-Plane Connect}
+% What I did:
+% - gitignore
+% - changing url for repo
+% - testing everything still worked
+\begin{itemize}
+  \item Adding the Gradle build tools can be seen as being helpful
+    for others, as it would allow for the XPC library to be added
+    as a dependency, especially if the NASA Ames Research Center Diagnostics and Prognostics Group
+    were to add it to the GitHub repository, it would mean that it would be easier for
+    people to access Maven Packages for XPC
+  \item Therefore, to help improve the experience for other people who would want
+    to develop with the XPC Java library, it would be logical to submit a
+    pull request
+  \item But it did mean making sure that the contribution would be perfect and not contain problems % TODO Improve wording
+\end{itemize}
+
+\subsubsection{Testing}
+\begin{itemize}
+  \item The XPC Java library includes a JUnit 4 test, however, implementing this
+    with Gradle proved useless, as it was not able to get the results from the
+    tests, which would be bad for not being able to catch problems with new builds
+  \item Therefore, the tests were updated to JUnit 5, where most of the changes were
+    adding asserts for throws~\cite{junit:migrate}
+    \footnote{The commit including the changes to the tests can be viewed here:
+    \url{https://github.com/smyalygames/XPlaneConnect/commit/e7b8d1e811999b4f8d7230f60ba94368e14f1148}}
+\end{itemize}
+
+\subsubsection{GitHub}
+\begin{itemize}
+  \item Made sure to add generated build files to .gitignore
+  \item Changed the URL of the repository in Gradle to NASA's repository so that
+    the Maven package can be published correctly on the GitHub repository
+  \item From the beginning anyways, made sure to have insightful commit messages
+  \item Submitted the pull request stating the changes made\footnote{\url{https://github.com/nasa/XPlaneConnect/pull/313}}
+\end{itemize}
+
 \section{Problems Found}
 
 
