@@ -43,33 +43,67 @@ chapter.
 
 %%%%% FORMAL METHOD %%%%%
 \section{Formal Method}
-\begin{itemize}
-  \item Formal modelling is the heart of the logic for testing checklists
-  \item Formal model created using VDM-SL
-  \item It allows to test that the checklists have been completed properly
-    - and that it is provable
-  \item Model keeps track of
-    \begin{itemize}
-      \item Aircraft state
-      \item Checklist state
-    \end{itemize}
-  \item If an error were to occur in the model, this can be relayed that there was
-    something wrong with running the test for the checklist, such as:
-    \begin{itemize}
-      \item Procedure compromises integrity of aircraft
-      \item There is not enough time to complete the procedure
-      \item There is a contradiction with the steps of the checklist
-    \end{itemize}
-\end{itemize}
+% \begin{itemize}
+%   \item Formal modelling is the heart of the logic for testing checklists
+%   \item Formal model created using VDM-SL
+%   \item It allows to test that the checklists have been completed properly
+%     - and that it is provable
+%   \item Model keeps track of
+%     \begin{itemize}
+%       \item Aircraft state
+%       \item Checklist state
+%     \end{itemize}
+%   \item If an error were to occur in the model, this can be relayed that there was
+%     something wrong with running the test for the checklist, such as:
+%     \begin{itemize}
+%       \item Procedure compromises integrity of aircraft
+%       \item There is not enough time to complete the procedure
+%       \item There is a contradiction with the steps of the checklist
+%     \end{itemize}
+% \end{itemize}
+Formal modelling is the heart of the logic for testing checklists in this project
+and is created using VDM-SL.
+The formal model is the logic behind the actions of running through a checklist
+and checking if the checklist has been completed in the correct manner.
+
+To be able to check that the checklist has been properly completed,
+the formal model keeps track of aircraft states, such as what state each switch
+in the aircraft is in; and the state of the checklist, such as what steps in the
+checklist has been completed.
+
+As there are invariants, pre-, and post-conditions, which are used for setting
+well-formedness conditions for types or functions, provide type and input safety,
+which will result in an error when broken. This is useful to make sure that
+the actions taken when completing the checklist is done correctly, such as making
+sure that a switch that may have 3 possible states is moved in properly, such as
+moving from off, middle, to on in order, rather than skipping from off to on.
+The cases where errors would occur is when these well-formed conditions are broken,
+which can be a sign that the checklist has been completed incorrectly, such as
+when the checklist is not completed in order, could signify that a step in the checklist
+failed, which could mean that the step in the checklist is problematic.
 
 \subsubsection{Testing}
-\begin{itemize}
-  % TODO add references
-  \item Since VDMJ version 4.5, it provides the QuickCheck tool
-  \item This allows for providing counter examples to the model
-  \item The counter examples were helpful to create pre and post conditions
-    to avoid any unexpected results from the model
-\end{itemize}
+% \begin{itemize}
+%   % TODO add references
+%   \item Since VDMJ version 4.5, it provides the QuickCheck tool
+%   \item This allows for providing counter examples to the model
+%   \item The counter examples were helpful to create pre- and post-conditions
+%     to avoid any unexpected results from the model
+% \end{itemize}
+
+Making sure that the formal model does not have well-formed conditions that can
+be broken by the formal model itself is important, as the goal of the formal model
+is to have a rigorous specification that is verifiable.
+
+Since \textit{VDMJ} version 4.5.0, the VDM interpreter has included the \textit{QuickCheck} tool,~\cite{vdmj:4.5.0}
+which is an automated testing tool to prove and find counter examples to specifications.~\cite{quickcheck}
+
+There were multiple counter examples that was produced by \textit{QuickCheck} that aided
+the development of the formal model, as the \lstinline|qc|\footnote{The command to run \textit{QuickCheck} on the formal model in \textit{VDMJ}}
+command in \textit{VDMJ} every time a new function was created to find potential counter
+examples and fix them.
+Checking every time when creating a new function was useful as it would avoid having to
+refactor more of the model.
 
 
 %%%%% CHECKLIST TESTER %%%%%
