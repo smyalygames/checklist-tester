@@ -648,31 +648,60 @@ within the GUI to continue being shown, making it look nicer.
 
 
 \subsection{Testing}
-\begin{itemize}
-  \item Testing can be run with Gradle when it comes to running unit tests
-  \item Decided to use JUnit 5 as it provides additional tools such as
-    statistics, integration with IntelliJ to view code coverage,
-    or being run in continuous integration tests
-  \item The testable components in this project is mostly backend modules as
-    the GUI made in Compose is not the focus of the project, and it would
-    require a lot of extra time
-  \item Unit tests have been made for the database and Koin
-  \item Koin comes with tests that can be automatically be generated
-  \item Ethos when testing was to try and find exploits, act as a
-    user who may mishandle inputs, and stress testing functions
-    by passing parameter with hundreds of objects
-\end{itemize}
+% \begin{itemize}
+%   \item Testing can be run with Gradle when it comes to running unit tests
+%   \item Decided to use JUnit 5 as it provides additional tools such as
+%     statistics, integration with IntelliJ to view code coverage,
+%     or being run in continuous integration tests
+%   \item The testable components in this project is mostly backend modules as
+%     the GUI made in Compose is not the focus of the project, and it would
+%     require a lot of extra time
+%   \item Unit tests have been made for the database and Koin
+%   \item Koin comes with tests that can be automatically be generated
+%   \item Ethos when testing was to try and find exploits, act as a
+%     user who may mishandle inputs, and stress testing functions
+%     by passing parameter with hundreds of objects
+% \end{itemize}
+\textit{Gradle} provides testing integration, which allows for unit tests to
+be run through \textit{Gradle}, with a command, in GitHub Continuous Integration for
+commits and packaging, or before building a complied application.
+
+\textit{JUnit} 5 was used for testing as other development tools provide integration with
+\textit{JUnit}, such as integration with IntelliJ to view code coverage.
+
+The testable components in this project are mostly backend modules as the
+GUI is difficult to write unit tests for there are not a lot of tools
+for testing \textit{Compose} components, and testing the GUI would be an
+inefficient use of time as it is not the focus of this project.
+
+For the backend, unit tests were written for the database and
+the dependency injection.
+Koin provides tools that allow unit tests to be
+automatically generated, as a result meaning it was worth the time to implement
+tests for dependency injection.
+The ethos when writing unit tests was to try and find exploits, act as a user who
+may mishandle inputs, and stress test functions that were developed.
+
 
 \subsubsection{Testing for Resource Usage}
-\begin{itemize}
-  \item The application was tested using the \textit{Profiler} tool on
-    IntelliJ IDEA 2024 (Ultimate Edition) to find potential
-    memory leaks
-  \item One problem found was the initial VDMJ wrapper which would use the execute
-    command instead of the interpreter, which would require reinitializing
-    the entirety of VDMJ, which resulted in a slight memory leak and a
-    massive write usage
-\end{itemize}
+% \begin{itemize}
+%   \item The application was tested using the \textit{Profiler} tool on
+%     IntelliJ IDEA 2024 (Ultimate Edition) to find potential
+%     memory leaks
+%   \item One problem found was the initial VDMJ wrapper which would use the execute
+%     command instead of the interpreter, which would require reinitializing
+%     the entirety of VDMJ, which resulted in a slight memory leak and a
+%     massive write usage
+% \end{itemize}
+
+The application was tested using the \textit{Profiler} tool provided by
+IntelliJ IDEA 2024 (Ultimate Edition) to find potential memory leaks and
+CPU intensive functions.
+
+One problem was found which was the initial versions of the \textit{VDMJ} wrapper that was
+created. The initial version did not use interactive mode, which resulted in
+\textit{VDMJ} reinitializing each time a command was executed, resulting in a slight
+memory leak and a massive memory write usage.
 
 
 
