@@ -446,49 +446,105 @@ handled, or if there are type conversions errors occuring.
 
 
 \subsection{VDMJ Wrapper}
-\begin{itemize}
-  \item VDMJ is written in Java and it is free open source software that is accessible on
-    GitHub
-  \item This allows for VDMJ to be used as per the licence, GNU General Public License v3
-    (GPLv3)~\cite{vdmj:license}~\cite{gpl3}. This means that as VDMJ is being used as a
-    library, the code for this project has to be licensed with GPLv3 or any GPLv3 compatible
-    licence~\cite{gpl3:library}
-\end{itemize}
+% \begin{itemize}
+%   \item VDMJ is written in Java and it is free open source software that is accessible on
+%     GitHub
+%   \item This allows for VDMJ to be used as per the licence, GNU General Public License v3
+%     (GPLv3)~\cite{vdmj:license}~\cite{gpl3}. This means that as VDMJ is being used as a
+%     library, the code for this project has to be licensed with GPLv3 or any GPLv3 compatible
+%     licence~\cite{gpl3:library}
+% \end{itemize}
+
+VDMJ is written in Java, and it is free open source software that is accessible on GitHub.
+This means that VDMJ can be used within any projects as long as the licence is followed.
+It is important to follow for ethical and legal reasons, as not following the licensing
+would result in breaking copyright law. However, it may not specifically break Newcastle
+University's ethics, it would break the ethos behind GPLv3 and free open source software.
+
+The licence VDMJ uses is the GNU General Public License v3 (GPLv3)~\cite{vdmj:license}\cite{gpl3}.
+This means that as VDMJ is being used as a library, the code for this project has to be
+licensed with GPLv3 or any GPLv3 compatible licence~\cite{gpl3:library}.
 
 \subsubsection{Implementing VDMJ}
-\begin{itemize}
-  \item VDMJ has packages available on Maven Central making adding it as a dependency simple
-  \item The package used was \lstinline|dk.au.ece.vdmj:vdmj| with version \lstinline|4.5.0|
-  \item However, initially when implementing VDMJ, \lstinline|4.5.0-P| was used accidentally,
-    and it led to debugging why imports were not working; and therefore the \lstinline|-P|
-    versions are not suitable
-  \item The initial method of implementation was using a Ktor server that would have run
-    alongside the desktop application, where the server would handle Representational State Transfer (REST)
-    API calls
-  \item This was unnecessary as the \textit{interactive} mode of VDMJ was able to run on
-    the desktop application itself. However, the Ktor was useful for debugging and testing as
-    an API route was created to allow VDMJ commands to be executed through a URL
+% \begin{itemize}
+%   \item VDMJ has packages available on Maven Central making adding it as a dependency simple
+%   \item The package used was \lstinline|dk.au.ece.vdmj:vdmj| with version \lstinline|4.5.0|
+%   \item However, initially when implementing VDMJ, \lstinline|4.5.0-P| was used accidentally,
+%     and it led to debugging why imports were not working; and therefore the \lstinline|-P|
+%     versions are not suitable
+%   \item The initial method of implementation was using a Ktor server that would have run
+%     alongside the desktop application, where the server would handle Representational State Transfer (REST)
+%     API calls
+%   \item This was unnecessary as the \textit{interactive} mode of VDMJ was able to run on
+%     the desktop application itself. However, the Ktor was useful for debugging and testing as
+%     an API route was created to allow VDMJ commands to be executed through a URL
 
-  \item To be able to get the outputs from VDMJ, a \lstinline|ConsolePrintWriter| new had to be
-    created from the \lstinline|com.fujitsu.vdmj.messages| package; which handles writing to
-    the console \textit{stdout}. This then gets used to replace the \lstinline|Console.out| and
-    \lstinline|Console.err| in the \lstinline|com.fujitsu.vdmj.messages| package
+%   \item To be able to get the outputs from VDMJ, a \lstinline|ConsolePrintWriter| new had to be
+%     created from the \lstinline|com.fujitsu.vdmj.messages| package; which handles writing to
+%     the console \textit{stdout}. This then gets used to replace the \lstinline|Console.out| and
+%     \lstinline|Console.err| in the \lstinline|com.fujitsu.vdmj.messages| package
 
-  \item Parsing commands into VDMJ interface - was more difficult
-    \footnote{The objects created here are provided by the \lstinline|java.io| package.}
-  \begin{itemize}
-    \item Created a \lstinline|PipedInputStream| object, that gets connected to a \lstinline|PipedOutputStream|
-      object by passing the latter object in as a parameter. The \lstinline|PipedOutputStream| is then used
-      to pass inputs into \lstinline|PipedInputStream|
-    \item To be able to write to this stream, a \lstinline|BufferedWriter| is created by passing the \lstinline|PipedOutputStream|
-      with a bridge \lstinline|OutputStreamWriter| that encodes characters into bytes
-    \item For VDMJ to be able to read the input stream, a separate object had to be created, \lstinline|BufferedReader|,
-      where the \lstinline|PipedInputStream| gets parsed through a bridge, \lstinline|InputStreamReader| that converts
-      bytes to characters
-      % TODO create a diagram of this (better than having code)
-      % BufferedWriter -> encode to byte -> Stream -> decode to char -> VDMJ
-  \end{itemize}
-\end{itemize}
+%   \item Parsing commands into VDMJ interface - was more difficult
+%     \footnote{The objects created here are provided by the \lstinline|java.io| package.}
+%   \begin{itemize}
+%     \item Created a \lstinline|PipedInputStream| object, that gets connected to a \lstinline|PipedOutputStream|
+%       object by passing the latter object in as a parameter. The \lstinline|PipedOutputStream| is then used
+%       to pass inputs into \lstinline|PipedInputStream|
+%     \item To be able to write to this stream, a \lstinline|BufferedWriter| is created by passing the \lstinline|PipedOutputStream|
+%       with a bridge \lstinline|OutputStreamWriter| that encodes characters into bytes
+%     \item For VDMJ to be able to read the input stream, a separate object had to be created, \lstinline|BufferedReader|,
+%       where the \lstinline|PipedInputStream| gets parsed through a bridge, \lstinline|InputStreamReader| that converts
+%       bytes to characters
+%       % TODO create a diagram of this (better than having code)
+%       % BufferedWriter -> encode to byte -> Stream -> decode to char -> VDMJ
+%   \end{itemize}
+% \end{itemize}
+
+\textit{VDMJ} has packages available on Maven Central%
+\footnote{Maven Central is a repository that stores dependencies required to build
+projects}
+making adding it as a dependency simple as it would require to be specified within
+the \textit{Gradle} build configurations.
+The package used was \lstinline|dk.au.ece.vdmj:vdmj| with version \lstinline|4.5.0|,
+however, initially when implementing VDMJ, \lstinline|4.5.0-P| was used accidentally,
+and it led to the rabbit hole of debugging why imports were not working, and it was
+found that the \lstinline|-P| versions of VDMJ is not suitable to be used when being
+implemented intentionally a project.
+
+The initial method of implementation was to use a Ktor server that would run
+alongside the desktop application, where communication between the desktop application
+and the server would be handled through Representational State Transfer (REST) API calls.
+However, this was unnecessary as the \textit{interactive} mode of \textit{VDMJ}
+was able to run on the desktop application itself. But using Ktor was useful for
+debugging and testing using as \textit{VDMJ} commands could be run through an
+API route.
+
+The major hurdle within implementing \textit{VDMJ} as a wrapper was fetching the
+outputs that \textit{VDMJ} sends to the console. This was implemented by
+creating a new \textit{VDMJ} console handler \\\lstinline|ConsolePrintWriter|, that
+handles writing to \textit{stdout},
+which is from the \lstinline|com.fujitsu.vdmj.messages| package.
+This then gets used to replace the \lstinline|Console.out| and
+\lstinline|Console.err|, from the same \textit{VDMJ} package, which
+will store the outputs to the console into a variable instead.
+
+Parsing commands into the \textit{VDMJ} interface was more difficult as it required
+using Java functions\footnote{The objects created here are provided by the \lstinline|java.io| package.}
+to act as if the program wrote something directly into the \textit{VDMJ} interactive console.
+\autoref{fig:vdmj-io} shows a simplified flowchart of how inputs are handled.
+A \lstinline|PipedInputStream| object was created, that gets connected to a
+\lstinline|PipedOutputStream| object by passing the latter object in as a parameter.
+The \lstinline|PipedOutputStream| is then used to pass inputs into \lstinline|PipedInputStream|.
+The \lstinline|PipedInputStream| handles sending inputs to the \textit{VDMJ} console.
+However, to be able to write to these streams, a \lstinline|BufferedWriter|,
+which is used to send inputs, is created by
+passing the \lstinline|PipedOutputStream| with a bridge \lstinline|OutputStreamWriter|
+that encodes characters into bytes.
+For \textit{VDMJ} to be able to read the input streams, the \lstinline|PipedInputStream|
+gets parsed through a bridge, \lstinline|InputStreamReader| that converts
+bytes to characters, and then allows \textit{VDMJ} read these characters through
+a \lstinline|BufferedReader|.
+
 
 \begin{figure}[!htp]
   \begin{tikzpicture}[node distance=2cm, align=center]
@@ -511,17 +567,30 @@ handled, or if there are type conversions errors occuring.
   \end{tikzpicture}
   \centering
   \caption[VDMJ IO Stream]{Flowchart of VDMJ Input/Output Stream handling}
-  \label{list:vdmj-io}
+  \label{fig:vdmj-io}
 \end{figure}
 
 
-\subsubsection{Handling VDMJ Outputs}
-\begin{itemize}
-  \item VDMJ outputs are handled using string manipulation
-  \item Created into objects that are replicas of types in VDM-SL
-  \item The string manipulation allows specifying where the outputs
-    of the object go
-\end{itemize}
+\subsubsection{Handling VDMJ Command Outputs}
+% \begin{itemize}
+%   \item VDMJ outputs are handled using string manipulation
+%   \item Created into objects that are replicas of types in VDM-SL
+%   \item The string manipulation allows specifying where the outputs
+%     of the object go
+% \end{itemize}
+When running a command in the \textit{VDMJ}, it will produce an output
+as a string for the returned variable in the function that was executed.
+
+To handle these strings, \textit{Kotlin} string manipulation was used,
+similar concept to \textit{Regex},
+to decode the string and convert the string into correct types and store them
+in specific types in the formal specification, recreated in \textit{Kotlin}.
+
+The types recreated from the formal specification were the records types.
+This was done by using \textit{Kotlin} data classes,
+which had functions implemented with the purpose of convert the stored types in \textit{Kotlin}
+to an identical \textit{VDM-SL} representation of the values in that type.
+
 
 
 % Talk about how XPC was used here, not how it was implemented
@@ -579,7 +648,7 @@ handled, or if there are type conversions errors occuring.
 
 
 %%%%% Simulator Connector Plugin %%%%%
-% \section{Simulator Connector Plugin}
+\section{Simulator Connector Plugin}
 % Talk about creating your own (originally happened) vs using something else that was developed
 % Maybe talk about original plan? i.e. <project root>/plugin
 
