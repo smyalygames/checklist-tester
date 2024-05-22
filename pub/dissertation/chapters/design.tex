@@ -4,13 +4,22 @@
 %%%%% COMPONENTS %%%%%
 \section{Components}
 
-Splitting up the project into multiple components has been useful for
-\begin{itemize}
-  \item Aiding in planning to make the implementation more efficient
-  \item Delegating specific work tasks
-  \item Making the project modular, for example, allowing for a different simulator
-    to be implemented with minimal need to refactor other parts of the codebase
-\end{itemize}
+% Splitting up the project into multiple components has been useful for
+% \begin{itemize}
+%   \item Aiding in planning to make the implementation more efficient
+%   \item Delegating specific work tasks
+%   \item Making the project modular, for example, allowing for a different simulator
+%     to be implemented with minimal need to refactor other parts of the codebase
+% \end{itemize}
+
+The best way to view the design and implementation of this project is by
+splitting up the project into multiple components.
+This has been useful for aiding in planning the implementation, as a result
+making being efficient with time and requiring less refactoring. The planning
+allows for delegating specific work tasks, and making the project modular.
+A benefit of making this project modular is improving the maintainability of the
+codebase, and allowing for future upgrades or changes, for example, using a different
+flight simulator for testing.
 
 \begin{figure}[H]
 \centering
@@ -24,8 +33,8 @@ Splitting up the project into multiple components has been useful for
     \draw [<->, arrow] (plugin) -- (connector);
     \draw [<->, arrow] (plugin) -- (simulator);
   \end{tikzpicture}
-  \label{fig:abstract}
   \caption{Abstract layout of components}
+  \label{fig:abstract}
 \end{figure}
 
 Each of the components in \autoref{fig:abstract} will be covered in detail in this
