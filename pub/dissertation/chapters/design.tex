@@ -62,7 +62,7 @@ chapter.
 %     \end{itemize}
 % \end{itemize}
 Formal modelling is the heart of the logic for testing checklists in this project
-and is created using VDM-SL.
+and is created using \textit{VDM-SL}.
 The formal model is the logic behind the actions of running through a checklist
 and checking if the checklist has been completed in the correct manner.
 
@@ -185,27 +185,58 @@ window.
 
 
 \subsection{Compose Multiplatform}
+% \begin{itemize}
+%   \item Used the \textit{Kotlin Multiplatform Wizard} to create projects as it allows
+%     for runtime environments to be specified (in this case, Desktop and Server)
+%   \item Provides necessary build configurations in Gradle
+%   \item Planning what to implement important as Compose is designed to use modular
+%     components, otherwise a nested mess would occur as Compose is designed to have
+%     Composable functions passed in to a Composable function and therefore by design
+%     function nests will occur, and the code will be harder to read if not managed correctly.
+%     \autoref{list:compose-modular} shows example of using modular code
+%     from the Actions screen in project (with code omissions shown in comments)
+%   \item Used Voyager~\cite{voyager} to handle screens
+%   \item Used Koin~\cite{koin} for dependency injection, to be able to get data from the
+%     database and VDMJ
+%     \begin{itemize}
+%       \item Chose to use it because of Voyager integration with Koin~\cite{voyager:koin}
+%       \item Required as the application will be unresponsive when making requests
+%         to the database and/or VDMJ
+%       \item Used asynchronous coroutines to prevent the program from being blocked
+%     \end{itemize}
+% \end{itemize}
 \subsubsection{Setup}
-\begin{itemize}
-  \item Used the \textit{Kotlin Multiplatform Wizard} to create projects as it allows
-    for runtime environments to be specified (in this case, Desktop and Server)
-  \item Provides necessary build configurations in Gradle
-  \item Planning what to implement important as Compose is designed to use modular
-    components, otherwise a nested mess would occur as Compose is designed to have
-    Composable functions passed in to a Composable function and therefore by design
-    function nests will occur, and the code will be harder to read if not managed correctly.
-    \autoref{list:compose-modular} shows example of using modular code
-    from the Actions screen in project (with code omissions shown in comments)
-  \item Used Voyager~\cite{voyager} to handle screens
-  \item Used Koin~\cite{koin} for dependency injection, to be able to get data from the
-    database and VDMJ
-    \begin{itemize}
-      \item Chose to use it because of Voyager integration with Koin~\cite{voyager:koin}
-      \item Required as the application will be unresponsive when making requests
-        to the database and/or VDMJ
-      \item Used asynchronous coroutines to prevent the program from being blocked
-    \end{itemize}
-\end{itemize}
+To set up \textit{Compose Multiplatform}, the \textit{Kotlin Multiplatform Wizard}
+was used to create the project as it allows for the runtime environments to be
+specified (at the time of creation, Desktop and Server), automatically generating
+the \textit{Gradle} build configurations and modules for each runtime environment,
+for the specific setup.
+
+\subsubsection{Implementation}
+Planning was important when implementing as \textit{Compose} is designed to use modular
+components, otherwise a nested mess would occur as \textit{Compose} is designed to
+have \textit{Composable}%
+\footnote{A \textit{Composable} is a description of the UI that will be built by \textit{Compose Multiplatform}}
+objects passed into another \textit{Composable} object.
+Therefore, due to how \textit{Kotlin}
+is designed with functions, there will be function nesting occurring naturally.
+To aid in readability of code due to the nesting functions, the \textit{Composable} objects
+are split into separate \textit{Composable} functions.
+An example of this is in~\autoref{list:compose-modular}, where instead of
+10 \textit{Composable} functions being nested in the \lstinline|Content()| function,
+the items in the list (\lstinline|LazyColumn| is used for creating lists) is split
+to a separate function, \lstinline|ActionItem()|, as a result making the maximum
+amount of nested functions to 5 for all functions.
+Another benefit is that it allows for the \lstinline|ActionItem| to be reused
+if desired, making the code modular.
+
+Voyager~\cite{voyager} was used to handle the navigation of the application as it
+handles replacing previous navigation screens, and allows for inserting data
+into the navigation screens.
+This is as Voyager has integration with Koin~\cite{koin}\cite{voyager:koin}, which is
+a library that specifically handles dependency injection.
+Using Koin allowed for data to be fetched from the database and to handle asynchronous
+functions, such as running VDMJ and sending instructions to the flight simulator.
 
 \begin{listing}
 \inputminted[
