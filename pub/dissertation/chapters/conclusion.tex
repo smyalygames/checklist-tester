@@ -2,116 +2,194 @@
 
 \begin{document}
 % What changes were made?
-\section{Changes}
-\begin{itemize}
-  \item Added the checklist manager which was not a part of the original
-    objectives
-  \begin{itemize}
-    \item Helped more to visualize the project
-    \item Aided in gathering statistics for how well the checklist performed
-    \item Using Kotlin helped speed up development, it simplifies parts
-      of Java and omitted a lot of boilerplate code that is required in Java,
-      such as setters and getters
-  \end{itemize}
-  \item How the Formal Model would interact was modified
-  \begin{itemize}
-    \item Initially was designed so that the formal model would complete
-      the entirety of the checklist, however, it was not useful for interacting
-      with the flight simulator
-    \item Modified the model to provide it would be similar to actions pilots can
-      do in the cockpit
-    \item Therefore acts like Read Checklist → Pilot Logic (VDM) → Do Action (XPC)
-  \end{itemize}
-  \item Originally was supposed to write an original plugin to connect to the flight simulator
-  \begin{itemize}
-    \item Whilst creating the plugin, sockets were confusing and accidentally stumbled
-      on the X-Plane Connect GitHub repository
-    \item This could have been prevented if a design document was created and
-      time was spent researching for tools in obscure places
-  \end{itemize}
-\end{itemize}
+\section{What Changed?}
+% \begin{itemize}
+%   \item Added the checklist manager which was not a part of the original
+%     objectives
+%   \begin{itemize}
+%     \item Helped more to visualize the project
+%     \item Aided in gathering statistics for how well the checklist performed
+%     \item Using Kotlin helped speed up development, it simplifies parts
+%       of Java and omitted a lot of boilerplate code that is required in Java,
+%       such as setters and getters
+%   \end{itemize}
+%   \item How the Formal Model would interact was modified
+%   \begin{itemize}
+%     \item Initially was designed so that the formal model would complete
+%       the entirety of the checklist, however, it was not useful for interacting
+%       with the flight simulator
+%     \item Modified the model to provide it would be similar to actions pilots can
+%       do in the cockpit
+%     \item Therefore acts like Read Checklist → Pilot Logic (VDM) → Do Action (XPC)
+%   \end{itemize}
+%   \item Originally was supposed to write an original plugin to connect to the flight simulator
+%   \begin{itemize}
+%     \item Whilst creating the plugin, sockets were confusing and accidentally stumbled
+%       on the X-Plane Connect GitHub repository
+%     \item This could have been prevented if a design document was created and
+%       time was spent researching for tools in obscure places
+%   \end{itemize}
+% \end{itemize}
+One of the major changes to the project was adding the Checklist Tester GUI, as it was
+not a part of the original objectives. This was helpful to the project as it helped
+in visualization of each module and what improvements could be made to the prototype,
+allowing a way to gather statistics for how well the checklist performed by storing it
+in a database, and using Kotlin helped speed up development, as it simplifies parts of
+Java and omitted a lot of boilerplate code that is required in Java, such as getters and setters.
+
+Because of the Checklist Tester GUI, how the Formal Model would interact was modified as a result.
+It was initially designed so that the formal model would complete the entirety of the checklist,
+however, it was not useful for interacting with the simulator as the formal model could not
+specifically give a command on what each step should do.
+
+This therefore would allow the formal model to act like a pilot as the way it would act was:
+Read Checklist → Pilot Logic (VDM) → Do Action (XPC).
+
+Another change was that originally a plugin for X-Plane was supposed to be written from
+scratch to connect to the flight simulator. However, whilst creating the plugin, sockets
+were confusing and accidentally stumbled on the X-Plane Connect GitHub repository when trying
+to find a simpler solution to the sockets. This mishap could have been prevented if a design
+document was created alongside spending time researching tools in more obscure places.
+
+One of the objectives were also removed from this project, which was to research
+pilot reaction times and how long it would take for a pilot to complete a step in the
+checklist. It came with difficulties as there are too many factors that can affect a
+pilot's reaction time, such as age, experience on an aircraft, total experience,
+how far the pilot is from a button, etc. Even if there were studies for this, it would be
+out of the scope for this project as it would require a lot of development, potentially
+delving into machine learning. Therefore, a set artificial delay was added between each
+step of the checklist during testing.
 
 % What objectives were met?
-\section{Objectives}
-\begin{itemize}
-  \item Most of the objectives were met
-  \item One of the original objectives was to research pilot
-    reaction times and how long it takes pilots to complete an action
-  \begin{itemize}
-    \item However, not able to do that as there are too many factors
-      that can affect a pilot's reaction time, such as age,
-      experience on an aircraft, total experience, how far a button is
-      from the pilot, etc.
-  \end{itemize}
-  \item Objective 2.a. was met to an extent
-  \begin{itemize}
-    \item Currently, the states of the aircraft monitored are only
-      the actions specified in the test, in the checklist tester
-    \item There could be more variables that could be monitored. Such
-      as engine fire, could monitor the engine temperature or thrust
-      produced by engine
-    \item This would have required a substantial amount of planning
-      as checklists do have conditional statements,
-      for example \enquote{If APU is available, then do Step 3 else do Step 4}
-  \end{itemize}
-  \item Objective 2.b. was also met to an extent
-  \begin{itemize}
-    \item Currently, this can be met by re-running the test multiple
-      times manually
-    \item However, it is manual at this stage due to limitations of XPC
-      and setting up the aircraft
-    \item The test data is stored on the database, hence test results
-      can be analysed to see the consistency between each test
-  \end{itemize}
-  \item The Checklist Tester does not currently run actions from the
-    Formal Model due to implementing the functions from VDMJ being
-    laborious
-  \item Hence focus was put on XPC first, as it would produce direct results
-\end{itemize}
+\section{What Objectives were met?}
+% \begin{itemize}
+%   \item Most of the objectives were met
+%   \item One of the original objectives was to research pilot
+%     reaction times and how long it takes pilots to complete an action
+%   \begin{itemize}
+%     \item However, not able to do that as there are too many factors
+%       that can affect a pilot's reaction time, such as age,
+%       experience on an aircraft, total experience, how far a button is
+%       from the pilot, etc.
+%   \end{itemize}
+%   \item Objective 2.a. was met to an extent
+%   \begin{itemize}
+%     \item Currently, the states of the aircraft monitored are only
+%       the actions specified in the test, in the checklist tester
+%     \item There could be more variables that could be monitored. Such
+%       as engine fire, could monitor the engine temperature or thrust
+%       produced by engine
+%     \item This would have required a substantial amount of planning
+%       as checklists do have conditional statements,
+%       for example \enquote{If APU is available, then do Step 3 else do Step 4}
+%   \end{itemize}
+%   \item Objective 2.b. was also met to an extent
+%   \begin{itemize}
+%     \item Currently, this can be met by re-running the test multiple
+%       times manually
+%     \item However, it is manual at this stage due to limitations of XPC
+%       and setting up the aircraft
+%     \item The test data is stored on the database, hence test results
+%       can be analysed to see the consistency between each test
+%   \end{itemize}
+%   \item The Checklist Tester does not currently run actions from the
+%     Formal Model due to implementing the functions from VDMJ being
+%     laborious
+%   \item Hence focus was put on XPC first, as it would produce direct results
+% \end{itemize}
+
+In this project, most of the objectives were met, but some of them were not
+met completely.
+
+Objective 2.a. was met to an extent as currently the states of the aircraft monitored
+are only for the action specified in the checklist test. To improve on this,
+there could have been more variables that could have been defined and monitored,
+such as if there was a test for an engine fire checklist, the Checklist Tester could
+have monitored the engine temperature or the thrust produced by the engine.
+
+Objective 2.b. was also partially met as to ensure that the checklist is consistent in the
+result, the test for that checklist has to be run multiple times manually. This is due
+to limitations of XPC as it does not have the required functions to set up the plane up
+automatically before each test. However, as the test data is stored on the database for
+each test, this could be analysed to see the consistency between each test.
+
+Another objective that was not met was due to the lack of time, and it was using the formal
+model during the tests for verifiability. The problem was the amount of time it took
+to implement the VDMJ wrapper that led to focus being put on XPC as it would produce
+results for each test with data.
 
 
-\section{What Next}
+\section{What Next?}
+% \begin{itemize}
+%   \item Formal Model
+%   \begin{itemize}
+%     \item Implemented either by creating an automatic wrapper.
+%       Done by either potentially linking the VDMJ LSP, or creating a
+%       plugin for VDMJ
+%     \item Or doing string manipulation on the VDM results for each of the
+%       functions as a lot of it is copy and paste - can be bad practice as
+%       it requires a lot of hard-coded code
+%   \end{itemize}
+%   \item Monitoring more of the aircraft
+%   \begin{itemize}
+%     \item Done by adding options in the Checklist Tester for extra
+%       Datarefs to monitor
+%     \item Modifying the \lstinline|Aircraft| record type to include a
+%       states type that checks multiple times throughout the procedure
+%       if this state has violated a constraint or if the goal of the
+%       state has been achieved (e.g. Engine is no longer on fire)
+%   \end{itemize}
+%   \item Expanding out of the scope of the objectives,
+%     conditional logic, such as if statements, to the checklist
+%     would be the next logical step
+%   \begin{itemize}
+%     \item VDM-SL would be really helpful for this, as can be used to
+%       design logic to be used outside of Kotlin
+%     \item This would allow for further automation of checklists,
+%       rather than only testing linearly, which at this current state
+%       would require writing the test multiple times
+%   \end{itemize}
+%   \item Adding more detailed test results
+%   \begin{itemize}
+%     \item Use analysis of previous test results to gain an understanding
+%       of the reproducibility of the procedure
+%     \item Keep track of aircraft state, such as speed or altitude
+%       aiding in understanding if the procedure may impose a safety risk 
+%   \end{itemize}
+% \end{itemize}
 The most important next steps to implement would be
 linking the formal mode, adding options of what parts of the aircraft
-to monitor
+to monitor.
 
-\begin{itemize}
-  \item Formal Model
-  \begin{itemize}
-    \item Implemented either by creating an automatic wrapper.
-      Done by either potentially linking the VDMJ LSP, or creating a
-      plugin for VDMJ
-    \item Or doing string manipulation on the VDM results for each of the
-      functions as a lot of it is copy and paste - can be bad practice as
-      it requires a lot of hard-coded code
-  \end{itemize}
-  \item Monitoring more of the aircraft
-  \begin{itemize}
-    \item Done by adding options in the Checklist Tester for extra
-      Datarefs to monitor
-    \item Modifying the \lstinline|Aircraft| record type to include a
-      states type that checks multiple times throughout the procedure
-      if this state has violated a constraint or if the goal of the
-      state has been achieved (e.g. Engine is no longer on fire)
-  \end{itemize}
-  \item Expanding out of the scope of the objectives,
-    conditional logic, such as if statements, to the checklist
-    would be the next logical step
-  \begin{itemize}
-    \item VDM-SL would be really helpful for this, as can be used to
-      design logic to be used outside of Kotlin
-    \item This would allow for further automation of checklists,
-      rather than only testing linearly, which at this current state
-      would require writing the test multiple times
-  \end{itemize}
-  \item Adding more detailed test results
-  \begin{itemize}
-    \item Use analysis of previous test results to gain an understanding
-      of the reproducibility of the procedure
-    \item Keep track of aircraft state, such as speed or altitude
-      aiding in understanding if the procedure may impose a safety risk 
-  \end{itemize}
-\end{itemize}
+The steps to doing this would first require the VDMJ wrapper to be implemented completely.
+This could be done by either creating types that will be created in Kotlin dynamically
+by potentially using the VDMJ LSP or creating a plugin for VDMJ. Or another option would
+be to keep on using string manipulation which would be quicker, as it would
+mostly be copy and pasting, but it is bad practice as it makes maintaining the code more
+difficult due to the hard-coded nature of using string manipulation.
+
+Another improvement that should be implemented would be monitoring more of the aircraft.
+It would be done by adding options to the Checklist Tester for extra datarefs to monitor,
+and modifying the \lstinline|Aircraft| record type to include a states type that is checked
+multiple times throughout the test if a certain state of the aircraft has violated a
+constraint or if the goal of the state has been achieved (e.g. engine is no longer on fire).
+
+Expanding outside the objectives, there are other features that could be added.
+
+One of them being adding conditional logic, such as if statements, when defining the checklist
+in the Checklist Tester and the formal model.
+VDM-SL would be really useful for this, as it can be used to design logic that handles
+these conditional statements that can be used outside of Kotlin. It would also allow for
+further automation of checklists, rather than only testing linearly, which at this current
+state would require writing the tests multiple times if the checklist has conditional
+statements in them.
+
+Finally, the last improvement would be to add more detailed test results. This would
+be done by adding a screen after the Checklist Tester is done running through the checklist
+to show the results. And with these results, the previous test results can be
+analysed to gain an understanding of the reproducibility of the checklist, or showing
+how the states of the aircraft has changed during the test.
+
 
 
 \end{document}
