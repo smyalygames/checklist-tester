@@ -99,7 +99,7 @@ Since \textit{VDMJ} version 4.5.0, the VDM interpreter has included the \textit{
 which is an automated testing tool to prove and find counter examples to specifications.~\cite{quickcheck}
 
 There were multiple counter examples that was produced by \textit{QuickCheck} that aided
-the development of the formal model, as the \lstinline|qc|\footnote{The command to run \textit{QuickCheck} on the formal model in \textit{VDMJ}}
+the development of the formal model, as the \lstinline|qc|\footnote{The command to run \textit{QuickCheck} on the formal model in \textit{VDMJ}.}
 command in \textit{VDMJ} every time a new function was created to find potential counter
 examples and fix them.
 Checking every time when creating a new function was useful as it would avoid having to
@@ -108,22 +108,42 @@ refactor more of the model.
 
 %%%%% CHECKLIST TESTER %%%%%
 \section{Checklist Tester}
-Brief overview of what it is supposed to do... % TODO
+The Checklist Tester is what provides a Graphical User Interface (GUI) for defining
+checklists to be tested, and to run the tests on the checklist.
+It is also responsible for connecting the Formal Method and the Simulator Connector Plugin
+together. 
 
 \subsection{Designing}
-\begin{itemize}
-  \item Used Figma to create a design for the application
-  \item Allows for implementing the front end to be faster because:
-    \begin{itemize}
-      \item They act as a requirement for code
-      \item You do not forget what needs to be implemented
-      \item Keeps everything consistent
-      \item Allows to think about making parts of the GUI modular and what components can be reused
-    \end{itemize}
-  \item Figma allows for plugins such as Material 3 colours and Material 3 components
-  \item \autoref{fig:figma-gui} is the final design that will be used for the
-    program
-\end{itemize}
+% \begin{itemize}
+%   \item Used Figma to create a design for the application
+%   \item Allows for implementing the front end to be faster because:
+%     \begin{itemize}
+%       \item They act as a requirement for code
+%       \item You do not forget what needs to be implemented
+%       \item Keeps everything consistent
+%       \item Allows to think about making parts of the GUI modular and what components can be reused
+%     \end{itemize}
+%   \item Figma allows for plugins such as Material 3 colours and Material 3 components
+%   \item \autoref{fig:figma-gui} is the final design that will be used for the
+%     program
+% \end{itemize}
+
+Creating an interface design before creating the GUI is useful as it is a form of
+requirements for the code.
+
+\textit{Figma} was used to create the design for the GUI as there is support for plugins
+and having a marketplace for components. This saved a lot of time in designing as
+Google provides components for \textit{Material 3}%
+\footnote{Material 3 is a design system which is used in Compose Multiplatform UI Framework.}
+and a plugin for creating a colour scheme for \textit{Material 3}.
+
+Having this design was useful as it aided in understanding
+what parts of the GUI could be modular and reused, kept the feel of the
+design consistent, and helped memorize what parts of the GUI needed to be implemented.
+
+The final design for the interface can be seen in~\autoref{fig:figma-gui}, where
+the components at the top are reusable modules, and the rest below are sections of
+the application that the user can navigate through.
 
 \begin{figure}
   \centering
@@ -133,18 +153,35 @@ Brief overview of what it is supposed to do... % TODO
 \end{figure}
 
 \subsubsection{Limitations of Figma}
-\begin{itemize}
-  \item The Material 3 Components in Figma do not include features that are available in
-    Jetpack Compose
-  \item In this project, the \enquote{Simulator Test} at the bottom of \autoref{fig:figma-gui}
-    does not include a leading icon~\cite{material:lists}, and therefore had to be a trailing
-    checkbox
-  \item This was overcome by adding comments in Figma as a reminder of how the actual implementation
-    should be like
-  \item Another limitation is that in \autoref{fig:figma-gui}, the title of the screen in the
-    top app bar~\cite{material:top-app-bar} is not centred, and that is because the auto layout
-    feature in Figma allows for equal spacing, rather than having each in a set position
-\end{itemize}
+% \begin{itemize}
+%   \item The Material 3 Components in Figma do not include features that are available in
+%     Jetpack Compose
+%   \item In this project, the \enquote{Simulator Test} at the bottom of \autoref{fig:figma-gui}
+%     does not include a leading icon~\cite{material:lists}, and therefore had to be a trailing
+%     checkbox
+%   \item This was overcome by adding comments in Figma as a reminder of how the actual implementation
+%     should be like
+%   \item Another limitation is that in \autoref{fig:figma-gui}, the title of the screen in the
+%     top app bar~\cite{material:top-app-bar} is not centred, and that is because the auto layout
+%     feature in Figma allows for equal spacing, rather than having each in a set position
+% \end{itemize}
+
+There were some limitations when working with \textit{Figma}, one of them being that
+the components created for \textit{Material 3} did not include all the features that are
+available in the \textit{Compose Multiplatform} Framework.
+
+This can be seen in the \enquote{Simulator Test} screen at the bottom of~\autoref{fig:figma-gui},
+where there is not an option for leading icons~\cite{material:lists} in each of the list items,
+and therefore had to be replaced with a trailing checkbox instead. However, \textit{Figma}
+allows for comments to be placed on the parts of the design, which was used as a reminder
+to use leading icons in the implementation of the design.
+
+Another limitation of \textit{Figma} is that in~\autoref{fig:figma-gui}, the title of the screen
+in the top app bar~\cite{material:top-app-bar} is not centred, this is because
+the auto layout feature in \textit{Figma} works by having equal spacing between each
+object, rather than having each object in a set position. However, this is
+not detrimental to the design, it is just obvious that the title is not centred in the
+window.
 
 
 \subsection{Compose Multiplatform}
