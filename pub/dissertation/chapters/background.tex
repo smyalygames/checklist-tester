@@ -3,17 +3,17 @@
 \begin{document}
 
 %%%%% HYPOTHESIS %%%%%
-\section{Hypothesis}
-\begin{itemize}
-    \item Checklists can be tested in a simulated environment 
-      to find flaws in checklist for things like
-      \begin{itemize}
-        \item Can be done in an amount of time that will not endanger aircraft
-        \item Provides reproducible results
-        \item Procedures will not endanger aircraft or crew further (Crew referring to Checklist Manifesto with the cargo door blowout)
-      \end{itemize}
-    \item Results in being able to see where to improve checklists
-\end{itemize}
+% \section{Hypothesis}
+% \begin{itemize}
+%     \item Checklists can be tested in a simulated environment 
+%       to find flaws in checklist for things like
+%       \begin{itemize}
+%         \item Can be done in an amount of time that will not endanger aircraft
+%         \item Provides reproducible results
+%         \item Procedures will not endanger aircraft or crew further (Crew referring to Checklist Manifesto with the cargo door blowout)
+%       \end{itemize}
+%     \item Results in being able to see where to improve checklists
+% \end{itemize}
 
 
 
@@ -24,16 +24,31 @@
 % - Safety became more of a concern when more passengers and more planes in the sky
 % - Safety procedures being added
 % - Rates of accidents
-\begin{itemize}
-  \item 70-80\% of aviation accidents are attributed to human factors~\cite{faa:reasons}
-  \item The first use of a checklist was in 1935 after the crash of a prototype plane known
-    back then as the Model 299 (known as the Boeing B-17 today), due to the complex procedures
-    required to operate the aircraft normally and forgetting a step resulting in
-    lack of controls during takeoff~\cite{manifesto}
-  \item It was found that because of the complicated procedure to operate the aircraft
-    that the pilots would forget steps, and hence the concept of checklists was tested,
-    and found to minimize human errors~\cite{manifesto}
-\end{itemize}
+% \begin{itemize}
+%   \item 70-80\% of aviation accidents are attributed to human factors~\cite{faa:reasons}
+%   \item The first use of a checklist was in 1935 after the crash of a prototype plane known
+%     back then as the Model 299 (known as the Boeing B-17 today), due to the complex procedures
+%     required to operate the aircraft normally and forgetting a step resulting in
+%     lack of controls during takeoff~\cite{manifesto}
+%   \item It was found that because of the complicated procedure to operate the aircraft
+%     that the pilots would forget steps, and hence the concept of checklists was tested,
+%     and found to minimize human errors~\cite{manifesto}
+% \end{itemize}
+
+According to the Federal Aviation Administration, a US federal government agency regulation
+body for civil aviation, 70-80\% of aviation accidents are attributed to human factors~\cite{faa:reasons}.
+
+One aspect that minimized the amount of accidents caused by human factors was with the checklist.
+
+The first use of a checklist was in 1935 after the crash of a prototype plane known
+back then as the Model 299 (known as the Boeing B-17 today), due to the complex procedures
+required to operate the aircraft normally and forgetting a step resulting in
+lack of controls during takeoff~\cite{manifesto}.
+
+It was found that because of the complicated procedure to operate the aircraft
+that the pilots would forget steps, and hence the concept of checklists was tested,
+and found to minimize human errors~\cite{manifesto}.
+
 
 \subsection{Checklists}
 % \begin{itemize}
@@ -97,9 +112,9 @@ the UK's aviation regulator, as:
   the operation of the aircraft by the flight
   crew in both normal and abnormal
   conditions.~\ldots~The Checklist is
-  carried on the flight deck.}~\cite{caa:design}
+  carried on the flight deck~\cite{caa:design}.}
 These checklists as a result has shown to be a crucial tool in aviation
-to minimize human errors.~\cite{manifesto}
+to minimize human errors~\cite{manifesto}.
 
 There are multiple checklists that are designed for aircraft for the use of
 normal operation and potential problems that could arise during the flight.
@@ -119,16 +134,16 @@ of a QRH by CAA is:
     This forms the basis for parts of the
     Operations Manual and checklists. The
     checklist procedures must reflect those
-    detailed in the AFM.}~\cite{caa:design}
+    detailed in the AFM~\cite{caa:design}.}
   }).
   The QRH is often
   used as an alternative name for the
-  Emergency and Abnormal Checklist.~\cite{caa:design}}
+  Emergency and Abnormal Checklist~\cite{caa:design}}.
 
 However, checklists themselves can have design flaws as noted by researchers at
 the National Aeronautics and Space Administration (NASA) where checklists
 can be misleading, too confusing, or too long to complete, as a result
-having the potential of compromising the safety of the aircraft.~\cite{nasa:design}
+having the potential of compromising the safety of the aircraft~\cite{nasa:design}.
 An example of this is what happened on Swiss Air Flight 111, where an electrical fault
 was made worse by following the checklist, resulting in the aircraft crashing in the ocean.
 This was as the flight crew was unaware of the severity of the fire caused by the
@@ -136,7 +151,7 @@ electrical fault. Following the steps in the checklist, one of the steps was
 to cut out power to \enquote{non-essential} systems, which increased the
 amount of smoke in the cockpit.
 Simultaneously, the checklist itself was a distraction as it was found to take
-around 30 minutes to complete in testing during the investigation.~\cite{tsb:SWR111}
+around 30 minutes to complete in testing during the investigation~\cite{tsb:SWR111}.
 This incident shows that checklists need to be tested for these flaws, and considering
 the original checklist for Swiss Air Flight 111 would have taken 30 minutes
 to theoretically complete, this could be time-consuming for checklist designers,
@@ -146,7 +161,7 @@ There are other potential problems with checklists,
 noted by the CAA, where the person running through the checklist could skip a step
 either unintentionally, by interruption, or just outright failing to complete the
 checklist. Or the crew may also not be alerted to performance issues within the aircraft,
-which would be a result of running the checklist.~\cite{caa:design} Therefore,
+which would be a result of running the checklist~\cite{caa:design}. Therefore,
 this would be useful to add for features when testing checklists, such as
 adding the ability to intentionally skip a step of a checklist or gathering
 statistics on how the performance of the aircraft has been affected as a result
@@ -157,7 +172,7 @@ may fail to use the checklist, like in the case of Northwest Airlines Flight 255
 where the National Transportation Safety Board (NTSB), an investigatory board
 for aviation accidents in the United States, determined that
 \enquote{the probable cause of the accident was the flight crew's failure
-to use the taxi checklist to ensure that the flaps and slats were extended for takeoff.}~\cite{ntsb:NWA255}
+to use the taxi checklist to ensure that the flaps and slats were extended for takeoff~\cite{ntsb:NWA255}.}
 This shows that even though checklists have shown to improve safety of the aircraft,
 there are other measures that aviation regulatory bodies are required implement, to avoid
 situations where the crew may completely ignore safety procedures and systems.
@@ -186,92 +201,142 @@ situations where the crew may completely ignore safety procedures and systems.
 
 Formal methods is a mathematical technique that can be used towards the verification
 of a system, that could either be a piece of software or hardware.
-Therefore, this can be used to verify correctness of all the inputs in a system.~\cite{nasa:formal}
+Therefore, this can be used to verify correctness of all the inputs in a system~\cite{nasa:formal}.
 Hence, as this project is dealing with safety, it would be beneficial to use
 formal methods for testing and verification.
 
 An example of where formal methods is used within aviation is by Airbus, where
 it was used during the development of the Airbus A380. Formal methods was used to test
 the A380 for proof of absence of stack overflows and analysis of the numerical precision
-and stability of floating-point operators to name a few.~\cite{airbus:formal}
+and stability of floating-point operators to name a few~\cite{airbus:formal}.
 
 % TODO maybe add a section about the amount of specification languages that exist?
 
 
 %%%%% SOLUTION STACK %%%%%
 \section{Solution Stack}
-\begin{itemize}
-  \item There would be around 3 main components to this tester
-    \begin{itemize}
-      \item Formal Model
-      \item Flight Simulator plugin
-      \item Checklist Tester (to connect the formal model and flight simulator)
-    \end{itemize}
-  \item As VDM-SL is being used, it uses VDMJ to parse the model~\cite{vdmj}. This was a starting
-    point for the tech stack, as VDMJ is also open source.
-  \item VDMJ is written in Java~\cite{vdmj}, therefore to simplify implementing VDMJ into the
-    Checklist Tester, it would be logical to use a Java virtual machine (JVM) language.
-\end{itemize}
+% \begin{itemize}
+%   \item There would be around 3 main components to this tester
+%     \begin{itemize}
+%       \item Formal Model
+%       \item Flight Simulator plugin
+%       \item Checklist Tester (to connect the formal model and flight simulator)
+%     \end{itemize}
+%   \item As VDM-SL is being used, it uses VDMJ to parse the model~\cite{vdmj}. This was a starting
+%     point for the tech stack, as VDMJ is also open source.
+%   \item VDMJ is written in Java~\cite{vdmj}, therefore to simplify implementing VDMJ into the
+%     Checklist Tester, it would be logical to use a Java virtual machine (JVM) language.
+% \end{itemize}
+
+Logically, is around 3 main components to this tester to focus on: the formal mode,
+checklist tester (to connect the formal model and flight simulator), and the flight simulator.
+
 
 \subsection{Formal Model}
-\begin{itemize}
-  \item There were a few ways of implementing the formal model into another application
-  \item Some of these methods were provided by Overture~\cite{overture-remote}
-    \begin{itemize}
-      \item RemoteControl interface
-      \item VDMTools API~\cite{vdmtoolbox-api}
-    \end{itemize}
-  \item However, both of these methods did not suit what was required as most of the
-    documentation for RemoteControl was designed for the Overture Tool IDE. VDMTools
-    may have handled the formal model differently
-  \item The choice was to create a VDMJ wrapper, as the modules are available on Maven
-\end{itemize}
+% \begin{itemize}
+%   \item There were a few ways of implementing the formal model into another application
+%   \item Some of these methods were provided by Overture~\cite{overture-remote}
+%     \begin{itemize}
+%       \item RemoteControl interface
+%       \item VDMTools API~\cite{vdmtoolbox-api}
+%     \end{itemize}
+%   \item However, both of these methods did not suit what was required as most of the
+%     documentation for RemoteControl was designed for the Overture Tool IDE. VDMTools
+%     may have handled the formal model differently
+%   \item The choice was to create a VDMJ wrapper, as the modules are available on Maven
+% \end{itemize}
+
+There are a few ways that a formal model could be implemented into another application.
+Some options mentioned by Overture~\cite{overture-remote} include the RemoteControl interface
+provided by VDMJ, or the VDMTools API~\cite{vdmtoolbox-api}.
+
+However, both of these methods do not suit what is required as most of the documentation
+for RemoteControl seems to be designed for the Overture Tool IDE. And VDMTools
+may handle the formal model differently or produce unexpected results, whilst having to deal
+with API calls.
+
+The choice was to create a VDMJ wrapper, as the modules are available on Maven Central,
+allowing for VDMJ to be implemented into the project.
 
 \subsection{Checklist Tester}
 \subsubsection{JVM Language}
-\begin{itemize}
-  \item There are multiple languages that are made for or support JVMs~\cite{jvm-alt-lang}
-  \item Requirements for language
-    \begin{itemize}
-      \item Be able to interact with Java code because of VDMJ
-      \item Have Graphical User Interface (GUI) libraries
-      \item Have good support (the more popular, the more resources available)
-    \end{itemize}
-  \item The main contenders were Java and Kotlin~\cite{kotlin}
-  \item Kotlin~\cite{kotlin} was the choice in the end as Google has been putting Kotlin first
-    instead of Java. Kotlin also requires less boilerplate code (e.g. getters and setters)~\cite{android-kotlin}
+% \begin{itemize}
+%   \item There are multiple languages that are made for or support JVMs~\cite{jvm-alt-lang}
+%   \item Requirements for language
+%     \begin{itemize}
+%       \item Be able to interact with Java code because of VDMJ
+%       \item Have Graphical User Interface (GUI) libraries
+%       \item Have good support (the more popular, the more resources available)
+%     \end{itemize}
+%   \item The main contenders were Java and Kotlin~\cite{kotlin}
+%   \item Kotlin~\cite{kotlin} was the choice in the end as Google has been putting Kotlin first
+%     instead of Java. Kotlin also requires less boilerplate code (e.g. getters and setters)~\cite{android-kotlin}
 
-\end{itemize}
+% \end{itemize}
+
+There are multiple languages that are made for or support JVMs~\cite{jvm-alt-lang}.
+
+The requirements for this project from a language would be to have the ability to interact
+with Java code because VDMJ uses Java, have Graphical User Interface (GUI) libraries that
+are accessible to use, and to have good support (the more popular, the more resources available).
+
+The main contenders for this are Java and Kotlin~\cite{kotlin}.
+
+Kotlin was the choice in the end as Google has been \enquote{putting Kotlin first},
+and is moving away from using Java. Kotlin also requires less boilerplate code (e.g. setters and getters)~\cite{android-kotlin}.
 
 \subsubsection{Graphical User Interface}
-\begin{itemize}
-  \item As the tester is going to include a UI, the language choice was still important
-    \item There are a variety of GUI libraries to consider using
-    \begin{itemize}
-      \item JavaFX~\cite{javafx}
-      \item Swing~\cite{flatlaf}
-      \item Compose Multiplatform~\cite{compose}
-    \end{itemize}
-  \item The decision was to use Compose Multiplatform in the end, due to time limitations and
-    having prior experience in using Flutter~\cite{flutter}
-  \item Compose Multiplatform has the ability to create a desktop application and a server,
-    which would allow for leeway if a server would be needed
-\end{itemize}
+% \begin{itemize}
+%   \item As the tester is going to include a UI, the language choice was still important
+%     \item There are a variety of GUI libraries to consider using
+%     \begin{itemize}
+%       \item JavaFX~\cite{javafx}
+%       \item Swing~\cite{flatlaf}
+%       \item Compose Multiplatform~\cite{compose}
+%     \end{itemize}
+%   \item The decision was to use Compose Multiplatform in the end, due to time limitations and
+%     having prior experience in using Flutter~\cite{flutter}
+%   \item Compose Multiplatform has the ability to create a desktop application and a server,
+%     which would allow for leeway if a server would be needed
+% \end{itemize}
+
+As the Checklist Tester is going to include a GUI, the choices of libraries would have to
+be compatible with Kotlin.
+
+The GUI libraries considered were JavaFX~\cite{javafx}, Swing~\cite{flatlaf}, and Compose Multiplatform~\cite{compose}.
+
+The decision was to use Compose Multiplatform in the end, due to the time limitation and
+having prior experience in using Flutter~\cite{flutter} which is similar to Compose.
+
+Compose Multiplatform also has the ability to create a desktop application and a server,
+which would allow for leeway if a server would be needed.
 
 \subsection{Flight Simulator Plugin}
-\begin{itemize}
-  \item There are two main choices for flight simulators that can be used
-    for professional simulation
-    \begin{itemize}
-      \item X-Plane~\cite{x-plane}
-      \item Prepar3D~\cite{p3d}
-    \end{itemize}
-  \item X-Plane was the choice due to having better documentation for the SDK, and a variety
-    of development libraries for the simulator itself
-  \item For the plugin itself, there was already a solution developed by NASA, X-Plane Connect~\cite{xpc}
-    that is more appropriate due to the time limitations and would be more likely to be reliable
-    as it has been developed since 2015
-\end{itemize}
+% \begin{itemize}
+%   \item There are two main choices for flight simulators that can be used
+%     for professional simulation
+%     \begin{itemize}
+%       \item X-Plane~\cite{x-plane}
+%       \item Prepar3D~\cite{p3d}
+%     \end{itemize}
+%   \item X-Plane was the choice due to having better documentation for the SDK, and a variety
+%     of development libraries for the simulator itself
+%   \item For the plugin itself, there was already a solution developed by NASA, X-Plane Connect~\cite{xpc}
+%     that is more appropriate due to the time limitations and would be more likely to be reliable
+%     as it has been developed since 2015
+% \end{itemize}
 
+There are two main choices for flight simulators that can be used for professional
+simulation, and is accessible to the public, either for free through a demo or through
+purchasing it for a reasonable price. These simulators are X-Plane~\cite{x-plane} and
+Prepar3D~\cite{p3d}.
+
+X-Plane was the choice due to having better documentation for the Software Development Kit (SDK),
+and a variety of development libraries for the simulator itself, for example FlyWithLua. There
+are also more aircraft being developed for X-Plane for entertainment use that claim to be \enquote{study level}.
+
+For the plugin itself, there was already a solution developed by NASA, X-Plane Connect~\cite{xpc}
+that is more appropriate due to the time limitations, and would be more likely to be reliable as
+it has been developed since 2015.
 
 \end{document}
