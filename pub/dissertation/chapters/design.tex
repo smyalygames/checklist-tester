@@ -715,43 +715,95 @@ memory leak and a massive memory write usage.
 % Gradle
 % Testing
 % GitHub CI
-\begin{itemize}
-  \item XPC package is not published on a public Maven repository
-  \item There has been a pull request that was merged to the \textit{develop} branch
-    that provides Maven POMs~\cite{xpc:pom}. However, the maintainer for the
-    project, at the time, did not have enough time to figure out the process of
-    publishing the package to a Maven repository~\cite{xpc:pom-time}
-  \item Therefore, had to find an alternative way to implement
-  \item Jitpack~\cite{jitpack}
-  \begin{itemize}
-    \item In theory, simple to publish a repository, all that is required is a GitHub
-      repository and searching if one has already been created on JitPack or build and publish
-      a specific version
-    \item However, due to the structure of the XPC repository, JitPack could not locate the
-      build tools (Apache Maven in this case) as JitPack only searches on the root directory
-      for the compatible build tools
-  \end{itemize}
-  \item Gradle gitRepository~\cite{gradle:gitRepository}
-  \begin{itemize}
-    \item There was not a lot of documentation
-    \item Ambiguous on how to define directory for where the Java library is located in the Git repository
-    \item However, as XPC was only built with Maven, Gradle was not able to add the dependency as \lstinline|gitRepository()|
-      only works with Gradle builds~\cite{gradle:gitRepoGradleOnly}
-  \end{itemize}
-\item Resorted to using a compiled Jar file and adding the dependency to Gradle
-\item Not happy about that because it means maintaining it will be more difficult as
-  it is not as simple as just changing the version number
-\item Later, resorted to adding Gradle build files to XPC
-\item Used automatic conversion from Maven to Gradle using \lstinline|gradle init| command~\cite{gradle:migratePOM}
-\item Had to add local dependencies due to how Gradle works differently
-\item Had to fix previous structure of Maven POM as the grouping as not good
-\end{itemize}
+% \begin{itemize}
+%   \item XPC package is not published on a public Maven repository
+%   \item There has been a pull request that was merged to the \textit{develop} branch
+%     that provides Maven POMs~\cite{xpc:pom}. However, the maintainer for the
+%     project, at the time, did not have enough time to figure out the process of
+%     publishing the package to a Maven repository~\cite{xpc:pom-time}
+%   \item Therefore, had to find an alternative way to implement
+%   \item Jitpack~\cite{jitpack}
+%   \begin{itemize}
+%     \item In theory, simple to publish a repository, all that is required is a GitHub
+%       repository and searching if one has already been created on JitPack or build and publish
+%       a specific version
+%     \item However, due to the structure of the XPC repository, JitPack could not locate the
+%       build tools (Apache Maven in this case) as JitPack only searches on the root directory
+%       for the compatible build tools
+%   \end{itemize}
+%   \item Gradle gitRepository~\cite{gradle:gitRepository}
+%   \begin{itemize}
+%     \item There was not a lot of documentation
+%     \item Ambiguous on how to define directory for where the Java library is located in the Git repository
+%     \item However, as XPC was only built with Maven, Gradle was not able to add the dependency as \lstinline|gitRepository()|
+%       only works with Gradle builds~\cite{gradle:gitRepoGradleOnly}
+%   \end{itemize}
+% \item Resorted to using a compiled Jar file and adding the dependency to Gradle
+% \item Not happy about that because it means maintaining it will be more difficult as
+%   it is not as simple as just changing the version number
+% \item Later, resorted to adding Gradle build files to XPC
+% \item Used automatic conversion from Maven to Gradle using \lstinline|gradle init| command~\cite{gradle:migratePOM}
+% \item Had to add local dependencies due to how Gradle works differently
+% \item Had to fix previous structure of Maven POM as the grouping as not good
+% \end{itemize}
+
+The XPC Java library is not published on a public Maven repository. There has been a pull
+request that was merged into the \textit{develop} branch that provides Maven POMs~\cite{xpc:pom}.
+However, the maintainer of the project, at the time, did not have enough time to figure out
+the process of publishing the package to a Maven repository~\cite{xpc:pom-time}.
+
+Therefore, an alternative had to be found to implement the XPC library and there were
+a few attempts made, before remaking the build files and publishing the library onto
+GitHub's Maven repository.
+
+The first tool found was Jitpack~\cite{jitpack}, which in theory makes it simple to
+publish to their own public Maven repository, as the requirements to publish the package
+was to input a desired GitHub repository and search if one has already been created on
+JitPack. If it has not been, JitPack will build and publish a desired version of
+the project. However, due to the structure of the XPC repository, JitPack was unable to
+locate the build tools (Apache Maven in this case) as JitPack only searches the root directory
+of the repository for the compatible build tools; XPC's build tools was in the \lstinline|Java/|
+directory.
+
+The next step was to look if Gradle was able to handle building and implementing libraries
+from a GitHub repository, to which there is the \lstinline|gitRepository| function~\cite{gradle:gitRepository}.
+It was a bit problematic trying to figure out how the \lstinline|gitRepository| function worked
+as there is not a lot of documentation provided for it, and the documentation provided was
+ambiguous on how to define the directory where the Java library is located in the Git
+repository. However, as XPC was only built with Maven, Gradle was unable to add the dependency
+to the project as \lstinline|gitRepository| only works with Gradle builds~\cite{gradle:gitRepoGradleOnly}.
+
+Therefore, as a temporary solution, implementing the library was resorted to using the Jar
+files provided with XPC and adding the dependency to Gradle. But this caused future maintainability
+problems as updating the XPC library would require downloading the Jar file manually and replacing
+the previous version. It also results in other tools being unable to check if there is a new
+version of XPC available.
+
+This temporary solution was later fixed by creating a fork of XPC and implementing 
+\textit{Gradle} build files.
+As there already are \textit{Apache Maven} build files for the Java library,
+the \lstinline|gradle init| command could be used to automatically generate
+\textit{Gradle} build files based on the \textit{Apache Maven} build files~\cite{gradle:migratePOM}.
+There was still some configuration required for the \textit{Gradle}
+build files as the previous \textit{Apache Maven} configuration was not
+properly implemented, resulting in fixing local dependencies and splitting up the
+library into their respective package groups.
+
 
 \subsubsection{Continuous Deployment of the Maven Package}
-\begin{itemize}
-  \item Used GitHub's template for Gradle package publishing
-  \item Required some setup in Gradle build files
-\end{itemize}
+% \begin{itemize}
+%   \item Used GitHub's template for Gradle package publishing
+%   \item Required some setup in Gradle build files
+% \end{itemize}
+
+To be able to use the new package created with \textit{Gradle} and publish them,
+GitHub provides tools to publish \textit{Gradle} projects automatically.
+This required defining in the build files on where \textit{Gradle} can
+publish the packages.
+This was combined GitHub's Gradle Continuous Deployment template
+to publish the package, with the only change to the template being defining the working
+directory to be the \lstinline|Java/|
+
 
 \subsection{Submitting a Pull Request}
 % What I did:
