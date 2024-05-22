@@ -248,27 +248,76 @@ functions, such as running VDMJ and sending instructions to the flight simulator
 \end{listing}
 
 \subsection{Storing Data}
-\begin{itemize}
-  \item SQLDelight was used to handle the database by allowing for typesafe Kotlin APIs when interacting with the database.
-    Specifically chosen as it provides support for Compose Multiplatform~\cite{sqldelight}
-  \item It only allows for queries to be written in SQL, which would allow for more complex SQL queries if needed
-  \item SQLite was used for the Relational Database Management System (RDBMS) as it is an embedded database~\cite{sqlite:about},
-    meaning that the database will run in the application, rather than running on a server,
-    either remotely or through local containerization through something like Docker~\cite{docker:container},
-    which could take more time and add complexity as it means implementing additional dependencies
-  \item SQLite also has 100\%~\cite{sqlite:tests} test coverage which is necessary for ensuring that the database will
-    not cause artefacts to the results
-\end{itemize}
+% \begin{itemize}
+%   \item SQLDelight was used to handle the database by allowing for typesafe Kotlin APIs when interacting with the database.
+%     Specifically chosen as it provides support for Compose Multiplatform~\cite{sqldelight}
+%   \item It only allows for queries to be written in SQL, which would allow for more complex SQL queries if needed
+%   \item SQLite was used for the Relational Database Management System (RDBMS) as it is an embedded database~\cite{sqlite:about},
+%     meaning that the database will run in the application, rather than running on a server,
+%     either remotely or through local containerization through something like Docker~\cite{docker:container},
+%     which could take more time and add complexity as it means implementing additional dependencies
+%   \item SQLite also has 100\%~\cite{sqlite:tests} test coverage which is necessary for ensuring that the database will
+%     not cause artefacts to the results
+% \end{itemize}
+\textit{SQLDelight} was used to handle the database as it creates typesafe \textit{Kotlin}
+application programming interfaces (APIs) to
+communicate to the database.
+It was specifically chosen as it provides support for \textit{Compose Multiplatform}~\cite{sqldelight},
+making implementing \textit{SQLDelight} into the project easier.
+
+A benefit of using \textit{SQLDelight} is that it only allows for database queries to be
+written in SQL, allowing for more complex, and more control of SQL queries. It also
+provides 100\% test coverage~\cite{sqlite:tests} which is necessary to ensure that
+the database will not cause artefacts to the results.
+
+The choice of relational database management system (RDBMS) to complement \textit{SQLDelight}
+was \textit{SQLite} as it allows for the database to run within the application,
+rather than running on a separate server, either remotely or through a containerized
+instance using something like Docker~\cite{docker:container}. As a result,
+this avoided spending extra time implementing the server and
+adding extra complexity due to requiring additional dependencies, which would also
+add extra maintenance overhead to the project.
 
 \subsubsection{Designing the Database}
-\begin{itemize}
-  \item The database could be thought as having 2 sections
-    \begin{itemize}
-      \item The user inputs to control the tester, i.e. the steps a procedure contains.
-        The tables for these are \textit{Project}, \textit{Procedure}, and \textit{Action}
-      \item The test results for a procedure which are in the \textit{Test}, and \textit{ActionResult} tables
-    \end{itemize}
-\end{itemize}
+% \begin{itemize}
+%   \item The database could be thought as having 2 sections
+%     \begin{itemize}
+%       \item The user inputs to control the tester, i.e. the steps a procedure contains.
+%         The tables for these are \textit{Project}, \textit{Procedure}, and \textit{Action}
+%       \item The test results for a procedure which are in the \textit{Test}, and \textit{ActionResult} tables
+%     \end{itemize}
+% \end{itemize}
+
+% \begin{itemize} 
+%   \item The design of the database had relationships in mind as the goal was to
+%     have a detailed tracking of statistics for each step in the procedure,
+%     hence in \autoref{fig:db-erd}
+%   \item A \textit{Procedure} can have multiple \textit{Tests}, where each \textit{Test}
+%     each contains the result of how each \textit{Action} in \textit{ActionResults}
+%   \item The choice of a \textit{Project} was to allow for the segregation of testing
+%     different aircraft, as each aircraft has different cockpit layouts
+%     and different systems
+% \end{itemize}
+
+The database could be looked at as having 2 sections, with relationships in mind
+between the two sections, to fulfil of the objectives, as it will allow tracking
+of the checklist tests that will be run, as a result being able to provide detailed
+statistics of the test. These relationships can be seen in the entity relationship
+diagram in~\autoref{fig:db-erd}.
+
+One of the sections is for user inputs to control the tests.
+The \textit{Project} table handles creating separate aircraft, or it could be used for
+separate iterations of Quick Reference Handbooks (QRHs).
+Then the \textit{Procedure} and \textit{Action} table handles defining
+steps/actions in a checklist/procedure.
+
+The other section of the database would be providing test results for each of the
+checklists, which are stored in the \textit{Test} and \textit{ActionResult} tables.
+
+Expanding on the relationships between each table in~\autoref{fig:db-erd}, the reasons
+for these relationships is to allow for segregation of data and the ability to
+associate test data with what checklist was tested.
+% TODO maybe expand?
 
 \begin{figure}[!htp]
   \centering
@@ -346,38 +395,55 @@ functions, such as running VDMJ and sending instructions to the flight simulator
   \label{fig:db-erd}
 \end{figure}
 
-\begin{itemize} 
-  \item The design of the database had relationships in mind as the goal was to
-    have a detailed tracking of statistics for each step in the procedure,
-    hence in \autoref{fig:db-erd}
-  \item A \textit{Procedure} can have multiple \textit{Tests}, where each \textit{Test}
-    each contains the result of how each \textit{Action} in \textit{ActionResults}
-  \item The choice of a \textit{Project} was to allow for the segregation of testing
-    different aircrafts, as each aircraft has different cockpit layouts
-    and different systems
-\end{itemize}
+\subsubsection{Linking into Compose Multiplatform}
+% \begin{itemize}
+%   \item Compose Multiplatform has support for different runtime environments,
+%     however as this project was only being developed for Desktop, the JVM
+%     SQLite driver only had to be considered
+%   \item However, the functions for the database were written in the \textit{shared/commonMain}
+%     module as there may be a potential for adding Android and iOS support as it may be
+%     helpful run the tests on a tablet
+%   \item A database transaction had two modules
+%     \begin{itemize}
+%       \item A class handling SQLDelight API calls only; meaning no conversion of types, which are
+%         functions only accessible within module internally, which is located in\\
+%         \textit{io.anthonyberg.connector.shared.database}
+%       \item SDKs that can handle multiple tables, such as \textit{TestTransaction} which handles database calls
+%         when checklists are being tested in the application.
+%         And allows for converting types, such as \lstinline|Int| to \lstinline|Long|
+%     \end{itemize}
+%   \item The separation of these modules was to have in mind unit testing, as
+%     it will make it easier to debug if a problem is with SQLDelight transactions
+%     are handled, or if there is a conversion error occurring
+% \end{itemize}
 
-\subsubsection{Implementing into Compose Multiplatform}
-\begin{itemize}
-  \item Compose Multiplatform has support for different runtime environments,
-    however as this project was only being developed for Desktop, the JVM
-    SQLite driver only had to be considered
-  \item However, the functions for the database were written in the \textit{shared/commonMain}
-    module as there may be a potential for adding Android and iOS support as it may be
-    helpful run the tests on a tablet
-  \item A database transaction had two modules
-    \begin{itemize}
-      \item A class handling SQLDelight API calls only; meaning no conversion of types, which are
-        functions only accessible within module internally, which is located in\\
-        \textit{io.anthonyberg.connector.shared.database}
-      \item SDKs that can handle multiple tables, such as \textit{TestTransaction} which handles database calls
-        when checklists are being tested in the application.
-        And allows for converting types, such as \lstinline|Int| to \lstinline|Long|
-    \end{itemize}
-  \item The separation of these modules was to have in mind unit testing, as
-    it will make it easier to debug if a problem is with SQLDelight transactions
-    are handled, or if there is a conversion error occurring
-\end{itemize}
+\textit{Compose Multiplatform} has support for different runtime environments which
+should be taken into account when adding \textit{SQLDelight} to \textit{Compose Multiplatform}.
+However, as this project is only being developed for Desktop, the \textit{JVM}
+\textit{SQLite} driver is the only one necessary to implement.
+
+However, to improve maintainability of the code, the functions of the database was
+written in the \lstinline|shared/commonMain| module (a shared module that is accessible
+to multiple runtime environments).
+This would be useful if there was a need for
+adding Android and/or iOS support for this project as some designers may want to
+run the tests on a tablet.
+
+Handling the database was done by implementing two modules.
+One module is the \lstinline|io.anthonyberg.connector.shared.database| module,
+used to handle SQLDelight API calls only; meaning no conversion of types,
+functions are only accessible internally within the \lstinline|io.anthonyberg.connector.shared|
+module.
+
+The other module is the Software Development Kit (SDK) that handle type conversions,
+such as \lstinline|Int| to \lstinline|Long|, and can handle multiple tables,
+such as \textit{TestTransaction} SDK that handles calls to multiple tables
+when a test is run in the flight simulator.
+
+The separation of these modules was also done to have unit testing in mind because
+it will make it easier to debug if a problem is due to how SQLDelight transactions are
+handled, or if there are type conversions errors occuring.
+
 
 \subsection{VDMJ Wrapper}
 \begin{itemize}
@@ -513,7 +579,7 @@ functions, such as running VDMJ and sending instructions to the flight simulator
 
 
 %%%%% Simulator Connector Plugin %%%%%
-\section{Simulator Connector Plugin}
+% \section{Simulator Connector Plugin}
 % Talk about creating your own (originally happened) vs using something else that was developed
 % Maybe talk about original plan? i.e. <project root>/plugin
 
